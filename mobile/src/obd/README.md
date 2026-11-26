@@ -45,3 +45,11 @@ Odczyty opcjonalnie zachowują `ecu: { protocol: 6|7|8|9, responseId }`. Istniej
 ## Lokalny odczyt VIN
 
 `readVin(vehicleId)` jest dostępne dopiero po wybraniu sterownika CAN. Wysyła 0902 fizycznie do tego sterownika i stosuje te same kontrole ramek/tożsamości. Dekoder wymaga 49 02 01 i dokładnie 17 poprawnych wielkich znaków ASCII VIN; wartości zastępcze złożone wyłącznie z zer są odrzucane. Wynik jest prezentowany do podglądu i potwierdzany przed atomową aktualizacją garażu. Zmiana istniejącego VIN w międzyczasie uniemożliwia zastąpienie. Opcjonalne lokalne dowody źródła są walidowane względem zapisanego VIN i usuwane przy jego ręcznej zmianie. Nie dołączono internetowego dekodera, specyfikacji producenta, gwarancji sumy kontrolnej ani twierdzenia o autentyczności pojazdu. VIN pozostaje wykluczony z AI i raportów sprzedażowych. Nie wykonano sprzętowych odczytów VIN.
+
+## Sesja i pomiary na żywo
+
+Uruchomienie sesji przez `startDiagnostics()` obejmuje inicjalizację i pełny odczyt ECU. Samo potwierdzenie adaptera nie wystarcza; brak odpowiedzi samochodu zamyka połączenie. Wiele adresów CAN wymaga wyboru sterownika.
+
+Metoda `readLiveParameters()` odświeża tylko obsługiwane parametry i napięcie. Korzysta z listy PID ostatniego pełnego odczytu, związanej z samochodem i wybranym ECU. Nie odpytuje ponownie kodów usterek i nie zmienia raportu. Pomiar na żywo, zmiana ECU, ponowna inicjalizacja i próba kasowania unieważniają uprawnienie do kasowania oparte na poprzednim raporcie.
+
+Transporty udostępniają `onDisconnected()` także pomiędzy poleceniami. Przed pierwszym poleceniem BLE toleruje startowe dane ASCII do 8192 znaków; nadmiar lub nieprawidłowe bajty zamykają połączenie. Po pierwszym poleceniu nadal obowiązuje ścisłe przypisanie odpowiedzi do żądania.

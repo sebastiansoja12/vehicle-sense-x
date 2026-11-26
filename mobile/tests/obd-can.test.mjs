@@ -72,3 +72,9 @@ test('a single actually discovered CAN address can be read without a selection d
  const {driver,sent}=fixture({one:true});await driver.initialize();const snapshot=await driver.readSnapshot('car');
  assert.deepEqual(snapshot.ecu,{protocol:6,responseId:'7E8'});assert.ok(sent.includes('ATSH7E0'));assert.ok(sent.includes('ATCRA7E8'));
 });
+test('live CAN parameters retain the selected ECU scope and changing ECU requires another full scan',async()=>{
+ const {driver,sent}=fixture();await driver.initialize();await assert.rejects(driver.readSnapshot('car'),EcuSelectionRequired);
+ await driver.selectEcu('7E9');await driver.readSnapshot('car');sent.length=0;
+ const live=await driver.readLiveParameters('car');assert.deepEqual(live.ecu,{protocol:6,responseId:'7E9'});assert.equal(live.parameters.rpm,1726);assert.deepEqual(sent,['010C','ATRV']);
+ await driver.selectEcu('7E8');const before=sent.length;await assert.rejects(driver.readLiveParameters('car'));assert.equal(sent.length,before);
+});

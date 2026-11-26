@@ -46,3 +46,11 @@ Protocol source: ELM327DSK pp. 17 (ATDPN/D0), 41–45 (headers/ISO-TP), 47 (ATCR
 ## Local VIN reading
 
 `readVin(vehicleId)` is available only after CAN controller selection. It sends 0902 physically to that controller and applies the same frame/identity checks. The decoder requires 49 02 01 plus exactly 17 valid uppercase ASCII VIN characters; all-zero placeholders fail. The result is previewed and confirmed before an atomic garage update. A stale existing VIN prevents replacement. Optional local source evidence is validated against the stored VIN and removed if that VIN is edited manually. No internet decoder, manufacturer specification, checksum guarantee or vehicle-authenticity claim is attached. VIN remains excluded from AI and sales reports. Hardware VIN reads have not been performed.
+
+## Session and live measurements
+
+Starting a session through `startDiagnostics()` includes initialization and a full ECU scan. An adapter acknowledgement alone is insufficient; no vehicle response closes the connection. Multiple CAN addresses require controller selection.
+
+The `readLiveParameters()` method refreshes supported measurements and voltage only. It uses the last full scan PID list, scoped to the vehicle and selected ECU. It does not poll fault codes again or change the report. A live measurement, ECU change, reinitialization and clear attempt invalidate permission to clear based on the earlier report.
+
+Transports expose `onDisconnected()` between commands as well. Before the first command, BLE tolerates startup ASCII data up to 8192 characters; excess or invalid bytes close the connection. After the first command, strict request/response ownership still applies.

@@ -83,6 +83,24 @@ test('disconnect, overflow, write failure and invalid commands reject with no fa
 
 const replies={ATZ:'ELM327 v2.3>',ATE0:'OK>',ATL0:'OK>',ATS1:'OK>',ATH0:'OK>',ATCAF1:'OK>',ATSP0:'OK>',ATDPN:'A3>','0100':'41 00 18 10 00 00>','0104':'41 04 FF>','0105':'41 05 7B>','010C':'41 0C 1A F8>',ATRV:'12.6V>','03':'43 01 33 00 00 00 00>','07':'NO DATA>','0A':'4A 00>','04':'44>'};
 function driverFixture(overrides={}) { const sent=[]; const driver=new obd.Elm327Driver({send:async c=>{sent.push(c);const r=Object.hasOwn(overrides,c)?overrides[c]:replies[c]; if(r instanceof Error) throw r; if(r===undefined) throw Error(`unexpected ${c}`);return r;}},'ELM BLE');return {driver,sent}; }
+test('live polling reads fresh supported measurements without rescanning faults or reusing the clear backup',async()=>{
+ const overrides={};const {driver,sent}=driverFixture(overrides);
+ await driver.initialize();const backup=await driver.readSnapshot('car');sent.length=0;
+ overrides['010C']='41 0C 0F A0>';overrides.ATRV='14.2V>';
+ const live=await driver.readLiveParameters('car');
+ assert.deepEqual(live.parameters,{rpm:1000,coolantC:83,loadPercent:100,voltageV:14.2});
+ assert.equal(live.vehicleId,'car');assert.equal(Number.isSafeInteger(live.timestamp),true);
+ assert.deepEqual(sent,['010C','0105','0104','ATRV']);
+ await assert.rejects(driver.clearFaults({confirmed:true,backedUpSnapshot:backup,vehicleId:'car'}),e=>e.kind==='confirmation');
+ assert.equal(sent.includes('04'),false);assert.equal(backup.parameters.rpm,1726);
+});
+test('live polling requires a full scan for the same vehicle and keeps unavailable measurements unknown',async()=>{
+ const {driver,sent}=driverFixture({'0100':'41 00 08 00 00 00>','0105':'NO DATA>',ATRV:'NO DATA>'});
+ await driver.initialize();await assert.rejects(driver.readLiveParameters('car'));await driver.readSnapshot('car');
+ sent.length=0;await assert.rejects(driver.readLiveParameters('another-car'));assert.deepEqual(sent,[]);
+ const live=await driver.readLiveParameters('car');assert.deepEqual(live.parameters,{rpm:null,coolantC:null,loadPercent:null,voltageV:null});
+ assert.deepEqual(sent,['0105','ATRV']);await driver.initialize();await assert.rejects(driver.readLiveParameters('car'));
+});
 test('driver initializes and records genuine supported measurements with explicit DTC coverage',async()=>{
  assert.equal(typeof obd.Elm327Driver,'function');
  const {driver,sent}=driverFixture();

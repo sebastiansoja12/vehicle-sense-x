@@ -1,6 +1,6 @@
 import { ObdError, parseClearResponse, parseDtc, parsePid, parseSupportedPids, parseVoltage, responseLines } from './protocol.ts';
 import { validateDiagnosticSnapshot } from './types.ts';
-import type { CommandTransport, DiagnosticSnapshot, Dtc } from './types.ts';
+import type { CommandTransport, DiagnosticSnapshot, Dtc, LiveParameters } from './types.ts';
 import {EcuSelectionRequired,parseProtocol,parseCanMessages,requestIdFor} from './can.ts';
 import type {CanEcu,CanProtocol} from './can.ts';
 import {parseObdVin} from '../vin.ts';
@@ -15,6 +15,7 @@ export class Elm327Driver {
   private initialized = false;
   private busy = false;
   private lastSnapshot: string | null = null;
+  private liveContext: { vehicleId: string; supportedPids: number[] } | null = null;
   private canProtocol:CanProtocol|null|undefined;
   private ecus:CanEcu[]=[];
   private selectedEcu:CanEcu|null=null;
@@ -28,6 +29,7 @@ export class Elm327Driver {
     return this.exclusive(async () => {
       this.initialized = false;
       this.lastSnapshot = null;
+      this.liveContext = null;
       this.canProtocol=undefined;this.ecus=[];this.selectedEcu=null;
       const reset = responseLines(await this.transport.send('ATZ'), 'ATZ');
       if (reset.length !== 1 || !/^ELM327\b/.test(reset[0])) throw new ObdError('Adapter did not identify as ELM327');
@@ -43,7 +45,7 @@ export class Elm327Driver {
     if(lines.length!==1||lines[0]!=='OK')throw new ObdError(`Adapter nie potwierdził ${command}.`);
   }
   private async applyEcu(ecu:CanEcu){
-    this.lastSnapshot=null;this.selectedEcu=null;
+    this.lastSnapshot=null;this.liveContext=null;this.selectedEcu=null;
     try{await this.configure(`ATSH${requestIdFor(ecu)}`);await this.configure(`ATCRA${ecu.responseId}`);this.selectedEcu={...ecu};}
     catch(error){this.initialized=false;throw error;}
   }
@@ -87,13 +89,7 @@ export class Elm327Driver {
     if(this.canProtocol&&!this.selectedEcu)throw new EcuSelectionRequired(this.ecus);
     return this.payload(await this.transport.send('0100'),'0100');
   }
-  async readSnapshot(vehicleId: string): Promise<DiagnosticSnapshot> {
-    return this.exclusive(async () => {
-      if (!this.initialized) throw new ObdError('Initialize adapter before reading');
-      if (!vehicleId.trim() || vehicleId.length > 200) throw new ObdError('A vehicle is required');
-      this.lastSnapshot = null;
-      const supportedPids = parseSupportedPids(await this.pidStart());
-      if (supportedPids.includes(32)) supportedPids.push(...parseSupportedPids(this.payload(await this.transport.send('0120'),'0120'), 32));
+  private async readParameters(supportedPids: number[]): Promise<DiagnosticSnapshot['parameters']> {
       const parameters: DiagnosticSnapshot['parameters'] = { rpm: null, coolantC: null, loadPercent: null, voltageV: null };
       for (const [pid, command, key] of [[12, '010C', 'rpm'], [5, '0105', 'coolantC'], [4, '0104', 'loadPercent']] as const) {
         if (!supportedPids.includes(pid)) continue;
@@ -102,6 +98,25 @@ export class Elm327Driver {
       }
       try { parameters.voltageV = parseVoltage(await this.transport.send('ATRV')); }
       catch (error) { if (!(error instanceof ObdError) || error.kind !== 'no-data') throw error; }
+      return parameters;
+  }
+  async readLiveParameters(vehicleId: string): Promise<LiveParameters> {
+    return this.exclusive(async () => {
+      if (!this.initialized || !this.liveContext || this.liveContext.vehicleId !== vehicleId) throw new ObdError('Najpierw wykonaj pełny odczyt dla wybranego samochodu.');
+      this.lastSnapshot = null;
+      const parameters = await this.readParameters(this.liveContext.supportedPids);
+      return { vehicleId, timestamp: Date.now(), adapterName: this.adapterName, parameters, ...(this.selectedEcu ? { ecu: { ...this.selectedEcu } } : {}) };
+    });
+  }
+  async readSnapshot(vehicleId: string): Promise<DiagnosticSnapshot> {
+    return this.exclusive(async () => {
+      if (!this.initialized) throw new ObdError('Initialize adapter before reading');
+      if (!vehicleId.trim() || vehicleId.length > 200) throw new ObdError('A vehicle is required');
+      this.lastSnapshot = null;
+      this.liveContext = null;
+      const supportedPids = parseSupportedPids(await this.pidStart());
+      if (supportedPids.includes(32)) supportedPids.push(...parseSupportedPids(this.payload(await this.transport.send('0120'),'0120'), 32));
+      const parameters = await this.readParameters(supportedPids);
       const codes: Dtc[] = [];
       const readStatuses: Dtc['status'][] = [];
       for (const [mode, status] of [['03', 'stored'], ['07', 'pending'], ['0A', 'permanent']] as const) {
@@ -114,6 +129,7 @@ export class Elm327Driver {
       if(this.selectedEcu)snapshot.ecu={...this.selectedEcu};
       if (!validateDiagnosticSnapshot(snapshot)) throw new ObdError('Invalid diagnostic snapshot');
       this.lastSnapshot = JSON.stringify(snapshot);
+      this.liveContext = { vehicleId, supportedPids: [...supportedPids] };
       return snapshot;
     });
   }
@@ -123,6 +139,7 @@ export class Elm327Driver {
       if (!this.initialized || options.confirmed !== true || options.tripRecording === true || !validateDiagnosticSnapshot(backup) || backup.source !== 'obd' || backup.vehicleId !== options.vehicleId || this.lastSnapshot !== JSON.stringify(backup)) throw new ObdError('Confirm clearing after backing up the current vehicle report; stop trip recording first', 'confirmation');
       // Invalidate before sending: a timeout may still mean the destructive command reached the ECU.
       this.lastSnapshot = null;
+      this.liveContext = null;
       const rawResponse = await this.transport.send('04');
       parseClearResponse(this.payload(rawResponse,'04'));
       return { acknowledged: true, rawResponse, timestamp: Date.now(), backupSnapshotId: backup.id };

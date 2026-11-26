@@ -1,6 +1,7 @@
 import base64 from 'base-64';
 import type { Device, Subscription } from 'react-native-ble-plx';
 import { createElmChannel } from './channel.ts';
+import { createDisconnectSignal } from './disconnect-signal.ts';
 import { ObdError } from './protocol.ts';
 import type { BleProfile, BleTransport } from './types.ts';
 
@@ -26,6 +27,9 @@ export async function createConnectedBleTransport(device: ConnectedDevice, profi
   let disconnections: Subscription | undefined;
   let closing: Promise<void> | null = null;
   let closed = false;
+  let sent = false;
+  let startupLength = 0;
+  const disconnected = createDisconnectSignal();
   const channel = createElmChannel(async ascii => {
     const encoded = base64.encode(ascii);
     if (writer.isWritableWithResponse) await device.writeCharacteristicWithResponseForService(profile.serviceUUID, profile.writeUUID, encoded);
@@ -36,7 +40,8 @@ export async function createConnectedBleTransport(device: ConnectedDevice, profi
     closed = true;
     channel.disconnect(reason);
     notifications?.remove(); disconnections?.remove();
-    closing = (async () => { try { await device.cancelConnection(); } catch { /* Already disconnected. */ } finally { await cleanup(); } })();
+    closing = Promise.resolve().then(async () => { try { await device.cancelConnection(); } catch { /* Already disconnected. */ } finally { await cleanup(); } });
+    disconnected.close();
     return closing;
   }
   try {
@@ -44,14 +49,24 @@ export async function createConnectedBleTransport(device: ConnectedDevice, profi
     notifications = device.monitorCharacteristicForService(profile.serviceUUID, profile.notifyUUID, (error, characteristic) => {
       if (error) { void close(error).catch(() => {}); return; }
       if (characteristic?.value === null || characteristic?.value === undefined) return;
-      try { channel.push(base64.decode(characteristic.value)); }
+      try {
+        const chunk = base64.decode(characteristic.value);
+        if (!sent) {
+          startupLength += chunk.length;
+          if (startupLength > 8192 || /[^\x20-\x7E\r\n\t]/.test(chunk)) void close(new ObdError('Invalid BLE startup message')).catch(() => {});
+          return;
+        }
+        channel.push(chunk);
+      }
       catch { void close(new ObdError('Invalid BLE notification encoding')).catch(() => {}); }
     });
     if (closed) { notifications.remove(); disconnections.remove(); throw new ObdError('Adapter disconnected during setup', 'disconnected'); }
   } catch (error) { await close(error instanceof Error ? error : new ObdError('BLE monitoring failed')); throw error; }
   return {
     adapterName: profile.adapterName,
+    onDisconnected: disconnected.subscribe,
     async send(command) {
+      sent = true;
       try { return await channel.send(command); }
       catch (error) { await close(error instanceof Error ? error : new ObdError('BLE command failed')); throw error; }
     },

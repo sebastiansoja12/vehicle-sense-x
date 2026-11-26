@@ -14,7 +14,8 @@ export type DiagnosticSnapshot = {
   ecu?:CanEcu;
 };
 export interface CommandTransport { send(command: string): Promise<string> }
-export interface BleTransport extends CommandTransport { adapterName: string; disconnect(): Promise<void> }
+export type LiveParameters = Pick<DiagnosticSnapshot, 'vehicleId' | 'timestamp' | 'adapterName' | 'parameters' | 'ecu'>;
+export interface BleTransport extends CommandTransport { adapterName: string; disconnect(): Promise<void>; onDisconnected(listener: () => void): () => void }
 export type BleProfile = { deviceId: string; adapterName: string; serviceUUID: string; writeUUID: string; notifyUUID: string };
 export type ScannedDevice = { id: string; name: string | null; rssi: number | null };
 export type StopScan = () => Promise<void>;
