@@ -15,7 +15,7 @@
 - [x] Testy brakującego języka, osieroconego tłumaczenia, błędnej nawigacji, lokalnych linków i zmienionych identyfikatorów; uruchomić i zobaczyć niepowodzenie.
 - [x] `scripts/check-docs.py`: kompletne trójki, nawigacja, linki i języki, zgodne polecenia i struktura; wdrożyć i potwierdzić testy oraz rzeczywistą dokumentację.
 - [x] `.github/workflows/verify.yml`: `npm ci` w `mobile`, pełne testy Node, typy/lint, walidacja dokumentacji i eksporty web/Hermes; uprawnienia tylko do odczytu, limit czasu i anulowanie starszych uruchomień.
-- [ ] Aktualizować trzy wersje instrukcji; niezależny przegląd, sprawdzić lokalnie, commit i push, następnie sprawdzić rzeczywiste uruchomienie GitHub.
+- [x] Aktualizować trzy wersje instrukcji; niezależny przegląd, sprawdzić lokalnie, commit i push, następnie sprawdzić rzeczywiste uruchomienie GitHub.
 
 ## Kontrola przeglądu
 

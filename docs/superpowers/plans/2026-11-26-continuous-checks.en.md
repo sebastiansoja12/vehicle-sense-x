@@ -15,7 +15,7 @@
 - [x] Tests for a missing language, orphan translation, incorrect navigation, local links and changed identifiers; run and observe failure.
 - [x] `scripts/check-docs.py`: complete triplets, navigation, links and languages, matching commands and structure; implement and verify tests plus actual documentation.
 - [x] `.github/workflows/verify.yml`: `npm ci` in `mobile`, all Node tests, types/lint, documentation validation and web/Hermes exports; read-only permissions, timeout and cancellation of older runs.
-- [ ] Update all three instruction variants; independent review, local checks, commit and push, then inspect the actual GitHub run.
+- [x] Update all three instruction variants; independent review, local checks, commit and push, then inspect the actual GitHub run.
 
 ## Review focus
 

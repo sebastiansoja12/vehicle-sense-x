@@ -15,7 +15,7 @@
 - [x] Tests für fehlende Sprache, verwaiste Übersetzung, falsche Navigation, lokale Links und geänderte Bezeichner; ausführen und Fehlschlag beobachten.
 - [x] `scripts/check-docs.py`: vollständige Sprachtrios, Navigation, Links und Sprachen, identische Befehle und Struktur; implementieren und Tests sowie tatsächliche Dokumentation prüfen.
 - [x] `.github/workflows/verify.yml`: `npm ci` in `mobile`, alle Node-Tests, Typen/Lint, Dokumentationsprüfung und Web-/Hermes-Exporte; Leserechte, Zeitlimit und Abbruch älterer Läufe.
-- [ ] Alle drei Anleitungsvarianten aktualisieren; unabhängige Prüfung, lokale Kontrollen, Commit und Push, danach den tatsächlichen GitHub-Lauf prüfen.
+- [x] Alle drei Anleitungsvarianten aktualisieren; unabhängige Prüfung, lokale Kontrollen, Commit und Push, danach den tatsächlichen GitHub-Lauf prüfen.
 
 ## Prüfschwerpunkte
 
