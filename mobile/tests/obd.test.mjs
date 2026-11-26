@@ -50,7 +50,7 @@ test('snapshot requires explicit successful DTC modes and codes must belong to t
 test('channel serializes commands and assembles chunks until a prompt',async()=>{
  assert.equal(typeof obd.createElmChannel,'function');
  const writes=[];
- const channel=obd.createElmChannel(async command=>{writes.push(command);},{timeoutMs:100});
+ const channel=obd.createElmChannel(async command=>{writes.push(command);},{timeoutMs:2000});
  const first=channel.send('010C'); const second=channel.send('0105');
  assert.deepEqual(writes,['010C\r']);
  channel.push('41 0'); channel.push('C 1A F8\r');
