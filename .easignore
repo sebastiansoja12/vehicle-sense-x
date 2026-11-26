@@ -1,6 +1,6 @@
 # Upload only the app's reproducible build inputs.
 *
-!mobile/
+!mobile
 !mobile/LICENSE
 !mobile/package.json
 !mobile/package-lock.json
@@ -9,15 +9,15 @@
 !mobile/tsconfig.json
 !mobile/babel.config.*
 !mobile/metro.config.*
-!mobile/src/
+!mobile/src
 !mobile/src/**
-!mobile/assets/
+!mobile/assets
 !mobile/assets/**
-!mobile/plugins/
+!mobile/plugins
 !mobile/plugins/**
-!mobile/patches/
+!mobile/patches
 !mobile/patches/**
-!mobile/scripts/
+!mobile/scripts
 !mobile/scripts/**
 **/.env
 **/.env.*
