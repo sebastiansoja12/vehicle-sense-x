@@ -1,6 +1,10 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# VehicleSenseX 0.3.0 release
+# VehicleSenseX 0.4.0 release
+
+Version 0.4.0 adds an automatic ECU scan, separate Live Data, connection-loss handling and a radio audio test through system Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.en.md)
+
+## 0.3.0
 
 Source 0.3.0/build 4 adds ownership expenses with category, exact PLN amount, editing/deletion, monthly/yearly totals and a separate CSV. Schema 3 migrates older garages and backups; older app versions cannot read schema 3. Backup import rejects future expense dates, while existing storage remains readable after a clock rollback. Expense details remain outside the AI context and sale report. The signed Android 0.3.0 AAB and iOS Release simulator package have been built and inspected, including the ledger.
 

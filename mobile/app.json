@@ -3,13 +3,13 @@
     "name": "VehicleSenseX",
     "slug": "vehiclesensex",
     "scheme": "vehiclesensex",
-    "version": "0.3.0",
+    "version": "0.4.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "com.vehiclesensex.app",
-      "buildNumber": "4",
+      "buildNumber": "5",
       "infoPlist": {
         "NSLocalNetworkUsageDescription": "VehicleSenseX łączy się z Twoim adapterem OBD2 Wi-Fi w sieci lokalnej, aby odczytać dane samochodu.",
         "RCTAsyncStorageExcludeFromBackup": true
@@ -17,7 +17,7 @@
     },
     "android": {
       "package": "com.vehiclesensex.app",
-      "versionCode": 4,
+      "versionCode": 5,
       "blockedPermissions": [
         "android.permission.READ_EXTERNAL_STORAGE",
         "android.permission.WRITE_EXTERNAL_STORAGE",

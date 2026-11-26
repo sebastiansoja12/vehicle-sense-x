@@ -2,7 +2,7 @@
 
 # VehicleSenseX — aplikacja mobilna
 
-React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.3.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
+React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.4.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
 
 ## Uruchomienie
 
@@ -93,3 +93,5 @@ Wersja 0.2.1/build 2 zawiera GPX i uzupełnianie danych NHTSA w zweryfikowanym p
 - [Notifications](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/), [FileSystem](https://docs.expo.dev/versions/v58.0.0/sdk/filesystem/)
 - [TCP Socket — oficjalne API](https://github.com/Rapsssito/react-native-tcp-socket), [BLE](https://dotintent.github.io/react-native-ble-plx/)
 - [Profile kompilacji Expo](https://docs.expo.dev/build/eas-json/), [BuildProperties](https://docs.expo.dev/versions/v58.0.0/sdk/build-properties/)
+
+Wersja 0.4.0 dodaje automatyczny skan ECU, osobne Live Data, obsługę utraty połączenia i próbę dźwięku radia przez systemowe Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.md)

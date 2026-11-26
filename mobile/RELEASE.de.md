@@ -1,6 +1,10 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Veröffentlichung von VehicleSenseX 0.3.0
+# Veröffentlichung von VehicleSenseX 0.4.0
+
+Version 0.4.0 ergänzt automatischen ECU-Scan, separate Live Data, Behandlung von Verbindungsverlust und einen Radio-Audiotest über System-Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.de.md)
+
+## 0.3.0
 
 Quellversion 0.3.0/Build 4 ergänzt Besitzkosten mit Kategorie, genauem PLN-Betrag, Bearbeiten/Löschen, Monats-/Jahressummen und separatem CSV. Schema 3 migriert ältere Garagen und Sicherungen; ältere App-Versionen können Schema 3 nicht lesen. Der Sicherungsimport lehnt zukünftige Ausgabendaten ab, vorhandene Daten bleiben bei zurückgestellter Uhr lesbar. Ausgabendetails bleiben außerhalb von KI-Kontext und Verkaufsbericht. Der signierte Android-0.3.0-AAB und das iOS-Release-Simulatorpaket wurden mit dem Register gebaut und geprüft.
 

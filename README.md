@@ -2,7 +2,7 @@
 
 # VehicleSenseX
 
-Aplikacja mobilna do diagnostyki OBD2, prowadzenia garażu, rejestrowania tras i kontroli kosztów samochodu. Bieżąca wersja źródłowa: 0.3.0. React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Garaż startuje pusty; pomiary pochodzą z urządzenia lub wpisów właściciela.
+Aplikacja mobilna do diagnostyki OBD2, prowadzenia garażu, rejestrowania tras i kontroli kosztów samochodu. Bieżąca wersja źródłowa: 0.4.0. React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Garaż startuje pusty; pomiary pochodzą z urządzenia lub wpisów właściciela.
 
 [Dokumentacja PL/EN/DE](docs/README.md) · [Instrukcja aplikacji](mobile/README.md) · [Kompilacje i wydanie](mobile/RELEASE.md)
 
@@ -56,3 +56,5 @@ Walidator dokumentacji wymaga Python 3.9+ i Git. Wyniki kodu i formularza: [wery
 ## Wcześniejszy prototyp HTML
 
 Pliki projektu interfejsu pozostają w katalogu głównym jako materiał historyczny. Uruchomisz je poleceniem `npm run prototype`, pod adresem http://127.0.0.1:5173. Bieżąca aplikacja znajduje się w `mobile/`.
+
+Wersja 0.4.0 dodaje automatyczny skan ECU, osobne Live Data, obsługę utraty połączenia i próbę dźwięku radia przez systemowe Bluetooth. [0.4.0](docs/verification/2026-11-26-obd-radio.md)

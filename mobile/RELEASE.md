@@ -1,6 +1,10 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Wydanie VehicleSenseX 0.3.0
+# Wydanie VehicleSenseX 0.4.0
+
+Wersja 0.4.0 dodaje automatyczny skan ECU, osobne Live Data, obsługę utraty połączenia i próbę dźwięku radia przez systemowe Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.md)
+
+## 0.3.0
 
 Kod 0.3.0/build 4 dodaje pozostałe wydatki z kategorią, dokładną kwotą PLN, edycją/usuwaniem, sumami miesiąca/roku i osobnym CSV. Schemat 3 migruje starsze garaże i kopie; starsze wersje aplikacji nie odczytają schematu 3. Import kopii odrzuca przyszłe daty wydatków, natomiast istniejący magazyn pozostaje dostępny po cofnięciu zegara. Szczegóły wydatków pozostają poza kontekstem AI i raportem sprzedażowym. Podpisany AAB Androida 0.3.0 i pakiet iOS Release na symulator zostały zbudowane i sprawdzone wraz z rejestrem.
 
