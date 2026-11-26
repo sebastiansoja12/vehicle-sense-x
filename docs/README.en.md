@@ -22,6 +22,7 @@ When changing documentation, update all three versions and language links. Do no
 - [Native builds](verification/2026-11-26-native-builds.en.md)
 - [iOS artifact metadata (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Android APK artifact metadata (JSON)](verification/2026-11-26-android-artifact.json)
+- [Production Android AAB metadata (JSON)](verification/2026-11-26-android-production-artifact.json)
 - [Generated native configuration (JSON)](verification/2026-11-25-native-config.json)
 
 ## Implementation plans

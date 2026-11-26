@@ -9,8 +9,9 @@ Użytkownik upoważnił do dalszej implementacji, kompilacji Android/iOS, kolejn
 - [x] Weryfikacja stanu wyjściowego (135 testów, typy/lint), commit na codex/native-build-compat, bez ustawień IDE i poświadczeń.
 - [x] Archiwum ograniczone allowlistą, profile walidacji bez poświadczeń i przypisany projekt Expo; kontrola zawartości przed wysłaniem (101 plików przed pluginem Classic, 102 po nim).
 - [x] Rzeczywiste kompilacje chmurowe Android Release APK i iOS Release na symulator, rozpoznanie błędu Classic, odtwarzalna poprawka przez plugin CNG, ponowny sukces kompilatora. Brak ręcznych zmian wygenerowanych projektów.
-- [ ] Produkcyjny Android AAB jest budowany po jawnej zgodzie na nowy klucz w Expo; brak aktywnego konta Apple Developer blokuje sklepowe IPA. Nie publikuj i nie zobowiązuj się do nowych opłat.
-- [x] Kontrola powtarzanego prebuild, testów, typów/lint, archiwum i pobranych artefaktów; niezależny przegląd poprawki, kolejne commity/push. Pozostają kontrole wynikowego AAB.
+- [x] Produkcyjny Android AAB zbudowano po jawnej zgodzie na nowy klucz w Expo; potwierdzono podpis, manifest, Bundletool i wyrównanie bibliotek.
+- [ ] Sklepowe IPA jest zablokowane brakiem aktywnego konta Apple Developer; nie publikuj i nie zobowiązuj się do nowych opłat.
+- [x] Kontrola powtarzanego prebuild, testów, typów/lint, archiwum i pobranych artefaktów; niezależny przegląd poprawki, kolejne commity/push. Sprawdzono także wynikowy AAB.
 - [x] Wszystkie dokumenty Markdown w trzech językach, przełączniki i indeks dokumentacji, zgodność poleceń i sprawdzenie odnośników; instrukcje AGENTS.md i raporty o strukturze maszynowej zachowują składnię źródłową.
 
 Kompilacja, podpisywanie i test sprzętowy stanowią odrębne dowody. Kompilacja na symulator nie jest sklepowym IPA, interop nie jest przepisaniem na TurboModules, a ostrzeżenie Directory nie jest wyciszane w celu uzyskania zielonego wyniku. Szczegóły: [raport kompilacji](../../verification/2026-11-26-native-builds.md).

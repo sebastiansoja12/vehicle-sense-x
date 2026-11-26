@@ -11,7 +11,7 @@ Projekt: [@rubisco4471/vehiclesensex](https://expo.dev/accounts/rubisco4471/proj
 | Android Release APK, pierwsza próba | [4eaf540e-88e6-4b41-8cd4-5686b9dd56b7](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/4eaf540e-88e6-4b41-8cd4-5686b9dd56b7) | Błąd kompilacji Classic: brak BuildConfig |
 | Android Release APK, po poprawce | [d99099b1-3458-497e-a496-ec3b449bdf16](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/d99099b1-3458-497e-a496-ec3b449bdf16) | Sukces, 08:10:22 UTC |
 | iOS Release, symulator | [ace81f64-663f-49e0-bb50-479e7752833c](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/ace81f64-663f-49e0-bb50-479e7752833c) | Sukces, 07:48:42 UTC |
-| Android produkcyjny AAB | [714a8afc-a7da-487b-9622-498bdb0103d4](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/714a8afc-a7da-487b-9622-498bdb0103d4) | W toku; rewizja 8056cf63e433894bad1ba6af6601dcade31cc8bb |
+| Android produkcyjny AAB | [714a8afc-a7da-487b-9622-498bdb0103d4](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/714a8afc-a7da-487b-9622-498bdb0103d4) | Sukces, 08:31:49 UTC; rewizja 8056cf63e433894bad1ba6af6601dcade31cc8bb |
 
 ## Poprawka Android Classic i New Architecture
 
@@ -31,6 +31,14 @@ APK zawiera `RNBluetoothClassicModule`, `TcpSocketModule`, `BlePlxModule`, samod
 
 Oficjalny Google apksig9.5.3 zweryfikował podpis APK v2 bez błędów i ostrzeżeń. To certyfikat `CN=Android Debug`, a nie klucz produkcyjny; odcisk certyfikatu jest w raporcie. APK służy do testów. Instalacja późniejszej wersji z innym podpisem może wymagać odinstalowania wersji testowej; przedtem wyeksportuj własne dane.
 
+## Weryfikacja produkcyjnego AAB
+
+Plik lokalny: `artifacts/native/VehicleSenseX-0.2.0-android-production.aab`, 75726460 bajtów. SHA-256: `c1be8e336ef4cb210388518c156cf3922f08428e917756a30faf30c0fbcaa554`. [Raport produkcyjnego AAB](2026-11-26-android-production-artifact.json) zachowuje wybrane metadane bez materiału prywatnego klucza.
+
+Oficjalny Bundletool1.18.3 zaakceptował `bundletool validate`; manifest, zestaw uprawnień, moduły transportów, pakiet JS i cztery ABI odpowiadają sprawdzonemu APK. Konfiguracja pakowania wskazuje `PAGE_ALIGNMENT_16K`, a wszystkie 54 biblioteki 64-bitowe przeszły kontrolę ELF LOAD/RELRO. JDK21 potwierdził podpis poleceniem `jarsigner -verify`; odcisk certyfikatu produkcyjnego to `d07968eb9f05359209b5874ebf8137818e7db45b836a5564bf957320bba621a0`, inny niż Android Debug. Raport zachowuje ostrzeżenia JDK dotyczące samopodpisanego certyfikatu bez zaufanego łańcucha CA, braku znacznika czasu i atrybutów POSIX/odnośników ZIP nieobjętych podpisem JAR. Certyfikat jest ważny do 2054-04-13.
+
+AAB nie został przesłany do Google Play. Przed dystrybucją nadal potrzebne są konto i metadane wydawcy oraz testy sprzętowe. Przechowuj bezpieczną kopię klucza zgodnie z procedurą poświadczeń Expo; nie dodawaj go do repozytorium.
+
 ## Weryfikacja artefaktu iOS
 
 Plik lokalny: `artifacts/native/VehicleSenseX-0.2.0-ios-simulator.tar.gz`, 28727631 bajtów. SHA-256: `ac33a19140b0e0a73ac7f5b78c2c7ad0ce29064f289a23ee52213d6f0efa8ffb`. [Raport iOS](2026-11-26-ios-artifact.json) zawiera wybrane metadane.
@@ -43,7 +51,7 @@ Odczytano 15 plików `PrivacyInfo.xcprivacy`, w tym zbiorczy manifest aplikacji 
 
 Archiwum Expo ogranicza główny `.easignore`: po poprawce Classic zawierało 102 dozwolone pliki (1497183 bajty), w tym plugin CNG. Sprawdzono je przed wysłaniem; brak plików środowiska, ustawień lokalnych, katalogów natywnych, `node_modules` i kluczy. Surowe metadane z podpisanymi adresami logów są poza repozytorium, podobnie jak binaria. Użyto istniejącego konta i bezpłatnego limitu Expo, bez zgłoszenia do sklepów.
 
-Automatyczna kontrola uprawnień początkowo odrzuciła utworzenie trwałego klucza Androida bez wyraźnej zgody; tamten proces anulowano. Użytkownik następnie jawnie zatwierdził wygenerowanie i przechowywanie nowego keystore w Expo. Klucz został utworzony, a podpisywany AAB jest budowany w zadaniu podanym powyżej. Materiał prywatnego klucza nie został odczytany ani dodany do repozytorium.
+Automatyczna kontrola uprawnień początkowo odrzuciła utworzenie trwałego klucza Androida bez wyraźnej zgody; tamten proces anulowano. Użytkownik następnie jawnie zatwierdził wygenerowanie i przechowywanie nowego keystore w Expo. Klucz został utworzony, a podpisany AAB zbudowano i sprawdzono w zadaniu podanym powyżej. Materiał prywatnego klucza nie został odczytany ani dodany do repozytorium.
 
 Próba produkcyjnego iOS zatrzymała się przed budowaniem: `Credentials are not set up. Run this command again in interactive mode.` Użytkownik potwierdził brak aktywnego konta Apple Developer. Publikowalne IPA wymaga członkostwa, certyfikatu/profilu dystrybucyjnego i konfiguracji deklaracji eksportu szyfrowania przez wydawcę; nie zgadywano deklaracji w celu usunięcia ostrzeżenia CLI. Wersja na symulator nie jest IPA do App Store.
 

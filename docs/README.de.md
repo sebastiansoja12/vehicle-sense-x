@@ -22,6 +22,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [Native Builds](verification/2026-11-26-native-builds.de.md)
 - [Metadaten des iOS-Artefakts (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Metadaten des Android-APK-Artefakts (JSON)](verification/2026-11-26-android-artifact.json)
+- [Metadaten des Android-Produktions-AAB (JSON)](verification/2026-11-26-android-production-artifact.json)
 - [Generierte native Konfiguration (JSON)](verification/2026-11-25-native-config.json)
 
 ## Implementierungspläne

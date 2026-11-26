@@ -9,8 +9,9 @@ Der Benutzer hat weitere Implementierung, Android-/iOS-Builds, weitere Commits u
 - [x] Ausgangszustand verifiziert (135 Tests, Typen/Lint), Commit auf codex/native-build-compat ohne IDE-Einstellungen und Zugangsdaten.
 - [x] Archiv durch Erlaubnisliste begrenzt, Validierungsprofile ohne Zugangsdaten und zugeordnetes Expo-Projekt; Inhaltsprüfung vor Hochladen (101 Dateien vor Classic-Plugin, 102 danach).
 - [x] Echte Cloudbuilds für Android Release APK und iOS Release für Simulator, Classic-Fehler erkannt, reproduzierbare Korrektur per CNG-Plugin, erneuter Compilererfolg. Keine manuellen Änderungen an generierten Projekten.
-- [ ] Android-Produktions-AAB wird nach ausdrücklicher Zustimmung zu einem neuen Schlüssel in Expo gebaut; fehlendes aktives Apple-Developer-Konto blockiert Store-IPA. Nicht veröffentlichen und keine neuen Kostenverpflichtungen eingehen.
-- [x] Wiederholtes Prebuild, Tests, Typen/Lint, Archiv und heruntergeladene Artefakte geprüft; unabhängige Prüfung der Korrektur, weitere Commits/Push. Prüfungen des resultierenden AAB stehen aus.
+- [x] Android-Produktions-AAB nach ausdrücklicher Zustimmung zu einem neuen Schlüssel in Expo gebaut; Signatur, Manifest, Bundletool und Bibliotheksausrichtung geprüft.
+- [ ] Store-IPA durch fehlendes aktives Apple-Developer-Konto blockiert; nicht veröffentlichen und keine neuen Kostenverpflichtungen eingehen.
+- [x] Wiederholtes Prebuild, Tests, Typen/Lint, Archiv und heruntergeladene Artefakte geprüft; unabhängige Prüfung der Korrektur, weitere Commits/Push. Der resultierende AAB wurde ebenfalls geprüft.
 - [x] Alle Markdown-Dokumente in drei Sprachen, Sprachumschalter und Dokumentationsindex, Befehlsübereinstimmung und Linkprüfung; Anweisungen in AGENTS.md und maschinenstrukturierte Berichte behalten die Quellsyntax.
 
 Kompilierung, Signierung und Hardwaretest sind getrennte Nachweise. Ein Simulatorbuild ist kein Store-IPA, Interop ist keine Umschreibung auf TurboModules, und die Directory-Warnung wird nicht unterdrückt, um ein grünes Ergebnis zu erhalten. Details: [Buildbericht](../../verification/2026-11-26-native-builds.de.md).

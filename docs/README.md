@@ -22,6 +22,7 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 - [Kompilacje natywne](verification/2026-11-26-native-builds.md)
 - [Metadane artefaktu iOS (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Metadane artefaktu Android APK (JSON)](verification/2026-11-26-android-artifact.json)
+- [Metadane produkcyjnego Android AAB (JSON)](verification/2026-11-26-android-production-artifact.json)
 - [Wygenerowana konfiguracja natywna (JSON)](verification/2026-11-25-native-config.json)
 
 ## Plany implementacji
