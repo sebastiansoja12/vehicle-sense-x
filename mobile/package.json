@@ -53,6 +53,7 @@
     "export:web": "expo export --platform web",
     "export:native": "expo export --platform ios --platform android",
     "verify": "npm test && npm run typecheck && npm run lint",
+    "build:native-check": "npx eas-cli@latest build --platform all --profile native-check",
     "build:android": "npx eas-cli@latest build --platform android --profile production",
     "build:ios": "npx eas-cli@latest build --platform ios --profile production"
   },

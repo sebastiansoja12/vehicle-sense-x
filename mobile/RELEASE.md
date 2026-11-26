@@ -1,14 +1,14 @@
 # Wydanie VehicleSenseX 0.2.0
 
-Status: implementacja z rzeczywistymi transportami BLE/TCP, bez demonstracyjnych pomiarów. Konfiguracja kompilacji jest przygotowana. Nie powstały jeszcze podpisane paczki ani potwierdzona macierz zgodności sprzętowej; nie jest to potwierdzenie gotowości do publikacji.
+Status: implementacja z rzeczywistymi transportami BLE/TCP/Android Classic, bez demonstracyjnych pomiarów. Natywna kompilacja iOS Release na symulator zakończyła się powodzeniem 2026-11-26; sprawdzono końcowy plik aplikacji, uprawnienia i obecność klas BLE/TCP. Pierwsza kompilacja Androida ujawniła brak BuildConfig w Classic; poprawka CNG jest w repozytorium, ponowna kompilacja trwa. Nie ma jeszcze podpisanych paczek sklepowych ani potwierdzonej macierzy sprzętowej. Bieżące wyniki: [raport kompilacji](../docs/verification/2026-11-26-native-builds.md).
 
 Kontrola konfiguracji 2026-11-25: `expo prebuild --no-install --platform all` zakończył się poprawnie w oddzielnej kopii tymczasowej. Nie utworzono `ios/` ani `android/` w repozytorium. Sprawdzono wygenerowane Info.plist, AndroidManifest i jasny motyw. Kamera/mikrofon/szeroki dostęp do zdjęć/nakładki są usuwane, brak lokalizacji Always i rejestracji w tle. Wynik: [raport konfiguracji](../docs/verification/2026-11-25-native-config.json). To konfiguracja projektu przed scaleniem manifestów bibliotek i kompilacją, nie wynik kontroli finalnego APK/IPA.
 
-Expo Doctor: 19/20 kontroli. Brakujący bezpośredni peer `expo-font` uzupełniono przez Expo CLI; `expo-system-ui` zapewnia zadeklarowany jasny styl Androida. Pozostała kontrola Directory: `react-native-bluetooth-classic` i `react-native-tcp-socket` mają status „Untested on New Architecture”. Nie wyciszono ostrzeżenia. Pomyślny prebuild, autolinking i eksport JS nie rozstrzygają ich działania w natywnej kompilacji; nadal potrzebne są prawidłowo zbudowane paczki i urządzenia.
+Expo Doctor: 19/20 kontroli. Brakujący bezpośredni peer `expo-font` uzupełniono przez Expo CLI; `expo-system-ui` zapewnia zadeklarowany jasny styl Androida. Pozostała kontrola Directory: `react-native-bluetooth-classic` i `react-native-tcp-socket` mają status „Untested on New Architecture”. Nie wyciszono ostrzeżenia. TCP skompilował się i został dołączony do iOS Release przez interop RN0.88; Classic jest tylko na Androidzie. Sam kompilator nie potwierdza połączenia z adapterem ani obsługi zgód i zdarzeń na telefonie.
 
 ## Wytworzenie paczek
 
-Wymagane są konto Expo/EAS wydawcy oraz uprawnienia do identyfikatora aplikacji i podpisów w Apple/Google. Identyfikator `com.vehiclesensex.app` nie został zarejestrowany ani sprawdzony pod kątem dostępności. Nie dodawaj kluczy i plików podpisujących do repozytorium.
+Projekt jest przypisany do istniejącego konta Expo `@rubisco4471/vehiclesensex`; `extra.eas.projectId` i `owner` są zapisane w `app.json`. Przy zmianie wydawcy należy przeprowadzić transfer projektu w Expo. Nadal wymagane są uprawnienia do identyfikatora aplikacji i podpisów w Apple/Google. Identyfikator `com.vehiclesensex.app` nie został zarejestrowany ani sprawdzony pod kątem dostępności w sklepach. Nie dodawaj kluczy i plików podpisujących do repozytorium.
 
 ```sh
 cd mobile
@@ -16,13 +16,17 @@ nvm use
 npm ci
 npm run verify
 npx eas-cli@latest login
-npx eas-cli@latest build:configure
+npm run build:native-check
 npx eas-cli@latest build --platform android --profile preview
 npx eas-cli@latest build --platform android --profile production
 npx eas-cli@latest build --platform ios --profile production
 ```
 
-Po przypisaniu projektu zachowaj istniejące ustawienia profili w `eas.json`. Preview Android tworzy APK do instalacji; production Android tworzy AAB. Profil iOS store wymaga poświadczeń Apple. Przed kolejnym wydaniem zwiększ `android.versionCode` i `ios.buildNumber` w `app.json`. Samo `expo export` nie kompiluje natywnych sterowników BLE/TCP/SQLite.
+Zachowaj istniejące profile w `eas.json`. `native-check` kompiluje Android Release APK bez przekazania klucza produkcyjnego oraz iOS Release na symulator, bez konta Apple. To nie są paczki do publikacji. Preview Android tworzy APK do instalacji; production Android tworzy AAB. Profil iOS store wymaga poświadczeń Apple. Przed kolejnym wydaniem zwiększ `android.versionCode` i `ios.buildNumber` w `app.json`. Samo `expo export` nie kompiluje natywnych sterowników BLE/TCP/SQLite.
+
+Archiwum dla Expo jest ograniczone przez główny `.easignore` do źródeł `mobile/`, zasobów i konfiguracji; katalogów zanegowanych w allowliście nie kończ ukośnikiem, ponieważ etap kopiowania sprawdza ścieżki bez niego. `plugins/withClassicBuildConfig.cjs` jest wymaganym wejściem CNG i musi trafić do archiwum. Przed wysłaniem zmienionej allowlisty sprawdź `eas build:inspect --platform android --profile native-check --stage archive --output /private/tmp/vehiclesensex-archive-check`; nie wysyłaj `.env`, kluczy ani lokalnych ustawień narzędzi.
+
+Próba produkcyjnego iOS zatrzymała się przed budowaniem z powodu braku certyfikatu/profilu dystrybucyjnego. Wydawca musi skonfigurować podpis interaktywnie i potwierdzić deklarację eksportu szyfrowania dla App Store Connect. Android wymaga decyzji o nowym lub istniejącym kluczu podpisującym; generowanie klucza nie jest automatycznie zastępowane kluczem testowym. Wyniki i pliki lokalne w `artifacts/` nie zawierają materiału podpisującego.
 
 SDK 58 ma jawnie ustawione Android compileSdk 37 / targetSdk 36 oraz iOS 16.4. Przy przyszłym podniesieniu targetSdk do 37 trzeba dodać i sprawdzić nową zgodę `ACCESS_LOCAL_NETWORK`; dla targetSdk 36 dokumentacja Androida wskazuje dostęp przez INTERNET. iOS ma opis użycia sieci lokalnej; nie ma globalnego wyłączenia ATS ani zbędnych deklaracji lokalizacji „Always”.
 
