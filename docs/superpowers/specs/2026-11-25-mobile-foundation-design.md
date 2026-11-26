@@ -1,3 +1,5 @@
+[Polski](2026-11-25-mobile-foundation-design.md) | [English](2026-11-25-mobile-foundation-design.en.md) | [Deutsch](2026-11-25-mobile-foundation-design.de.md)
+
 # VehicleSenseX — fundament aplikacji mobilnej
 
 ## Zatwierdzony kierunek
@@ -37,4 +39,4 @@ OBD2 wymaga wskazania adaptera i testów sprzętowych. GPS, praca w tle, powiado
 
 ## Weryfikacja
 
-Testy logiki: walidacja, izolacja aut, niepełne tankowania, sumy kosztów i uszkodzony zapis. TypeScript bez błędów; eksport bundli platformowych. Podgląd web na telefonie i ręczna ścieżka dodania samochodu → tankowania → serwisu → odświeżenie → drugi samochód. Testy fizycznych urządzeń i podpisane buildy raportujemy osobno.
+Testy logiki: walidacja, izolacja aut, niepełne tankowania, sumy kosztów i uszkodzony zapis. TypeScript bez błędów; eksport bundli platformowych. Podgląd web na telefonie i ręczna ścieżka dodania samochodu → tankowania → serwisu → odświeżenie → drugi samochód. Testy fizycznych urządzeń i podpisane kompilacje raportujemy osobno.

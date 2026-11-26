@@ -1,3 +1,5 @@
+[Polski](README.md) | [English](README.en.md) | [Deutsch](README.de.md)
+
 # VehicleSenseX — aplikacja mobilna
 
 React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja aplikacji 0.2.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
@@ -22,7 +24,7 @@ Podgląd bieżącej sesji: **http://127.0.0.1:8083/**. Bluetooth i surowe TCP do
 - Trasy: ręczne przejazdy i rejestrator GPS przy otwartej aplikacji. Pauza w tle, szkic zapisywany na urządzeniu, odzyskanie po restarcie, oznaczone przerwy śladu, blokada zmiany auta podczas szkicu. Web Locks chronią jednoczesne rejestrowanie w kilku kartach.
 - Analiza: dystans, czas, prędkość i heurystyki przyspieszania/hamowania z poprawnych pomiarów GPS. Brak danych pozostaje brakiem danych; nie generujemy Eco Score.
 - OBD2: rzeczywiste transporty ELM327 **Bluetooth BLE**, **Bluetooth Classic/SPP na Androidzie** i **Wi-Fi/TCP**, odczyt wspieranych PID, napięcia i trzech statusów DTC, historia i import/eksport raportu. Kasowanie wymaga bieżącego rzeczywistego odczytu, zachowanej kopii i oddzielnego potwierdzenia; jest blokowane podczas szkicu GPS.
-- Kondycja i wartość: datowane źródła diagnostyczne i wpisy właściciela, terminy, przedział/mediana minimum dwóch ofert podanych przez właściciela z ostatnich 90 dni; raport PDF na telefonie lub HTML na web.
+- Kondycja i wartość: datowane źródła diagnostyczne i wpisy właściciela, terminy, przedział/mediana minimum dwóch ofert podanych przez właściciela z ostatnich 90 dni; raport PDF na telefonie lub HTML w przeglądarce.
 - Asystent: lokalne podsumowanie faktów oraz rzeczywiste wywołanie skonfigurowanego proxy OpenAI po zgodzie. Nie zawiera gotowych odpowiedzi udających AI. Uruchomienie API opisuje [serwer](../server/README.md).
 
 Eksport CSV obejmuje osobno paliwo, serwis i trasy. Pełna kopia JSON zachowuje wszystkie dane, także VIN, tablice, notatki, zdjęcia, faktury i współrzędne GPS. Pliki mają limit 1 MB oraz 5 załączników przy samochodzie lub serwisie; zdjęcia auta są zmniejszane do 1200 px. Przywrócenie najpierw waliduje format, pokazuje zawartość i wymaga potwierdzenia zastąpienia garażu. Powiadomienia z kopii trzeba włączyć ponownie. Limit importu kopii wynosi 20 MB.
@@ -51,7 +53,7 @@ Po wybraniu sterownika CAN w diagnostyce można wykonać lokalne zapytanie mode 
 
 Na telefonie używamy `expo-sqlite/kv-store`, aby większe historie GPS nie trafiały na limit pojedynczego rekordu AsyncStorage na Androidzie. Starszy zapis jest walidowany i kopiowany przed usunięciem kopii ze starego magazynu. Web używa AsyncStorage/localStorage oraz Web Locks. Repozytorium zatwierdza stan dopiero po trwałym zapisie; nie zastępuje uszkodzonych danych pustym garażem. Wersja schematu 1 jest migrowana do 2.
 
-Baza nie jest dodatkowo szyfrowana przez aplikację. Android ma wyłączony automatyczny backup aplikacji; zachowanie kopii systemowych iOS zależy również od platformy. W aplikacji jest ekran opisujący dane i dobrowolne wysyłanie kontekstu AI. Publiczną politykę operatora trzeba przygotować dla rzeczywistego wydawcy przed publikacją.
+Baza nie jest dodatkowo szyfrowana przez aplikację. Android ma wyłączoną automatyczną kopię aplikacji; zachowanie kopii systemowych iOS zależy również od platformy. W aplikacji jest ekran opisujący dane i dobrowolne wysyłanie kontekstu AI. Publiczną politykę operatora trzeba przygotować dla rzeczywistego wydawcy przed publikacją.
 
 `EXPO_PUBLIC_ASSISTANT_URL` może zawierać wyłącznie publiczny adres serwera. Klucz OpenAI jest wyłącznie w środowisku serwera, a token dostępu użytkownik podaje na ekranie asystenta; token nie jest zapisywany i znika po opuszczeniu ekranu. Nie konfiguruj sekretów w publicznych zmiennych Expo.
 
@@ -63,9 +65,9 @@ npm run export:web
 npm run export:native
 ```
 
-Testy modelu, repozytorium, parserów, migracji i klienta API działają w Node 24. Testy HTTP/TCP otwierają wyłącznie lokalne porty testowe i nie wykonują płatnych połączeń z AI. Eksport natywny tworzy bundle JavaScript/Hermes, **nie podpisane IPA/APK/AAB**.
+Testy modelu, repozytorium, parserów, migracji i klienta API działają w Node 24. Testy HTTP/TCP otwierają wyłącznie lokalne porty testowe i nie wykonują płatnych połączeń z AI. Eksport natywny tworzy pakiet JavaScript/Hermes, **nie podpisane IPA/APK/AAB**.
 
-`eas.json` zawiera profile development, preview (instalacyjny APK) i production (AAB / iOS store). Instrukcja i konkretne warunki wydania: [RELEASE.md](RELEASE.md). EAS nie został połączony z kontem wydawcy ani uruchomiony do płatnej kompilacji. Ten komputer ma Command Line Tools zamiast pełnego Xcode i nie ma skonfigurowanego emulatora Androida.
+`eas.json` zawiera profile `development`, `preview` (instalacyjny APK), `production` (AAB / iOS store) i `native-check` (Android Release APK oraz iOS Release na symulator). Projekt jest przypisany do `@rubisco4471/vehiclesensex`. Walidacyjny APK Android Release zbudowano po ukierunkowanej poprawce CNG dla BuildConfig biblioteki Classic; iOS Release na symulator również zbudowano poprawnie. Sprawdzono oba artefakty. Podpisany produkcyjny AAB Androida jest w toku z nowym kluczem Expo jawnie zatwierdzonym przez użytkownika. Brak aktywnego konta Apple Developer blokuje sklepowe IPA. Testów na fizycznych telefonach i adapterach nie wykonano. Lokalnie są tylko Command Line Tools zamiast pełnego Xcode, bez Android SDK i skonfigurowanego emulatora; kompilacje wykonuje Expo w chmurze. Szczegóły: [instrukcja wydania](RELEASE.md) i [raport kompilacji](../docs/verification/2026-11-26-native-builds.md).
 
 ## Pozostały zakres produktu
 
@@ -76,4 +78,4 @@ Nie ma jeszcze zewnętrznego dekodowania specyfikacji po VIN, zewnętrznej wycen
 - [Expo SDK 58](https://docs.expo.dev/versions/v58.0.0/), [SQLite](https://docs.expo.dev/versions/v58.0.0/sdk/sqlite/), [Location](https://docs.expo.dev/versions/v58.0.0/sdk/location/)
 - [Notifications](https://docs.expo.dev/versions/v58.0.0/sdk/notifications/), [FileSystem](https://docs.expo.dev/versions/v58.0.0/sdk/filesystem/)
 - [TCP Socket — oficjalne API](https://github.com/Rapsssito/react-native-tcp-socket), [BLE](https://dotintent.github.io/react-native-ble-plx/)
-- [Expo Build profiles](https://docs.expo.dev/build/eas-json/), [BuildProperties](https://docs.expo.dev/versions/v58.0.0/sdk/build-properties/)
+- [Profile kompilacji Expo](https://docs.expo.dev/build/eas-json/), [BuildProperties](https://docs.expo.dev/versions/v58.0.0/sdk/build-properties/)

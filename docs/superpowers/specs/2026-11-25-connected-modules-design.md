@@ -1,3 +1,5 @@
+[Polski](2026-11-25-connected-modules-design.md) | [English](2026-11-25-connected-modules-design.en.md) | [Deutsch](2026-11-25-connected-modules-design.de.md)
+
 # VehicleSenseX — pozostałe moduły
 
 Użytkownik zlecił ciągłą implementację pozostałych modułów z użyciem Superpowers, bez kolejnych przerw na akceptację. Zachowujemy zatwierdzony interfejs i Expo SDK 58; poprzedni plan pozostaje ukończony. Nowy zakres rozwija działającą aplikację, nie zastępuje danych użytkownika demonstracją.
@@ -17,7 +19,7 @@ Analiza pokazuje konkretne zdarzenia przyspieszenia/hamowania i jawne progi, jak
 
 ## Serwis, koszty i garaż
 
-Przypomnienia według dnia lub przebiegu; obowiązuje wcześniejszy termin. Edycja i usuwanie wpisów z potwierdzeniem, eksport CSV oraz pełny backup JSON z walidowanym przywracaniem i potwierdzeniem zastąpienia. Załączniki lokalne, jeżeli pozwoli bezpiecznie zweryfikować cykl plików; brak automatycznego uploadu. Zdjęcia i VIN nie mają wymyślonego dostawcy.
+Przypomnienia według dnia lub przebiegu; obowiązuje wcześniejszy termin. Edycja i usuwanie wpisów z potwierdzeniem, eksport CSV oraz pełna kopia JSON z walidowanym przywracaniem i potwierdzeniem zastąpienia. Załączniki lokalne, jeżeli pozwoli bezpiecznie zweryfikować cykl plików; brak automatycznego przesyłania. Zdjęcia i VIN nie mają wymyślonego dostawcy.
 
 ## Kondycja i wartość
 
@@ -29,4 +31,4 @@ Migracja istniejącego stanu v1 do rozszerzonego v2 bez utraty garażu, tankowa�
 
 ## Weryfikacja
 
-Testy przed kodem: migracja, izolacja aut, filtry GPS i luki, zdarzenia jazdy, parser OBD i timeouty, minimalizacja kontekstu AI, błędy serwera, terminy serwisu, CSV i backup. Typy, lint, bundle web/iOS/Android, niezależny przegląd oraz podgląd telefonu. Brak fizycznego adaptera, GPS urządzenia i klucza API jest jawnie raportowany; nie oznaczamy tych testów jako wykonanych.
+Testy przed kodem: migracja, izolacja aut, filtry GPS i luki, zdarzenia jazdy, parser OBD i timeouty, minimalizacja kontekstu AI, błędy serwera, terminy serwisu, CSV i kopia. Typy, lint, bundle web/iOS/Android, niezależny przegląd oraz podgląd telefonu. Brak fizycznego adaptera, GPS urządzenia i klucza API jest jawnie raportowany; nie oznaczamy tych testów jako wykonanych.

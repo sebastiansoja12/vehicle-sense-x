@@ -1,36 +1,52 @@
-# Native compilation evidence — 2026-11-26
+[Polski](2026-11-26-native-builds.md) | [English](2026-11-26-native-builds.en.md) | [Deutsch](2026-11-26-native-builds.de.md)
 
-Project: [@rubisco4471/vehiclesensex](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex), Expo58.0.26 / RN0.88.1, version0.2.0.
+# Wyniki kompilacji natywnych — 2026-11-26
 
-## First compiler runs
+Projekt: [@rubisco4471/vehiclesensex](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex), Expo58.0.26 / RN0.88.1, wersja0.2.0. Transporty: BLE3.5.1, TCP6.4.3, Android Classic1.73.0-rc.17. Kompilacja, podpis i działanie na sprzęcie stanowią osobne etapy weryfikacji.
 
-- Android Release APK validation: [4eaf540e-88e6-4b41-8cd4-5686b9dd56b7](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/4eaf540e-88e6-4b41-8cd4-5686b9dd56b7), **failed** in `:react-native-bluetooth-classic:compileReleaseJavaWithJavac` with six missing `kjd.reactnative.bluetooth.BuildConfig` references in `StateChangeReceiver` and `PairingReceiver`.
-- iOS Release simulator: [ace81f64-663f-49e0-bb50-479e7752833c](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/ace81f64-663f-49e0-bb50-479e7752833c), **finished** at 07:48:42 UTC; final application linked successfully with TCP and BLE.
+## Zadania Expo
 
-## Targeted Android fix
+| Platforma i profil | Zadanie | Wynik |
+| --- | --- | --- |
+| Android Release APK, pierwsza próba | [4eaf540e-88e6-4b41-8cd4-5686b9dd56b7](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/4eaf540e-88e6-4b41-8cd4-5686b9dd56b7) | Błąd kompilacji Classic: brak BuildConfig |
+| Android Release APK, po poprawce | [d99099b1-3458-497e-a496-ec3b449bdf16](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/d99099b1-3458-497e-a496-ec3b449bdf16) | Sukces, 08:10:22 UTC |
+| iOS Release, symulator | [ace81f64-663f-49e0-bb50-479e7752833c](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/ace81f64-663f-49e0-bb50-479e7752833c) | Sukces, 07:48:42 UTC |
+| Android produkcyjny AAB | [714a8afc-a7da-487b-9622-498bdb0103d4](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/714a8afc-a7da-487b-9622-498bdb0103d4) | W toku; rewizja 8056cf63e433894bad1ba6af6601dcade31cc8bb |
 
-`mobile/plugins/withClassicBuildConfig.cjs` adds a project Gradle hook enabling `buildFeatures.buildConfig` for `react-native-bluetooth-classic` only, before that Android library is configured. This preserves CNG and avoids editing `node_modules` or committing native output. The actual failed compiler run is the regression reproduction; a new native build must confirm the fix.
+## Poprawka Android Classic i New Architecture
 
-An isolated `expo prebuild --platform android --no-install` generated exactly one targeted block; 135 regression tests, TypeScript and lint passed. These checks are not a substitute for the pending compiler rerun.
+Pierwszy kompilator zgłosił sześć brakujących odwołań do `kjd.reactnative.bluetooth.BuildConfig` w `StateChangeReceiver` i `PairingReceiver`, podczas `:react-native-bluetooth-classic:compileReleaseJavaWithJavac`. AGP domyślnie nie generował tej klasy w bibliotece.
 
-The independent code review found no actionable issues in the Gradle hook or archive. Repeated prebuild retained exactly one block; the updated archive contains 102 allowed files (1,497,183 bytes), including the plugin. Android rerun: [d99099b1-3458-497e-a496-ec3b449bdf16](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/d99099b1-3458-497e-a496-ec3b449bdf16), in progress when this entry was written.
+`mobile/plugins/withClassicBuildConfig.cjs` włącza `buildFeatures.buildConfig` wyłącznie dla `react-native-bluetooth-classic`, przed zakończeniem konfiguracji biblioteki Androida. Zachowuje CNG; nie edytuje `node_modules` i nie wymaga dodawania wygenerowanych katalogów natywnych do repozytorium. Izolowany `expo prebuild --platform android --no-install`, również uruchomiony ponownie, wygenerował dokładnie jeden blok. Przeszły 135 testów regresji, TypeScript i lint; niezależny przegląd nie wykazał problemów z poprawką ani archiwum. Kolejna kompilacja potwierdziła wygenerowanie klasy i sukces całego APK.
 
-No TCP patch: the installed RN0.88.1 Gradle plugin applies a namespace fallback to all Android libraries, including libraries without its own plugin (`ReactPlugin.kt`, `configureNamespaceForLibraries`); the first build passed configuration for TCP. Neither library has been converted to a TurboModule; both use RN's legacy module interop. The Directory warning remains visible.
+TCP nie wymaga łatki namespace: zainstalowany plugin Gradle RN0.88.1 stosuje mechanizm uzupełniania namespace do wszystkich bibliotek Androida (`ReactPlugin.kt`, `configureNamespaceForLibraries`). Classic i TCP nadal korzystają z interopu modułów starszego typu RN; nie zostały przepisane na TurboModules. Ostrzeżenie Directory „Untested on New Architecture” pozostaje widoczne. Udana kompilacja nie dowodzi działania radia, routingu ani zdarzeń na urządzeniu.
 
-## iOS artifact verification
+## Weryfikacja APK
 
-Downloaded `artifacts/native/VehicleSenseX-0.2.0-ios-simulator.tar.gz` (28,727,631 bytes); SHA-256 `ac33a19140b0e0a73ac7f5b78c2c7ad0ce29064f289a23ee52213d6f0efa8ffb`. Binaries are excluded from Git.
+Plik lokalny: `artifacts/native/VehicleSenseX-0.2.0-android-validation.apk`, 109822572 bajty. SHA-256: `b77f4f5f6ca4c02ede18efdb7219cfb1d823250dbe930c48ce94c9b725535eac`. [Raport APK](2026-11-26-android-artifact.json) zawiera wybrane metadane i pełną listę uprawnień.
 
-Read final `VehicleSenseX.app/Info.plist` from the archive: bundle identifier `com.vehiclesensex.app`, version0.2.0/build1, iOS minimum16.4, simulator SDK27.1. Confirmed only Bluetooth, local network, foreground location and photo library usage descriptions; no camera, microphone, location Always descriptions or background modes. `file` verified x86_64/arm64 Mach-O, `nm -gU` verified linked `TcpSockets`, `TcpSocketClient` and `BlePlx` classes. `codesign -dv` reports an ad-hoc signature with no Apple team, as expected for simulator output. Selected metadata: [iOS artifact report](2026-11-26-ios-artifact.json).
+Końcowy manifest potwierdza `com.vehiclesensex.app`, wersję0.2.0/kod1, minSdk24/targetSdk36, `allowBackup=false` i brak trybu debugowania aplikacji. Brak kamery, mikrofonu, szerokiego dostępu do mediów, nakładek oraz lokalizacji/rejestracji w tle. Są rzeczywiste uprawnienia Bluetooth, sieci, lokalizacji na pierwszym planie i powiadomień; biblioteki dodają też uprawnienia odznak launcherów, wymienione w raporcie.
 
-The archive also contains 15 readable `PrivacyInfo.xcprivacy` files, including the main application's aggregate and file-system framework manifests; none enables tracking or declares tracking domains. Their actual API reason entries are retained in the artifact report. This inspects packaged metadata, not the future backend's privacy declarations or an App Store review outcome.
+APK zawiera `RNBluetoothClassicModule`, `TcpSocketModule`, `BlePlxModule`, samodzielny pakiet JS (3201928 bajtów) oraz biblioteki arm64-v8a/armeabi-v7a/x86/x86_64. Dla wszystkich 54 bibliotek 64-bitowych sprawdzono wyrównanie segmentów ELF LOAD do co najmniej16384 bajtów, brak zapisywalnych danych w zaokrąglonym końcu RELRO oraz nieskompresowane wpisy ZIP wyrównane do16384 bajtów. Kontrola uwzględnia dopełnienie RELRO; nie zastępuje uruchomienia na systemie z rozmiarem strony16 KB. Porównano też nagłówki ELF z wynikiem `llvm-objdump`.
 
-The production iOS credential preflight stopped before any build: `Credentials are not set up. Run this command again in interactive mode.` An Apple distribution certificate/provisioning profile and publisher's Apple account are still required; no Apple credentials were requested or read. Export-compliance information also remains to be confirmed by the publisher rather than guessed to silence the CLI warning.
+Oficjalny Google apksig9.5.3 zweryfikował podpis APK v2 bez błędów i ostrzeżeń. To certyfikat `CN=Android Debug`, a nie klucz produkcyjny; odcisk certyfikatu jest w raporcie. APK służy do testów. Instalacja późniejszej wersji z innym podpisem może wymagać odinstalowania wersji testowej; przedtem wyeksportuj własne dane.
 
-The Android production flow reached a request to generate a new remote keystore. Automatic approval review rejected accepting this prompt because a production-build request did not explicitly authorize persistent signing-key creation. The flow was cancelled without generating a key; explicit approval was requested separately. Unsigned compilation continues independently.
+## Weryfikacja artefaktu iOS
 
-## Scope and remaining gates
+Plik lokalny: `artifacts/native/VehicleSenseX-0.2.0-ios-simulator.tar.gz`, 28727631 bajtów. SHA-256: `ac33a19140b0e0a73ac7f5b78c2c7ad0ce29064f289a23ee52213d6f0efa8ffb`. [Raport iOS](2026-11-26-ios-artifact.json) zawiera wybrane metadane.
 
-The root `.easignore` allows only the mobile application source, package lock, assets, config, plugins and patches; the archive was inspected before upload. Raw build metadata and signed log URLs remain outside the repository. EAS uses the existing account's free build allowance; no store submission was requested or run.
+Końcowy `VehicleSenseX.app/Info.plist` potwierdza identyfikator `com.vehiclesensex.app`, wersję0.2.0/build1, minimum iOS16.4 i SDK symulatora27.1. Opisy zgód obejmują Bluetooth, sieć lokalną, lokalizację podczas używania i bibliotekę zdjęć; brak kamery, mikrofonu, lokalizacji Always i trybów tła. `file` potwierdził Mach-O x86_64/arm64, `nm -gU` obecność klas `TcpSockets`, `TcpSocketClient` i `BlePlx`, a archiwum zawiera samodzielny `main.jsbundle` (3824069 bajtów). `codesign -dv` wskazuje podpis ad-hoc bez zespołu Apple, właściwy dla symulatora.
 
-The validation APK is built without production signing credentials; the iOS simulator artifact cannot be uploaded to App Store. Release signing, hardware transport tests and store submission remain separate required checks, along with deployment of the real AI backend and publisher/privacy information listed in `mobile/RELEASE.md`.
+Odczytano 15 plików `PrivacyInfo.xcprivacy`, w tym zbiorczy manifest aplikacji i manifesty frameworka systemu plików. Żaden nie włącza śledzenia ani nie deklaruje domen śledzących; rzeczywiste wpisy powodów używania API zachowano w raporcie. Nie jest to deklaracja przyszłego backendu ani wynik oceny App Store.
+
+## Podpisy, źródła i dalsze wymagania
+
+Archiwum Expo ogranicza główny `.easignore`: po poprawce Classic zawierało 102 dozwolone pliki (1497183 bajty), w tym plugin CNG. Sprawdzono je przed wysłaniem; brak plików środowiska, ustawień lokalnych, katalogów natywnych, `node_modules` i kluczy. Surowe metadane z podpisanymi adresami logów są poza repozytorium, podobnie jak binaria. Użyto istniejącego konta i bezpłatnego limitu Expo, bez zgłoszenia do sklepów.
+
+Automatyczna kontrola uprawnień początkowo odrzuciła utworzenie trwałego klucza Androida bez wyraźnej zgody; tamten proces anulowano. Użytkownik następnie jawnie zatwierdził wygenerowanie i przechowywanie nowego keystore w Expo. Klucz został utworzony, a podpisywany AAB jest budowany w zadaniu podanym powyżej. Materiał prywatnego klucza nie został odczytany ani dodany do repozytorium.
+
+Próba produkcyjnego iOS zatrzymała się przed budowaniem: `Credentials are not set up. Run this command again in interactive mode.` Użytkownik potwierdził brak aktywnego konta Apple Developer. Publikowalne IPA wymaga członkostwa, certyfikatu/profilu dystrybucyjnego i konfiguracji deklaracji eksportu szyfrowania przez wydawcę; nie zgadywano deklaracji w celu usunięcia ostrzeżenia CLI. Wersja na symulator nie jest IPA do App Store.
+
+Nadal wymagane są testy transportów na fizycznych telefonach i adapterach, podpisana dystrybucja iOS, rzeczywiste wdrożenie backendu AI oraz dane wydawcy/polityka prywatności opisane w `mobile/RELEASE.md`. Nie wykonano testów sprzętowych ani testu uruchomienia na systemie ze stronami16 KB.
+
+Źródło kryteriów wyrównania: [dokumentacja Androida dotycząca stron16 KB](https://developer.android.com/guide/practices/page-sizes). Identyfikatory techniczne i raporty JSON zachowują oryginalną składnię we wszystkich wersjach językowych.

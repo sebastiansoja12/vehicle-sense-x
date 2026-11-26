@@ -1,13 +1,16 @@
-# Native compatibility and build plan
+[Polski](2026-11-26-native-builds.md) | [English](2026-11-26-native-builds.en.md) | [Deutsch](2026-11-26-native-builds.de.md)
 
-User authorizes continued implementation, native Android/iOS builds, incremental commits and GitHub pushes; use one-sentence English commit messages without co-author trailers. Retain the current Expo58/RN0.88 app and actual ELM transports.
+# Plan zgodności i kompilacji natywnych
 
-- [x] Inspect local toolchains and existing service access: no full Xcode or Android SDK locally; existing authenticated personal Expo account has free build quota. GitHub origin is configured and empty.
-- [x] Independent read-only native source audits: RN interop APIs remain available; Directory metadata is not compilation proof. The initial TCP namespace concern is handled by RN0.88.1's app-wide namespace fallback; no TCP patch is needed. Classic references BuildConfig without enabling it, confirmed by the first Android compiler run. Other old DSL concerns remain hypotheses until build output.
-- [x] Verify baseline (135 tests, types/lint) and commit it on codex/native-build-compat, excluding IDE/local settings and credentials.
-- [x] Prepare archive allowlist and credential-free native validation profiles; associate the Expo project on the currently authenticated personal account and inspect archive before upload (101 mobile-only files, approximately 1.5 MB before the Classic config plugin).
-- [ ] Run native Android and iOS simulator cloud builds on the available free quota; retain real compiler logs and fix confirmed incompatibilities with reproducible package patches.
-- [ ] Build Android store artifact and prepare iOS store signing path; no publication or new billing commitment. Stop only at concrete unavailable credentials/service limits, while finishing independent work.
-- [ ] Verify patch reproduction, regression tests, type/lint, archive scope and build results; independently review native changes and commit/push each verified increment.
+Użytkownik upoważnił do dalszej implementacji, kompilacji Android/iOS, kolejnych commitów i wysyłania ich do GitHub; komunikaty commitów mają być jednym zdaniem po angielsku, bez informacji o współautorstwie. Zachowaj aplikację Expo58/RN0.88 i rzeczywiste transporty ELM. README i dokumentacja mają być dostępne po polsku, angielsku i niemiecku.
 
-Compilation, signing and hardware runtime checks are distinct evidence. A simulator build is not an App Store IPA, interop is not a TurboModule rewrite, and a Directory warning is not removed to manufacture a green check.
+- [x] Sprawdzenie lokalnych narzędzi i dostępu: brak pełnego Xcode i Android SDK; istniejące osobiste konto Expo ma bezpłatny limit kompilacji. Skonfigurowany GitHub origin był pusty.
+- [x] Niezależne przeglądy kodu natywnego: interop RN pozostaje dostępny; Directory nie jest dowodem kompilacji. RN0.88.1 uzupełnia namespace TCP, więc łatka TCP nie jest potrzebna. Brak BuildConfig w Classic potwierdził kompilator Androida.
+- [x] Weryfikacja stanu wyjściowego (135 testów, typy/lint), commit na codex/native-build-compat, bez ustawień IDE i poświadczeń.
+- [x] Archiwum ograniczone allowlistą, profile walidacji bez poświadczeń i przypisany projekt Expo; kontrola zawartości przed wysłaniem (101 plików przed pluginem Classic, 102 po nim).
+- [x] Rzeczywiste kompilacje chmurowe Android Release APK i iOS Release na symulator, rozpoznanie błędu Classic, odtwarzalna poprawka przez plugin CNG, ponowny sukces kompilatora. Brak ręcznych zmian wygenerowanych projektów.
+- [ ] Produkcyjny Android AAB jest budowany po jawnej zgodzie na nowy klucz w Expo; brak aktywnego konta Apple Developer blokuje sklepowe IPA. Nie publikuj i nie zobowiązuj się do nowych opłat.
+- [x] Kontrola powtarzanego prebuild, testów, typów/lint, archiwum i pobranych artefaktów; niezależny przegląd poprawki, kolejne commity/push. Pozostają kontrole wynikowego AAB.
+- [x] Wszystkie dokumenty Markdown w trzech językach, przełączniki i indeks dokumentacji, zgodność poleceń i sprawdzenie odnośników; instrukcje AGENTS.md i raporty o strukturze maszynowej zachowują składnię źródłową.
+
+Kompilacja, podpisywanie i test sprzętowy stanowią odrębne dowody. Kompilacja na symulator nie jest sklepowym IPA, interop nie jest przepisaniem na TurboModules, a ostrzeżenie Directory nie jest wyciszane w celu uzyskania zielonego wyniku. Szczegóły: [raport kompilacji](../../verification/2026-11-26-native-builds.md).

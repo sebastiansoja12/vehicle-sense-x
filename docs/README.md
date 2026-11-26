@@ -1,0 +1,50 @@
+[Polski](README.md) | [English](README.en.md) | [Deutsch](README.de.md)
+
+# Dokumentacja VehicleSenseX
+
+Pełne wersje polska, angielska i niemiecka mają ten sam zakres i polecenia. Plik bez przyrostka jest wersją polską; sąsiednie pliki `.en.md` i `.de.md` zawierają tłumaczenia. Datowane plany i dzienniki opisują stan z danego etapu; aktualnego wyniku wydania szukaj w instrukcji wydania i raporcie kompilacji.
+
+Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki językowe. Nie tłumacz poleceń, identyfikatorów API, nazw plików, adresów ani składni danych. Instrukcje `AGENTS.md`, oryginalne licencje i raporty JSON zachowują składnię źródłową; opisy wyników są dostępne w trzech językach.
+
+## Uruchomienie i obsługa
+
+- [Opis projektu](../README.md)
+- [Aplikacja mobilna](../mobile/README.md)
+- [Kompilacje, podpisy i wydanie](../mobile/RELEASE.md)
+- [Backend asystenta AI](../server/README.md)
+- [Granice i protokoły klienta OBD](../mobile/src/obd/README.md)
+- [Katalog offline i licencje](../mobile/assets/catalog/README.md)
+- [Pochodzenie zasobów](../assets/README.md)
+
+## Źródła i weryfikacja
+
+- [Badanie publicznych katalogów pojazdów](research/2026-11-25-vehicle-catalogs.md)
+- [Kompilacje natywne](verification/2026-11-26-native-builds.md)
+- [Metadane artefaktu iOS (JSON)](verification/2026-11-26-ios-artifact.json)
+- [Metadane artefaktu Android APK (JSON)](verification/2026-11-26-android-artifact.json)
+- [Wygenerowana konfiguracja natywna (JSON)](verification/2026-11-25-native-config.json)
+
+## Plany implementacji
+
+- [Podstawy aplikacji mobilnej](superpowers/plans/2026-11-25-mobile-foundation.md)
+- [Moduły połączone z danymi](superpowers/plans/2026-11-25-connected-modules.md)
+- [CAN i wybór ECU](superpowers/plans/2026-11-25-can-ecu.md)
+- [Odczyt VIN z OBD](superpowers/plans/2026-11-25-obd-vin.md)
+- [Katalog pojazdów offline](superpowers/plans/2026-11-25-offline-catalog.md)
+- [Kompilacje natywne](superpowers/plans/2026-11-26-native-builds.md)
+
+## Specyfikacje projektu
+
+- [Podstawy aplikacji mobilnej](superpowers/specs/2026-11-25-mobile-foundation-design.md)
+- [Moduły połączone z danymi](superpowers/specs/2026-11-25-connected-modules-design.md)
+- [CAN i wybór ECU](superpowers/specs/2026-11-25-can-ecu-design.md)
+- [Katalog pojazdów offline](superpowers/specs/2026-11-25-offline-catalog-design.md)
+
+## Dzienniki postępu
+
+- [Podstawy aplikacji mobilnej](superpowers/progress/2026-11-25-mobile-foundation.md)
+- [Moduły połączone z danymi](superpowers/progress/2026-11-25-connected-modules.md)
+- [CAN i wybór ECU](superpowers/progress/2026-11-25-can-ecu.md)
+- [Odczyt VIN z OBD](superpowers/progress/2026-11-25-obd-vin.md)
+- [Katalog pojazdów offline](superpowers/progress/2026-11-25-offline-catalog.md)
+- [Przygotowanie wydania](superpowers/progress/2026-11-25-release-preflight.md)

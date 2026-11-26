@@ -1,24 +1,26 @@
-# VehicleSenseX Mobile Foundation Implementation Plan
+[Polski](2026-11-25-mobile-foundation.md) | [English](2026-11-25-mobile-foundation.en.md) | [Deutsch](2026-11-25-mobile-foundation.de.md)
 
-> **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [x]`) syntax for tracking.
+# VehicleSenseX — plan implementacji fundamentu aplikacji mobilnej
 
-**Goal:** uruchamialny klient mobilny z lokalnym garażem, tankowaniami i serwisem.
+> **Dla agentów wykonawczych:** WYMAGANA UMIEJĘTNOŚĆ: użyj superpowers:executing-plans, aby zrealizować ten plan zadanie po zadaniu. Postęp jest śledzony składnią pól wyboru (`- [x]`).
 
-**Architecture:** niezależny projekt Expo w `mobile/`. Czysta logika TypeScript odpowiada za walidację i statystyki; jeden zapis wersjonowanego stanu jest zatwierdzany przed aktualizacją UI. Prototyp pozostaje wzorcem.
+**Cel:** uruchamialny klient mobilny z lokalnym garażem, tankowaniami i serwisem.
 
-**Tech Stack:** Expo stable, React Native, TypeScript, AsyncStorage.
+**Architektura:** niezależny projekt Expo w `mobile/`. Czysta logika TypeScript odpowiada za walidację i statystyki; jeden zapis wersjonowanego stanu jest zatwierdzany przed aktualizacją UI. Prototyp pozostaje wzorcem.
 
-**Spec:** `docs/superpowers/specs/2026-11-25-mobile-foundation-design.md`
+**Stos technologiczny:** Stabilna wersja Expo, React Native, TypeScript, AsyncStorage.
 
-## Global Constraints
+**Specyfikacja:** `docs/superpowers/specs/2026-11-25-mobile-foundation-design.md`
+
+## Ograniczenia ogólne
 
 - Zatwierdzony jasny interfejs, pięć zakładek, język polski, minimum 44 px dla dotyku.
 - `mobile/` jest implementacją; pliki prototypu i jego dane nie są migrowane ani nadpisywane.
 - Domyślnie pusty garaż; demo odseparowane od własnych danych.
-- Kwoty: integer grosze; paliwo: integer mililitry; daty: lokalny dzień `YYYY-MM-DD`.
+- Kwoty: całkowite grosze; paliwo: całkowite mililitry; daty: lokalny dzień `YYYY-MM-DD`.
 - Żadnych prawdziwych uprawnień Bluetooth/GPS ani sekretów zewnętrznych.
 
-## Review Focus
+## Obszary przeglądu
 
 - Uszkodzony lub nieznany zapis nie może zostać nadpisany pustym garażem.
 - Szybkie wielokrotne zapisy i przełączanie auta nie mogą przypisać wpisu innemu pojazdowi.
@@ -26,30 +28,30 @@
 - Miesięczne zestawienie używa miesiąca wpisu, a nie czasu UTC bieżącego urządzenia.
 - Odmowa zapisu pozostawia wpis w formularzu i umożliwia ponowienie.
 
-### Task 1: Model i walidacja danych
+### Zadanie 1: Model i walidacja danych
 
-**Files:** `mobile/src/domain.ts`, `mobile/tests/domain.test.mjs`.
-**Interfaces:** `AppData`, `Vehicle`, `FuelEntry`, `ServiceEntry`; `emptyData()`, `addVehicle(state,input,id,today)`, `addFuel(state,input,id,today)`, `addService(state,input,id,today)`, `vehicleSummary(state,vehicleId,month)`, `parseStoredData(raw)`.
+**Pliki:** `mobile/src/domain.ts`, `mobile/tests/domain.test.mjs`.
+**Interfejsy:** `AppData`, `Vehicle`, `FuelEntry`, `ServiceEntry`; `emptyData()`, `addVehicle(state,input,id,today)`, `addFuel(state,input,id,today)`, `addService(state,input,id,today)`, `vehicleSummary(state,vehicleId,month)`, `parseStoredData(raw)`.
 
 - [x] Zdefiniować testy: izolacja dwóch aut, przecinek dziesiętny, prawdziwe daty, VIN, chronologia, częściowe tankowania, miesięczne koszty, uszkodzony schemat.
 - [x] Uruchomić testy przed implementacją i potwierdzić brak tych funkcji.
 - [x] Napisać minimalny model i implementacje bez zależności platformowych.
 - [x] Uruchomić `node --test mobile/tests/domain.test.mjs`; wszystkie scenariusze przechodzą.
 
-### Task 2: Trwały zapis i projekt mobilny
+### Zadanie 2: Trwały zapis i projekt mobilny
 
-**Files:** `mobile/package.json`, `mobile/app.json`, `mobile/App.tsx`, `mobile/src/storage.ts`, konfiguracja Expo.
-**Interfaces:** `readData(): Promise<AppData>`, `writeData(state: AppData): Promise<void>`; atomowy zatwierdzany zapis w komponencie App.
+**Pliki:** `mobile/package.json`, `mobile/app.json`, `mobile/App.tsx`, `mobile/src/storage.ts`, konfiguracja Expo.
+**Interfejsy:** `readData(): Promise<AppData>`, `writeData(state: AppData): Promise<void>`; atomowy zatwierdzany zapis w komponencie App.
 
 - [x] Utworzyć projekt oficjalnym szablonem `blank-typescript`, zainstalować wersje zależności zgodne z Expo.
 - [x] Napisać testy stanu przy błędzie/konkurencji zapisu dla `createRepository(storage)`; test potwierdza niezmieniony stan po odrzuceniu i kolejność zapisów.
 - [x] Wdrożyć odczyt walidowany i zapis bez kasowania uszkodzonego stanu.
-- [x] Uruchomić suite oraz `tsc --noEmit`.
+- [x] Uruchomić zestaw testów oraz `tsc --noEmit`.
 
-### Task 3: Ekrany i ścieżki użytkownika
+### Zadanie 3: Ekrany i ścieżki użytkownika
 
-**Files:** `mobile/src/screens.tsx`, `mobile/src/EntryForm.tsx`, `mobile/src/ui.tsx`, `mobile/src/theme.ts`, `mobile/App.tsx`.
-**Interfaces:** ekran dostaje stan i callbacki zapisu/nawigacji; formularz przechwytuje `vehicleId` przy otwarciu i zachowuje wartości przy błędzie.
+**Pliki:** `mobile/src/screens.tsx`, `mobile/src/EntryForm.tsx`, `mobile/src/ui.tsx`, `mobile/src/theme.ts`, `mobile/App.tsx`.
+**Interfejsy:** ekran dostaje stan i callbacki zapisu/nawigacji; formularz przechwytuje `vehicleId` przy otwarciu i zachowuje wartości przy błędzie.
 
 - [x] Wdrożyć pięć zakładek oraz cztery ekrany podrzędne, puste stany i odseparowane demo.
 - [x] Podłączyć dodanie/wybór auta, tankowania, serwisu i statystyki bieżącego miesiąca do modelu.

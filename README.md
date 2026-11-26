@@ -1,6 +1,8 @@
+[Polski](README.md) | [English](README.en.md) | [Deutsch](README.de.md)
+
 # VehicleSenseX
 
-**Implementacja mobilna:** projekt React Native / Expo znajduje się w [`mobile/`](mobile/README.md). Garaż, serwis, trasy GPS i odczyty diagnostyczne mają lokalny zapis. Dodano rzeczywiste transporty OBD Bluetooth BLE/Wi-Fi, raporty, kopie oraz serwer asystenta. Aktualny stan i warunki wydania opisuje `mobile/RELEASE.md`. Poniższy opis dotyczy zachowanego prototypu HTML.
+**Implementacja mobilna:** projekt React Native / Expo znajduje się w [`mobile/`](mobile/README.md). Garaż, serwis, trasy GPS i odczyty diagnostyczne mają lokalny zapis. Dodano rzeczywiste transporty OBD Bluetooth BLE/Wi-Fi, raporty, kopie oraz serwer asystenta. Aktualny stan i warunki wydania opisuje `mobile/RELEASE.md`. Poniższy opis dotyczy zachowanego prototypu HTML. [Spis całej dokumentacji](docs/README.md).
 
 Interaktywny projekt produktu na iOS i Android. Polski interfejs, osiem modułów i responsywny układ do przeglądu na komputerze oraz telefonie. To działający prototyp przeglądarkowy, nie gotowa aplikacja do publikacji w sklepach.
 
@@ -22,14 +24,14 @@ Na telefonie pięć głównych zakładek: **Start, Diagnostyka, Trasy, Koszty, G
 
 | Moduł | Projektowany przepływ | Status prototypu |
 | --- | --- | --- |
-| OBD2 Diagnostics | Połączenie → odczyt → kody i parametry → raport | Jawna symulacja połączenia i skanu; parametry statyczne |
-| My Garage | Profil → specyfikacja → źródło danych → kolejne pojazdy | Profil demo i lokalny zapis dodatkowych szkiców; bez przełączania danych między pojazdami |
-| Drive Analytics | Okres → mierzalne zdarzenia → kontekst GPS/OBD2 | Dwa przykładowe okresy; bez niezweryfikowanego Eco Score |
-| Maintenance | Termin → wpis → historia | Działający zapis serwisu; przypomnienia statyczne; bez załączników i powiadomień systemowych |
-| Fuel & Expenses | Tankowanie → zestawienie → spalanie → eksport | Formularz, zapis lokalny, obliczenia pełny–pełny, CSV; trend miesięczny osobnym zestawem demo |
-| AI Car Assistant | Pytanie → dane źródłowe → interpretacja i niepewność | Gotowe odpowiedzi, bez modelu lub zewnętrznego API |
-| Trips | Wybór przejazdu → schemat → dystans/czas/koszt → eksport | Trzy przykładowe przejazdy i CSV; mapa schematyczna, bez GPS |
-| Vehicle Health & Value | Dostępne dowody → braki danych → historia → raport | Jawne źródła i braki; eksport TXT; bez zmyślonej wyceny |
+| Diagnostyka OBD2 | Połączenie → odczyt → kody i parametry → raport | Jawna symulacja połączenia i skanu; parametry statyczne |
+| Mój garaż | Profil → specyfikacja → źródło danych → kolejne pojazdy | Profil demo i lokalny zapis dodatkowych szkiców; bez przełączania danych między pojazdami |
+| Analiza jazdy | Okres → mierzalne zdarzenia → kontekst GPS/OBD2 | Dwa przykładowe okresy; bez niezweryfikowanego Eco Score |
+| Serwis | Termin → wpis → historia | Działający zapis serwisu; przypomnienia statyczne; bez załączników i powiadomień systemowych |
+| Paliwo i koszty | Tankowanie → zestawienie → spalanie → eksport | Formularz, zapis lokalny, obliczenia pełny–pełny, CSV; trend miesięczny osobnym zestawem demo |
+| Asystent samochodowy AI | Pytanie → dane źródłowe → interpretacja i niepewność | Gotowe odpowiedzi, bez modelu lub zewnętrznego API |
+| Trasy | Wybór przejazdu → schemat → dystans/czas/koszt → eksport | Trzy przykładowe przejazdy i CSV; mapa schematyczna, bez GPS |
+| Kondycja i wartość pojazdu | Dostępne dowody → braki danych → historia → raport | Jawne źródła i braki; eksport TXT; bez zmyślonej wyceny |
 
 Wpisy użytkownika są kodowane przed wyświetleniem. Tankowanie musi mieć dodatnią ilość i cenę oraz niecofający się przebieg. Przykłady dotyczą 25 listopada 2026; formularze nowych wpisów używają bieżącej daty urządzenia. Dane demonstracyjne i własne można wyzerować w ustawieniach po potwierdzeniu.
 
@@ -48,12 +50,12 @@ Docelowo osobny klient mobilny korzysta z natywnych możliwości Bluetooth/GPS, 
 
 Stan źródeł sprawdzony 25 listopada 2026. Poniższe wymagania wpływają na projekt; prototyp nie realizuje procesu publikacji i nie gwarantuje akceptacji.
 
-- **Uprawnienia w kontekście:** Bluetooth przy parowaniu, GPS przy uruchomieniu trasy, powiadomienia przy przypomnieniu, zdjęcia przy dodawaniu załącznika. Działać także po odmowie. Android rozróżnia uprawnienia Bluetooth zależnie od wersji systemu: [Bluetooth permissions](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions).
-- **Prywatność:** dostępna w aplikacji i metadanych polityka prywatności; zgodne z rzeczywistym zachowaniem SDK deklaracje sklepu. Trasy, VIN, zdjęcia, analityka i przekazanie danych do AI wymagają świadomych decyzji projektowych. [Apple App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/), [Google Play User Data](https://support.google.com/googleplay/android-developer/answer/10144311).
+- **Uprawnienia w kontekście:** Bluetooth przy parowaniu, GPS przy uruchomieniu trasy, powiadomienia przy przypomnieniu, zdjęcia przy dodawaniu załącznika. Działać także po odmowie. Android rozróżnia uprawnienia Bluetooth zależnie od wersji systemu: [Uprawnienia Bluetooth](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions).
+- **Prywatność:** dostępna w aplikacji i metadanych polityka prywatności; zgodne z rzeczywistym zachowaniem SDK deklaracje sklepu. Trasy, VIN, zdjęcia, analityka i przekazanie danych do AI wymagają świadomych decyzji projektowych. [Wytyczne oceny aplikacji Apple](https://developer.apple.com/app-store/review/guidelines/), [Dane użytkownika w Google Play](https://support.google.com/googleplay/android-developer/answer/10144311).
 - **Usuwanie konta:** jeżeli aplikacja umożliwia tworzenie kont, projekt musi obejmować usuwanie konta i danych. Google Play wymaga również działającej ścieżki internetowej. [Apple](https://developer.apple.com/help/app-review/guideline-reference/5-1-1-account-deletion), [Google Play](https://support.google.com/googleplay/android-developer/answer/13327111).
-- **Ocena aplikacji:** zapewnić recenzentom dostęp do funkcji i danych demonstracyjnych oraz potrzebne zasoby dla funkcji sprzętowych; jasno wyjaśnić zależność od adaptera. [Apple — Before You Submit](https://developer.apple.com/app-store/review/guidelines/).
-- **Przed wysyłką:** natywne buildy i podpisy, ikony i zrzuty ekranów, dostępność, testy na urządzeniach, obsługa braku sieci i uprawnień, awarii adaptera, ograniczeń baterii oraz pełne sprawdzenie aktualnych wymagań sklepów dla wybranej dystrybucji i modelu płatności.
+- **Ocena aplikacji:** zapewnić recenzentom dostęp do funkcji i danych demonstracyjnych oraz potrzebne zasoby dla funkcji sprzętowych; jasno wyjaśnić zależność od adaptera. [Apple — przed zgłoszeniem](https://developer.apple.com/app-store/review/guidelines/).
+- **Przed wysyłką:** natywne kompilacje i podpisy, ikony i zrzuty ekranów, dostępność, testy na urządzeniach, obsługa braku sieci i uprawnień, awarii adaptera, ograniczeń baterii oraz pełne sprawdzenie aktualnych wymagań sklepów dla wybranej dystrybucji i modelu płatności.
 
 ## Ograniczenia i weryfikacja
 
-Testy jednostkowe obejmują obliczanie spalania, walidację tankowania i bezpieczne komórki CSV. Prototyp nie zawiera backendu, kont, płatności, rzeczywistej diagnostyki, systemowych powiadomień ani paczek sklepowych. Czcionki z Google Fonts wymagają połączenia; systemowy font działa jako fallback. W wydaniu mobilnym fonty należy dostarczyć w pakiecie. Zapis przeglądarkowy nie jest bezpiecznym magazynem dla danych produkcyjnych.
+Testy jednostkowe obejmują obliczanie spalania, walidację tankowania i bezpieczne komórki CSV. Prototyp nie zawiera serwera zaplecza, kont, płatności, rzeczywistej diagnostyki, systemowych powiadomień ani paczek sklepowych. Czcionki z Google Fonts wymagają połączenia; czcionka systemowa jest używana zastępczo. W wydaniu mobilnym czcionki należy dostarczyć w pakiecie. Zapis przeglądarkowy nie jest bezpiecznym magazynem dla danych produkcyjnych.

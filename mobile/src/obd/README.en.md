@@ -1,0 +1,48 @@
+[Polski](README.md) | [English](README.en.md) | [Deutsch](README.de.md)
+
+# OBD client boundaries
+
+`index.ts` and `types.ts` are pure TypeScript, usable by the local persistence validator and Node tests. Import `createBleTransport` and `scanDevices` from **extensionless** `./ble` so Metro selects `.native.ts` or `.web.ts`.
+
+An explicit scan returns an asynchronous stop function; stop scanning before connecting. It also ends after 15 seconds. No Bluetooth manager, scan, permissions request, connection, or OBD command runs on module import. Android API 31+ requests SCAN and CONNECT; older Android requests fine location. The Expo BLE config plugin must declare permissions and iOS usage text. The app needs a native development build, not Expo Go. Web reports unsupported BLE. Bluetooth Classic/SPP is provided separately on Android through `classic.android.ts`, using already bonded devices and an unsegmented ASCII stream. It is excluded from iOS autolinking; iOS supports BLE and Wi-Fi, not generic SPP.
+
+The BLE profile identifies the actual device and adapter name. With empty UUID fields, native discovery selects exactly one custom serial service with one writable/notifying pair and excludes standard GATT services in 4-digit, 8-digit and canonical 128-bit UUID representations. Ambiguity fails explicitly. Advanced profiles accept the service UUID, writable characteristic UUID and notification characteristic UUID from the adapter vendor. No generic UUID or universal adapter compatibility is assumed. Discovered capabilities select acknowledged writes when available; otherwise explicit write-without-response support is required. Responses are ASCII in base64 notifications. Only an ELM327-compatible stream is supported.
+
+Call `new Elm327Driver(transport, adapterName)`, then `initialize()`, then `readSnapshot(vehicleId)`. The driver configures headers off, spaces on and automatic CAN formatting, queries PID support pages 00/20 and reads advertised RPM/coolant/load plus adapter supply voltage. The bitmap is the advertised set within pages 00/20; the driver does not follow later pages because it reads no higher PID. Unsupported parameters are null. Voltage is adapter input voltage, not an independently measured battery health assessment.
+
+The headers-off parser remains strict for legacy protocols. For ISO 15765-4 CAN (6/7/8/9), the first 0100 opens the protocol before ATDPN is read. The driver enables ATH1, ATD0 and ATCFC1, discovers actual 7E8–7EF or 18DAF1xx response IDs from a second functional request, then physically addresses one controller with ATSH and filters it with ATCRA. Multiple IDs require user selection; a single actual ID can be selected automatically. Every payload is checked against that selected ID in software. Other addressing, CAN FD, extended-address ISO-TP and negative response-pending sequences remain unsupported. Non-CAN multi-controller replies still fail explicitly.
+
+DTC modes 03/07/0A preserve stored/pending/permanent status. A positive zero response is different from NO DATA. `readStatuses` names exactly the positive replies received; NO DATA omits that status. No positive DTC reply fails the read. Timeout, disconnect or malformed data fails the read, never creates a zero measurement or empty report. A partial read must not be displayed as an overall fault-free vehicle. Even complete DTC reads do not certify vehicle safety.
+
+Channel commands are queued and responses end only at an ELM prompt. Overflow, invalid bytes, timeout, write failure, or disconnect rejects outstanding commands. A timed-out channel stays closed so late bytes cannot satisfy the next request. Reconnect before retrying.
+
+Before `clearFaults({confirmed, backedUpSnapshot, vehicleId, tripRecording})`, the caller must **persist/export** the current report successfully and obtain a separate user confirmation. The driver requires the exact last real snapshot for the same vehicle and rejects trip recording. It cannot independently prove that the UI saved a backup or stopped recording. A mode 04 request is sent only after these guards; success requires a genuine 44 reply. A timeout is uncertain, since the ECU might already have processed the command. The report must be read again before another attempt. Mode 04 can erase freeze frames/readiness data; permanent DTCs cannot be cleared with this command.
+
+## Sources and verification
+
+Primary protocol source: [ELM Electronics ELM327DSK datasheet](https://www.elmelectronics.com/wp-content/uploads/2017/01/ELM327DS.pdf), especially prompt/echo handling, voltage, PID/DTC examples, fault clearing and multiline responses. Load PID 04 uses SAE J1979 A×100/255 scaling. Manufacturer-specific PIDs and descriptions are not guessed.
+
+BLE API: [official react-native-ble-plx documentation](https://dotintent.github.io/react-native-ble-plx/) and installed upstream **3.5.1** source/type definitions (`Device`, `BleManager`, Expo config plugin); [official React Native PermissionsAndroid](https://reactnative.dev/docs/permissionsandroid); [Expo SDK 58 reference](https://docs.expo.dev/versions/v58.0.0/). The generated online BLE reference identifies itself as 3.3.0; installed 3.5.1 signatures were checked before implementation.
+
+Node tests exercise real parsing, driver decisions, command buffering/queueing, timeout/disconnect handling, backup confirmation guards, base64 notification transport and web fallback. BLE peripheral methods are controlled at the external hardware boundary. Physical adapters, OS permission dialogs, characteristic subscription timing, iOS/Android radio behavior and SDK 58 native binary compatibility have not been tested on hardware.
+
+
+## Wi-Fi / Classic transport
+
+`wifi.native.ts` connects using react-native-tcp-socket 6.4.3 and the shared ELM channel. A local IPv4 address and TCP port come from the adapter instructions. No default endpoint, proxy, HTTP bridge or measurement generator is used. `wifi-core.ts` is exercised against real local TCP sockets for fragmented responses, disconnects and deadlines. Native Wi-Fi routing with an internet-free adapter and concurrent mobile data still needs device validation. The implementation deliberately does not pass `interface: wifi`: installed upstream Android code otherwise binds the process to that network globally without a corresponding reset.
+
+`classic.android.ts` uses react-native-bluetooth-classic 1.73.0-rc.17, BLUETOOTH_CONNECT on API 31+, paired devices, RFCOMM, ASCII and an empty delimiter. Thus the shared channel sees genuine prompt bytes across arbitrary read fragments; no prompt is appended in JavaScript. Opening has a 15-second deadline and late connections are disconnected. Physical SPP disconnection rejects pending reads. The source and installed types were checked against the [maintainer's documentation](https://kenjdavidson.com/react-native-bluetooth-classic/react-native/rn-bluetooth-device/).
+
+Broad ELM327 compatibility is the objective, not a claim of universal hardware support. Manufacturer protocols, locked adapters, MFi-specific protocols, and non-CAN multi-ECU protocols require additional implementations and hardware fixtures. [Apple External Accessory](https://developer.apple.com/documentation/externalaccessory/) documents the separate MFi accessory model.
+
+## CAN framing and saved scope
+
+`can.ts` validates standard OBD response addresses and reassembles ISO-TP single/first/consecutive frames independently per CAN ID. Interleaving is supported; missing, duplicate, incomplete or out-of-sequence frames fail. Declared payload length removes padding; DTC parsing requires an explicit CAN count and rejects empty counted codes. Automatic flow control remains with the adapter; no hand-crafted bus packets are injected.
+
+Snapshots optionally retain `ecu: { protocol: 6|7|8|9, responseId }`. Existing snapshots remain valid. The UI, JSON backup, sales report and whitelisted AI context retain that scope; a single ECU scan is never described as all controllers. Unknown fields are dropped at both AI boundaries. Changing ECU invalidates the last clear permission before any configuration command. Failed physical configuration invalidates initialization; reconnect before further work. CAN clearing is physically addressed and requires a valid 44 from exactly the selected ECU; an uncertain outcome cannot simply be retried with the old snapshot.
+
+Protocol source: ELM327DSK pp. 17 (ATDPN/D0), 41–45 (headers/ISO-TP), 47 (ATCRA). The [python-OBD CAN implementation](https://github.com/brendan-w/python-OBD/blob/master/obd/protocols/protocol_can.py) also documents CAN DTC count placement. No upstream application code was copied. Tests cover 11/29-bit addressing, interleaving and sequence/length failures, controller selection, failed configuration, wrong-controller responses, scope propagation and clear guards. Physical CAN adapters and ECU behavior remain unverified.
+
+## Local VIN reading
+
+`readVin(vehicleId)` is available only after CAN controller selection. It sends 0902 physically to that controller and applies the same frame/identity checks. The decoder requires 49 02 01 plus exactly 17 valid uppercase ASCII VIN characters; all-zero placeholders fail. The result is previewed and confirmed before an atomic garage update. A stale existing VIN prevents replacement. Optional local source evidence is validated against the stored VIN and removed if that VIN is edited manually. No internet decoder, manufacturer specification, checksum guarantee or vehicle-authenticity claim is attached. VIN remains excluded from AI and sales reports. Hardware VIN reads have not been performed.

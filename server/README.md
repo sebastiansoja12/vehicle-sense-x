@@ -1,6 +1,8 @@
-# VehicleSenseX assistant proxy
+[Polski](README.md) | [English](README.en.md) | [Deutsch](README.de.md)
 
-A dependency-free Node 24.3+ HTTP server. Mobile never receives the OpenAI key.
+# Serwer proxy asystenta VehicleSenseX
+
+Serwer HTTP dla Node 24.3+ bez zewnętrznych zależności. Klient mobilny nigdy nie otrzymuje klucza OpenAI.
 
 ```sh
 cd server
@@ -10,20 +12,20 @@ npm start
 npm test
 ```
 
-No package install is necessary. `npm start` reads `.env` with Node's built-in loader. Do not commit it. Generate the app token locally with the command in `.env.example`, then enter it in the app's assistant settings. This token grants paid API access; keep it private and rotate it if shared. Neither the server nor client logs requests, credentials, questions, or answers. A syntactically valid key is not a guarantee of provider authorization, credits, or model access.
+Instalowanie pakietów nie jest potrzebne. `npm start` odczytuje `.env` wbudowanym mechanizmem Node. Nie dodawaj tego pliku do repozytorium. Wygeneruj token aplikacji lokalnie poleceniem z `.env.example`, a następnie wpisz go w ustawieniach asystenta w aplikacji. Token daje dostęp do płatnego API; zachowaj go w tajemnicy i wymień, jeżeli został udostępniony. Ani serwer, ani klient nie zapisują w logach zapytań, danych uwierzytelniających, pytań ani odpowiedzi. Poprawny składniowo klucz nie gwarantuje autoryzacji u dostawcy, środków ani dostępu do modelu.
 
-The default bind address is `127.0.0.1:8787`. Keep it for local work. For a physical phone, deploy behind an HTTPS reverse proxy or a private HTTPS tunnel and restrict network access. Set `HOST` explicitly only when needed for that deployment. Configure the proxy not to log bodies or authorization headers. The client accepts a server **origin**, such as `https://assistant.example.com` or development-only `http://127.0.0.1:8787`; it appends `/assistant`. URL paths, embedded credentials, queries and fragments are rejected. Phone loopback means the phone itself, so use your HTTPS deployment URL on a physical device.
+Domyślny adres nasłuchiwania to `127.0.0.1:8787`. Zachowaj go do pracy lokalnej. Dla fizycznego telefonu wdróż serwer za odwrotnym proxy HTTPS albo prywatnym tunelem HTTPS i ogranicz dostęp sieciowy. Ustaw `HOST` jawnie tylko wtedy, gdy wymaga tego wdrożenie. Skonfiguruj proxy tak, aby nie logowało treści żądań ani nagłówków autoryzacji. Klient przyjmuje wyłącznie **adres bazowy serwera** (origin), np. `https://assistant.example.com` albo, tylko w środowisku deweloperskim, `http://127.0.0.1:8787`; dodaje do niego `/assistant`. Ścieżki URL, osadzone dane uwierzytelniające, parametry zapytania i fragmenty są odrzucane. Adres pętli zwrotnej telefonu wskazuje sam telefon, więc na fizycznym urządzeniu użyj adresu swojego wdrożenia HTTPS.
 
-`OPENAI_MODEL` defaults to documented Responses-compatible `gpt-5-mini`; override it server-side with a text model available to your OpenAI project. `OPENAI_API_KEY` is read only from the server environment. `APP_API_TOKEN` must have 32–512 URL-safe characters (`A-Z a-z 0-9 . _ ~ -`). Missing/invalid configuration disables paid requests with HTTP 503. Authentication compares SHA-256 token digests with Node's constant-time comparison. CORS is disabled for browser origins by default; native requests without Origin are accepted after authentication. `ALLOWED_ORIGINS` is an optional comma-separated exact allowlist (`https://app.example.com`); wildcard, paths and trailing slashes are invalid. CORS supplements authentication.
+`OPENAI_MODEL` ma domyślną wartość `gpt-5-mini`, udokumentowaną jako zgodną z Responses; można ją zmienić na serwerze na model tekstowy dostępny w projekcie OpenAI. `OPENAI_API_KEY` jest odczytywany wyłącznie ze środowiska serwera. `APP_API_TOKEN` musi mieć 32–512 znaków bezpiecznych w URL (`A-Z a-z 0-9 . _ ~ -`). Brakująca lub niepoprawna konfiguracja blokuje płatne żądania odpowiedzią HTTP 503. Uwierzytelnienie porównuje skróty SHA-256 tokenów mechanizmem Node o stałym czasie porównania. Domyślnie CORS jest wyłączony dla originów przeglądarkowych; żądania natywne bez Origin są przyjmowane po uwierzytelnieniu. `ALLOWED_ORIGINS` jest opcjonalną, rozdzieloną przecinkami listą dokładnych dozwolonych originów (`https://app.example.com`); symbole wieloznaczne, ścieżki i końcowe ukośniki są niepoprawne. CORS uzupełnia uwierzytelnienie.
 
-## HTTP contract
+## Kontrakt HTTP
 
-- `GET /health` → `{ "configured": true | false }`, no paid call or secret details. `configured` means local configuration is syntactically valid; health does not verify the OpenAI account.
-- `POST /assistant` requires `Authorization: Bearer <APP_API_TOKEN>` and `Content-Type: application/json`.
-- Body: `{ "question": "Co sprawdzić?", "context": { ... } }`.
-- Success: `{ "answer": "..." }`. Errors: `{ "error": "stable Polish message" }` with a suitable 4xx/5xx status. Raw provider errors are never forwarded.
+- `GET /health` → `{ "configured": true | false }`, bez płatnego wywołania i szczegółów sekretów. `configured` oznacza składniową poprawność konfiguracji lokalnej; ten endpoint nie weryfikuje konta OpenAI.
+- `POST /assistant` wymaga `Authorization: Bearer <APP_API_TOKEN>` i `Content-Type: application/json`.
+- Treść: `{ "question": "Co sprawdzić?", "context": { ... } }`.
+- Sukces: `{ "answer": "..." }`. Błędy: `{ "error": "..." }` z odpowiednim statusem 4xx/5xx i stałym komunikatem po polsku. Surowe błędy dostawcy nigdy nie są przekazywane dalej.
 
-Context is rebuilt from a whitelist independently in the client and server. Unknown fields are **dropped at every depth**, including VIN, plates, notes, route coordinates and identifiers. No implicit state or full vehicle object is forwarded. Allowed fields:
+Kontekst jest odtwarzany na podstawie białej listy niezależnie w kliencie i serwerze. Nieznane pola są **usuwane na każdym poziomie**, w tym VIN, tablice, notatki, współrzędne tras i identyfikatory. Żaden ukryty stan ani pełny obiekt pojazdu nie jest przekazywany. Dozwolone pola:
 
 ```ts
 type AssistantContext = {
@@ -34,33 +36,34 @@ type AssistantContext = {
     timestamp: number; // Unix milliseconds, original reading time
     codes: string[]; // Uppercase five-character OBD DTCs
     parameters: { rpm: number | null; coolantC: number | null; loadPercent: number | null; voltageV: number | null };
+    ecu?: { protocol: 6 | 7 | 8 | 9; responseId: string };
   };
 };
 ```
 
-The question and allowed free-text fields are sent as entered; do not include personal data in them. Consent UI must describe the context before sending. The backend only handles individual requests, with no conversations, previous responses, persistence or content logs. It sends `store: false`, no tools and no external browsing to the fixed `https://api.openai.com/v1/responses` endpoint; caller-supplied model/upstream/history fields are ignored. `store: false` is not a promise of zero provider retention: OpenAI's abuse-monitoring policy still applies.
+Pytanie i dozwolone pola tekstowe są przesyłane w postaci wpisanej przez użytkownika; nie umieszczaj w nich danych osobowych. Ekran zgody musi opisywać kontekst przed wysłaniem. Backend obsługuje tylko pojedyncze żądania, bez rozmów, wcześniejszych odpowiedzi, trwałego zapisu ani logów treści. Wysyła `store: false`, bez narzędzi i przeglądania internetu, pod stały adres `https://api.openai.com/v1/responses`; przekazane przez wywołującego pola modelu, serwera docelowego i historii są ignorowane. `store: false` nie jest obietnicą zerowej retencji u dostawcy: nadal obowiązuje polityka monitorowania nadużyć OpenAI.
 
-Limits: JSON body 16 KiB, question 2,000 characters, make/model 80 characters, engine/service title 120, 20 service entries, 50 DTCs. Monetary values are nonnegative integer cents; mileage is nonnegative integer km. Measurement nulls remain unknown. Each server process allows 20 authenticated attempts per minute with at most 2 concurrently reading/calling upstream; spoofed forwarded-IP headers cannot bypass this shared limit. The rate window stores only counters and time, no personal data. Request-body timeout is 5 seconds; upstream timeout defaults to 25 seconds (`ASSISTANT_TIMEOUT_MS`, 100–30,000). Upstream JSON is capped at 64 KiB, generation at 1,600 output tokens, answer at 8,000 characters. The client times out after 30 seconds and supports cancellation. Browser/Node response streaming is byte-bounded; native fetch may expose only `text()`, so native clients depend additionally on the trusted proxy's server-side output limit. No automatic paid retries occur. Use a shared gateway rate limit and per-user authentication before serving multiple untrusted users or multiple processes.
+Limity: treść JSON 16 KiB, pytanie 2000 znaków, marka/model 80 znaków, silnik/tytuł serwisu 120, 20 wpisów serwisowych, 50 DTC. Kwoty to nieujemne liczby całkowite w groszach; przebieg to nieujemne całkowite km. Wartości pomiarów `null` pozostają nieznane. Każdy proces serwera pozwala na 20 uwierzytelnionych prób na minutę, przy najwyżej 2 równocześnie odczytujących treść lub wywołujących dostawcę; sfałszowane nagłówki przekazanego IP nie omijają tego wspólnego limitu. Okno limitowania przechowuje tylko liczniki i czas, bez danych osobowych. Limit czasu treści żądania to 5 sekund; dostawcy domyślnie 25 sekund (`ASSISTANT_TIMEOUT_MS`, 100–30 000). JSON dostawcy ma limit 64 KiB, generowanie 1600 tokenów wyjściowych, a odpowiedź 8000 znaków. Klient kończy oczekiwanie po 30 sekundach i obsługuje anulowanie. Strumieniowanie odpowiedzi w przeglądarce/Node jest ograniczone bajtowo; natywny fetch może udostępniać tylko `text()`, więc klient natywny dodatkowo polega na ograniczeniu odpowiedzi po stronie zaufanego serwera proxy. Nie ma automatycznych ponowień płatnych wywołań. Przed udostępnieniem wielu niezaufanym użytkownikom lub uruchomieniem wielu procesów zastosuj wspólny limit na bramie i uwierzytelnienie poszczególnych użytkowników.
 
-The model instructions require concise Polish answers, evidence/uncertainty distinctions, acknowledgement of missing or old data, and no invented diagnostics, manufacturer intervals, prices or external research. AI is advisory; the separate local factual summary remains usable without configuration.
+Instrukcje modelu wymagają zwięzłych odpowiedzi po polsku, rozróżnienia dowodów i niepewności, wskazywania brakujących lub starych danych oraz niewymyślania diagnostyki, interwałów producenta, cen ani badań zewnętrznych. AI ma charakter doradczy; oddzielne lokalne podsumowanie faktów działa bez konfiguracji.
 
-## Client integration
+## Integracja klienta
 
-`mobile/src/assistant-client.ts` exports `AssistantContext` and:
+`mobile/src/assistant-client.ts` eksportuje `AssistantContext` oraz:
 
 ```ts
 askAssistant({ endpoint, token, question, context, signal? }): Promise<string>
 ```
 
-`signal` is an optional `AbortSignal`; cancellation rejects with `name === 'AbortError'`, timeout with `name === 'TimeoutError'`. The caller owns consent and vehicle selection and should abort when switching vehicle or leaving the screen. Token and key must never be embedded in source, build-time public variables, URLs, crash reports, or analytics.
+`signal` jest opcjonalnym `AbortSignal`; anulowanie odrzuca obietnicę z `name === 'AbortError'`, a przekroczenie czasu z `name === 'TimeoutError'`. Wywołujący odpowiada za zgodę i wybór pojazdu oraz powinien anulować żądanie przy zmianie pojazdu lub opuszczeniu ekranu. Tokenu i klucza nigdy nie wolno osadzać w źródłach, publicznych zmiennych czasu budowania, URL, raportach awarii ani analityce.
 
-Tests use local HTTP and injected fake upstream responses. No configured real key and no paid call are needed. Public server construction is exported as `createAssistantServer({ env?, fetchImpl? })` for embedding and transport injection.
+Testy używają lokalnego HTTP i wstrzykiwanych fikcyjnych odpowiedzi dostawcy. Nie wymagają rzeczywistego klucza ani płatnego wywołania. Publiczna funkcja `createAssistantServer({ env?, fetchImpl? })` pozwala osadzać serwer i wstrzykiwać transport.
 
-Official API references checked for this implementation:
+Oficjalne materiały API sprawdzone podczas tej implementacji:
 
-- [Developer quickstart](https://developers.openai.com/api/docs/quickstart)
-- [Responses create parameters and output](https://developers.openai.com/api/reference/resources/responses/methods/create)
-- [GPT-5 mini model](https://developers.openai.com/api/docs/models/gpt-5-mini)
-- [Data controls and provider retention](https://developers.openai.com/api/docs/guides/your-data)
+- [Szybki start dla deweloperów](https://developers.openai.com/api/docs/quickstart)
+- [Parametry tworzenia Responses i odpowiedzi](https://developers.openai.com/api/reference/resources/responses/methods/create)
+- [Model GPT-5 mini](https://developers.openai.com/api/docs/models/gpt-5-mini)
+- [Kontrola danych i retencja u dostawcy](https://developers.openai.com/api/docs/guides/your-data)
 
-Optional diagnostic `ecu` metadata contains only a validated standard CAN protocol number (6/7/8/9) and response address. It is whitelisted independently on client and server. The model is told this covers the selected controller, not every controller. VIN, VIN-source evidence and unknown ECU metadata are not part of the accepted AI context.
+Opcjonalne metadane diagnostyczne `ecu` zawierają wyłącznie zwalidowany numer standardowego protokołu CAN (6/7/8/9) i adres odpowiedzi. Są niezależnie dopuszczane przez białą listę klienta i serwera. Model otrzymuje informację, że dane dotyczą wybranego sterownika, a nie wszystkich sterowników. VIN, dowody źródła VIN i nieznane metadane ECU nie należą do akceptowanego kontekstu AI.
