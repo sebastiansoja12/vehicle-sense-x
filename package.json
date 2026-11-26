@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "VehicleSenseX — interactive mobile-first product design",
+  "description": "VehicleSenseX mobile vehicle diagnostics and ownership tracking",
   "scripts": {
-    "start": "python3 -m http.server 5173 --bind 127.0.0.1",
-    "test": "node --test tests.mjs tests/*.test.mjs"
+    "start": "npm run start --prefix mobile",
+    "test": "node --test tests.mjs tests/*.test.mjs",
+    "prototype": "python3 -m http.server 5173 --bind 127.0.0.1"
   },
   "dependencies": {
     "expo": "^58.0.26"

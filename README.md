@@ -2,69 +2,47 @@
 
 # VehicleSenseX
 
-**Implementacja mobilna:** projekt React Native / Expo znajduje się w [`mobile/`](mobile/README.md). Garaż, serwis, trasy GPS i odczyty diagnostyczne mają lokalny zapis. Dodano rzeczywiste transporty OBD Bluetooth BLE/Wi-Fi, raporty, kopie oraz serwer asystenta. Aktualny stan i warunki wydania opisuje `mobile/RELEASE.md`. Poniższy opis dotyczy zachowanego prototypu HTML. [Spis całej dokumentacji](docs/README.md).
+Aplikacja mobilna do diagnostyki OBD2, prowadzenia garażu, rejestrowania tras i kontroli kosztów samochodu. Bieżąca wersja źródłowa: 0.3.0. React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Garaż startuje pusty; pomiary pochodzą z urządzenia lub wpisów właściciela.
 
-Interaktywny projekt produktu na iOS i Android. Polski interfejs, osiem modułów i responsywny układ do przeglądu na komputerze oraz telefonie. To działający prototyp przeglądarkowy, nie gotowa aplikacja do publikacji w sklepach.
+[Dokumentacja PL/EN/DE](docs/README.md) · [Instrukcja aplikacji](mobile/README.md) · [Kompilacje i wydanie](mobile/RELEASE.md)
+
+## Moduły
+
+| Moduł | Dostępne funkcje |
+| --- | --- |
+| OBD2 Diagnostics | ELM327 przez BLE, Wi-Fi/TCP i Bluetooth Classic/SPP na Androidzie; wybór sterownika CAN, PID, statusy DTC, VIN, historia i raporty |
+| My Garage | Wiele samochodów, katalog marek/modeli offline, pełny wpis ręczny, zdjęcia i opcjonalne dane NHTSA po osobnej zgodzie |
+| Drive Analytics | Dystans, czas, prędkość i heurystyki przyspieszania/hamowania z poprawnych pomiarów GPS |
+| Maintenance | Serwis, koszty, notatki, faktury/zdjęcia, terminy daty/przebiegu i osobno włączane lokalne powiadomienia |
+| Fuel & Expenses | Tankowania pełne/częściowe, spalanie, ubezpieczenia, parkingi, opłaty, edycja, sumy miesiąca/roku i CSV |
+| AI Car Assistant | Lokalne podsumowanie oraz rzeczywiste zapytania do skonfigurowanego serwera po zgodzie; klucz dostawcy pozostaje na serwerze |
+| Trips | Wpisy ręczne, GPS przy otwartej aplikacji, odzyskiwanie szkicu, ślad bez podkładu mapowego i eksport GPX/JSON/CSV |
+| Vehicle Health & Value | Źródła i braki danych, porównanie ofert właściciela oraz raport PDF/HTML przed sprzedażą |
+
+Pięć głównych zakładek: Start, Diagnostyka, Trasy, Koszty i Garaż. Serwis, kondycja, analiza jazdy i asystent są dostępne z garażu. Jasny interfejs używa grafitu i czerwonego akcentu, jawnych jednostek, źródeł i dat.
 
 ## Uruchomienie
 
-Wymagania: Python 3 oraz Node.js 20+ do testów. Bez instalowania zależności.
+Node 24.18.0, npm i zależności z pliku blokady:
 
 ```sh
-npm start
+cd mobile
+nvm use
+npm ci
+npm run web
 ```
 
-Otwórz http://127.0.0.1:5173. Testy logiki: `npm test`.
+Po instalacji zależności główne `npm start` uruchamia projekt mobilny. Bluetooth i TCP działają w skompilowanych aplikacjach Android/iOS; profile EAS opisuje instrukcja wydania. Zasady wdrożenia asystenta: [serwer](server/README.md).
 
-## Kierunek produktu i interfejsu
+## Dane i wiarygodność
 
-Obietnica: **Twój samochód. Pełny obraz.** Start odpowiada na trzy pytania: co wymaga uwagi, ile kosztuje jazda i co wydarzyło się ostatnio. Jasny, płaski interfejs: złamana biel, grafit, oszczędny akcent czerwieni. Profil samochodu ma duży napis modelu i kadrowaną ilustrację. Dane i działania są ułożone w sekcje oddzielone liniami, bez ozdobnych zegarów, gradientów, bocznego panelu i siatki zaokrąglonych kafelków. Jednostki, źródła i daty pozostają jawne. Kolor zawsze towarzyszy etykiecie. Bez arbitralnego procentu zdrowia samochodu.
+Garaż jest zapisywany lokalnie, a pełna kopia JSON obejmuje także notatki, VIN, zdjęcia i dokładne trasy GPS. Dane nie są dodatkowo szyfrowane przez aplikację. Schemat 3 migruje starsze dane; przed powrotem do starszej aplikacji zachowaj kopię. Eksporty CSV i raporty mają opisany zakres udostępnianych danych.
 
-Na telefonie pięć głównych zakładek: **Start, Diagnostyka, Trasy, Koszty, Garaż**. Garaż prowadzi do Serwisu, Kondycji, Stylu jazdy i Asystenta. Start prowadzi do diagnostyki, najbliższego serwisu i ostatniej trasy. Na komputerze te same pięć zakładek znajduje się w poziomej nawigacji. Pozostałe moduły są dostępne przez Garaż.
+Zgodność adaptera wymaga sprawdzenia konkretnego urządzenia i samochodu. Odczyt jednego sterownika nie potwierdza stanu całego auta. Ocena Eco Driving wymaga kalibracji; wycena korzysta z jawnie dodanych ofert, a nie automatycznej zewnętrznej wyceny.
 
-| Moduł | Projektowany przepływ | Status prototypu |
-| --- | --- | --- |
-| Diagnostyka OBD2 | Połączenie → odczyt → kody i parametry → raport | Jawna symulacja połączenia i skanu; parametry statyczne |
-| Mój garaż | Profil → specyfikacja → źródło danych → kolejne pojazdy | Profil demo i lokalny zapis dodatkowych szkiców; bez przełączania danych między pojazdami |
-| Analiza jazdy | Okres → mierzalne zdarzenia → kontekst GPS/OBD2 | Dwa przykładowe okresy; bez niezweryfikowanego Eco Score |
-| Serwis | Termin → wpis → historia | Działający zapis serwisu; przypomnienia statyczne; bez załączników i powiadomień systemowych |
-| Paliwo i koszty | Tankowanie → zestawienie → spalanie → eksport | Formularz, zapis lokalny, obliczenia pełny–pełny, CSV; trend miesięczny osobnym zestawem demo |
-| Asystent samochodowy AI | Pytanie → dane źródłowe → interpretacja i niepewność | Gotowe odpowiedzi, bez modelu lub zewnętrznego API |
-| Trasy | Wybór przejazdu → schemat → dystans/czas/koszt → eksport | Trzy przykładowe przejazdy i CSV; mapa schematyczna, bez GPS |
-| Kondycja i wartość pojazdu | Dostępne dowody → braki danych → historia → raport | Jawne źródła i braki; eksport TXT; bez zmyślonej wyceny |
+## Weryfikacja i wydanie
 
-Wpisy użytkownika są kodowane przed wyświetleniem. Tankowanie musi mieć dodatnią ilość i cenę oraz niecofający się przebieg. Przykłady dotyczą 25 listopada 2026; formularze nowych wpisów używają bieżącej daty urządzenia. Dane demonstracyjne i własne można wyzerować w ustawieniach po potwierdzeniu.
-
-## Zakres pierwszego wydania mobilnego
-
-1. **Najpierw test sprzętowy:** macierz konkretnych adapterów i pojazdów na iPhone i Androidzie. Sprawdzić protokół, transport Bluetooth, zestaw PID, przerwania połączenia i ograniczenia pracy w tle. Sama etykieta ELM327 nie określa zgodności adaptera z oboma systemami. Nie wybierać stosu produkcyjnego przed tą próbą.
-2. **Fundament:** lokalny garaż, wiele pojazdów z osobnymi rekordami, tankowania, serwis i eksport. Konto opcjonalne; synchronizacja osobną funkcją. Dane offline i jawne konflikty synchronizacji.
-3. **Diagnostyka:** odczyt wspieranych PID, jednostki, czas pomiaru, status DTC, historia i raport. Brak danych różny od zera. Kasowanie kodów dopiero po zachowaniu odczytu i osobnym potwierdzeniu; nie podczas jazdy.
-4. **Przejazdy:** ręczny start/stop, widoczna rejestracja i łatwe usuwanie tras. Rejestrację automatyczną w tle dodać po testach dokładności, baterii i akceptacji uprawnień.
-5. **Asystent:** wyłącznie udostępniony kontekst, identyfikowalne źródła opisów DTC, oddzielenie faktów od hipotez, zgoda na przekazanie danych. Nigdy nie traktować odpowiedzi modelu jako dowodu sprawności.
-6. **Kolejne wydanie:** dostawca VIN, aktualne dane porównawcze do wyceny, zweryfikowana metoda Eco Driving, PDF, faktury i zdjęcia. Nie obiecywać tych integracji przed wyborem dostawców i ustaleniem praw do danych.
-
-Docelowo osobny klient mobilny korzysta z natywnych możliwości Bluetooth/GPS, lokalnego magazynu i opcjonalnego API do synchronizacji, AI oraz zewnętrznych danych. Sekrety dostawców pozostają na serwerze. Dane OBD2, GPS i wpisy ręczne muszą zachować swoje źródło, jednostkę i datę; brak dostępu do jednego źródła nie blokuje pozostałych modułów.
-
-## Przygotowanie do App Store i Google Play
-
-Stan źródeł sprawdzony 25 listopada 2026. Poniższe wymagania wpływają na projekt; prototyp nie realizuje procesu publikacji i nie gwarantuje akceptacji.
-
-- **Uprawnienia w kontekście:** Bluetooth przy parowaniu, GPS przy uruchomieniu trasy, powiadomienia przy przypomnieniu, zdjęcia przy dodawaniu załącznika. Działać także po odmowie. Android rozróżnia uprawnienia Bluetooth zależnie od wersji systemu: [Uprawnienia Bluetooth](https://developer.android.com/develop/connectivity/bluetooth/bt-permissions).
-- **Prywatność:** dostępna w aplikacji i metadanych polityka prywatności; zgodne z rzeczywistym zachowaniem SDK deklaracje sklepu. Trasy, VIN, zdjęcia, analityka i przekazanie danych do AI wymagają świadomych decyzji projektowych. [Wytyczne oceny aplikacji Apple](https://developer.apple.com/app-store/review/guidelines/), [Dane użytkownika w Google Play](https://support.google.com/googleplay/android-developer/answer/10144311).
-- **Usuwanie konta:** jeżeli aplikacja umożliwia tworzenie kont, projekt musi obejmować usuwanie konta i danych. Google Play wymaga również działającej ścieżki internetowej. [Apple](https://developer.apple.com/help/app-review/guideline-reference/5-1-1-account-deletion), [Google Play](https://support.google.com/googleplay/android-developer/answer/13327111).
-- **Ocena aplikacji:** zapewnić recenzentom dostęp do funkcji i danych demonstracyjnych oraz potrzebne zasoby dla funkcji sprzętowych; jasno wyjaśnić zależność od adaptera. [Apple — przed zgłoszeniem](https://developer.apple.com/app-store/review/guidelines/).
-- **Przed wysyłką:** natywne kompilacje i podpisy, ikony i zrzuty ekranów, dostępność, testy na urządzeniach, obsługa braku sieci i uprawnień, awarii adaptera, ograniczeń baterii oraz pełne sprawdzenie aktualnych wymagań sklepów dla wybranej dystrybucji i modelu płatności.
-
-## Ograniczenia i weryfikacja
-
-Testy jednostkowe obejmują obliczanie spalania, walidację tankowania i bezpieczne komórki CSV. Prototyp nie zawiera serwera zaplecza, kont, płatności, rzeczywistej diagnostyki, systemowych powiadomień ani paczek sklepowych. Czcionki z Google Fonts wymagają połączenia; czcionka systemowa jest używana zastępczo. W wydaniu mobilnym czcionki należy dostarczyć w pakiecie. Zapis przeglądarkowy nie jest bezpiecznym magazynem dla danych produkcyjnych.
-
-## Automatyczne kontrole
-
-Workflow GitHub Actions `.github/workflows/verify.yml` sprawdza pushe i pull requesty przy użyciu Node z `mobile/.nvmrc`, zablokowanych wersji zależności mobilnych, pełnego zestawu testów, TypeScript, lint, trzech języków dokumentacji oraz eksportów JavaScript web/native. Korzysta z przypiętych oficjalnych akcji i uprawnień tylko do odczytu repozytorium. Nie podpisuje, nie wdraża ani nie wysyła aplikacji do sklepów, nie używa poświadczeń dostawców i nie wywołuje płatnych API.
-
-Z katalogu głównego repozytorium, po zainstalowaniu zależności mobilnych:
+GitHub Actions sprawdza pushe i pull requesty: testy aplikacji/transportów/serwera, typy, lint, dokumentację PL/EN/DE i eksporty web/Hermes. Z katalogu głównego, po instalacji zależności mobilnych:
 
 ```sh
 node --test tests.mjs tests/*.test.mjs mobile/tests/*.test.mjs server/*.test.mjs
@@ -73,4 +51,8 @@ npm run lint --prefix mobile
 python3 scripts/check-docs.py
 ```
 
-Walidator dokumentacji wymaga Python 3.9+ i Git. Sprawdza kompletność wersji językowych, nawigację, lokalne odnośniki, bloki poleceń, identyfikatory oraz strukturę nagłówków i pól wyboru; nie ocenia jakości tłumaczenia. Kontrole źródła uzupełniają natywne kompilacje i testy urządzeń opisane w [instrukcji wydania](mobile/RELEASE.md).
+Walidator dokumentacji wymaga Python 3.9+ i Git. Wyniki kodu i formularza: [weryfikacja 0.3.0](docs/verification/2026-11-26-ownership-expenses.md). Testy fizycznych telefonów/adapterów, podpisany sklepowy IPA, informacje wydawcy i wdrożenie własnego serwera AI pozostają opisanymi warunkami publikacji. Nie wykonano zgłoszenia do sklepów.
+
+## Wcześniejszy prototyp HTML
+
+Pliki projektu interfejsu pozostają w katalogu głównym jako materiał historyczny. Uruchomisz je poleceniem `npm run prototype`, pod adresem http://127.0.0.1:5173. Bieżąca aplikacja znajduje się w `mobile/`.
