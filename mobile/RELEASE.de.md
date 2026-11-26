@@ -1,6 +1,10 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Veröffentlichung von VehicleSenseX 0.2.2
+# Veröffentlichung von VehicleSenseX 0.3.0
+
+Quellversion 0.3.0/Build 4 ergänzt Besitzkosten mit Kategorie, genauem PLN-Betrag, Bearbeiten/Löschen, Monats-/Jahressummen und separatem CSV. Schema 3 migriert ältere Garagen und Sicherungen; ältere App-Versionen können Schema 3 nicht lesen. Der Sicherungsimport lehnt zukünftige Ausgabendaten ab, vorhandene Daten bleiben bei zurückgestellter Uhr lesbar. Ausgabendetails bleiben außerhalb von KI-Kontext und Verkaufsbericht. Diese Quelle benötigt neue native Pakete; die unten geprüften 0.2.2-Artefakte enthalten das Register nicht.
+
+Aktuelle Quellprüfungen und Oberflächenergebnisse: [Überprüfung 0.3.0](../docs/verification/2026-11-26-ownership-expenses.de.md).
 
 Quellversion 0.2.2/Build 3 korrigiert veraltete Benachrichtigungszeitpläne und die Vordergrundanzeige, prüft beim Zurückkehren erneut und liest die angezeigte Version aus der Expo-Konfiguration. Sieben neue Regressionstests bestanden; die vollständige Suite besteht mit 171/171, ebenso Typprüfung und Lint. Die nativen 0.2.2-Pakete wurden gebaut und geprüft; die Zustellung auf Hardware bleibt ungeprüft.
 

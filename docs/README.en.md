@@ -23,6 +23,7 @@ When changing documentation, update all three versions and language links. Do no
 - [Native builds](verification/2026-11-26-native-builds.en.md)
 - [VIN and GPX 0.2.1 implementation verification](verification/2026-11-26-vin-gpx-builds.en.md)
 - [Reminder 0.2.2 builds and continuous checks](verification/2026-11-26-reminder-builds.en.md)
+- [Ownership expenses 0.3.0 verification](verification/2026-11-26-ownership-expenses.en.md)
 - [iOS artifact metadata (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Android APK artifact metadata (JSON)](verification/2026-11-26-android-artifact.json)
 - [Production Android AAB metadata (JSON)](verification/2026-11-26-android-production-artifact.json)
@@ -39,6 +40,7 @@ When changing documentation, update all three versions and language links. Do no
 - [GPX trip export](superpowers/plans/2026-11-26-trip-gpx.en.md)
 - [Vehicle details from VIN](superpowers/plans/2026-11-26-vin-enrichment.en.md)
 - [Continuous project checks](superpowers/plans/2026-11-26-continuous-checks.en.md)
+- [Vehicle ownership expenses](superpowers/plans/2026-11-26-ownership-expenses.en.md)
 
 ## Design specifications
 
@@ -48,6 +50,7 @@ When changing documentation, update all three versions and language links. Do no
 - [Offline vehicle catalog](superpowers/specs/2026-11-25-offline-catalog-design.en.md)
 - [GPX trip export](superpowers/specs/2026-11-26-trip-gpx-design.en.md)
 - [Vehicle details from VIN](superpowers/specs/2026-11-26-vin-enrichment.en.md)
+- [Vehicle ownership expenses](superpowers/specs/2026-11-26-ownership-expenses.en.md)
 
 ## Progress logs
 

@@ -2,7 +2,7 @@
 
 # VehicleSenseX — mobile App
 
-React Native 0.88.1, Expo SDK 58, React 19.3 und TypeScript 6. Quellversion 0.2.2. Die eigene Garage startet leer; die App hat keinen Demonstrationsmodus, kein Beispielfahrzeug und keinen Messwertgenerator. Im übergeordneten Verzeichnis ist ein separater früherer HTML-Prototyp erhalten.
+React Native 0.88.1, Expo SDK 58, React 19.3 und TypeScript 6. Quellversion 0.3.0. Die eigene Garage startet leer; die App hat keinen Demonstrationsmodus, kein Beispielfahrzeug und keinen Messwertgenerator. Im übergeordneten Verzeichnis ist ein separater früherer HTML-Prototyp erhalten.
 
 ## Starten
 
@@ -27,11 +27,17 @@ Vorschau der aktuellen Sitzung: **http://127.0.0.1:8083/**. Bluetooth und direkt
 - Zustand und Wert: datierte Diagnosequellen und Eigentümereinträge, Termine, Spanne/Median aus mindestens zwei vom Eigentümer angegebenen Angeboten der letzten 90 Tage; PDF-Bericht auf dem Telefon oder HTML im Web.
 - Assistent: lokale Faktenübersicht und echter Aufruf eines konfigurierten OpenAI-Proxys nach Zustimmung. Keine vorbereiteten Antworten, die KI vortäuschen. Den API-Start beschreibt der [Server](../server/README.de.md).
 
-CSV-Export umfasst getrennt Kraftstoff, Wartung und Fahrten. Eine vollständige JSON-Sicherung erhält alle Daten, auch VIN, Kennzeichen, Notizen, Fotos, Rechnungen und GPS-Koordinaten. Dateien sind auf 1 MB sowie 5 Anhänge pro Fahrzeug oder Wartungseintrag begrenzt; Fahrzeugfotos werden auf 1200 px verkleinert. Die Wiederherstellung validiert zunächst das Format, zeigt den Inhalt und erfordert die Bestätigung des Ersetzens der Garage. Benachrichtigungen aus einer Sicherung müssen erneut aktiviert werden. Das Sicherungsimportlimit beträgt 20 MB.
+CSV-Export umfasst getrennt Kraftstoff, Wartung, Besitzkosten und Fahrten. Eine vollständige JSON-Sicherung erhält alle Daten, auch VIN, Kennzeichen, Notizen, Fotos, Rechnungen und GPS-Koordinaten. Dateien sind auf 1 MB sowie 5 Anhänge pro Fahrzeug oder Wartungseintrag begrenzt; Fahrzeugfotos werden auf 1200 px verkleinert. Die Wiederherstellung validiert zunächst das Format, zeigt den Inhalt und erfordert die Bestätigung des Ersetzens der Garage. Benachrichtigungen aus einer Sicherung müssen erneut aktiviert werden. Das Sicherungsimportlimit beträgt 20 MB.
 
 GPX-1.1-Export steht bei gespeicherten GPS-Fahrten neben JSON zur Verfügung. Er enthält echte gültige Punkte und UTC-Zeiten; Lücken bleiben getrennte Segmente, ohne erfundene Höhe oder Geschwindigkeit. Manuelle Einträge oder weniger als zwei gültige Punkte ergeben keine GPX-Datei. Die Datei enthält genaue Standorte und Zeiten.
 
 Version 0.2.2 korrigiert veraltete Daten und Inhalte lokaler Wartungsbenachrichtigungen, ersetzt alte Zeitpläne einmalig und prüft sie bei Rückkehr in den Vordergrund erneut, auch nach Zeitzonenänderungen. Vordergrundbenachrichtigungen erscheinen lautlos. Die Einstellungen lesen die Version aus der Expo-Konfiguration. Diese Änderungen sind im geprüften signierten Android-0.2.2-AAB und iOS-Simulatorpaket enthalten.
+
+## Besitzkosten
+
+Unter Kraftstoff und Kosten lassen sich Versicherung, Parken, Maut, Steuern/Gebühren und andere Fahrzeugkosten hinzufügen. Jeder Eintrag hat Datum, Kategorie, Bezeichnung, PLN-Betrag und optionale Notiz; Bearbeiten oder Löschen nach Bestätigung ist möglich. Der Kilometerstand bleibt unverändert. Monats-/Jahressummen, Startseite und Zustandsbericht zählen jeden Eintrag einmal. Kosten pro 100 km schätzen nur Kraftstoff.
+
+Das Ausgaben-CSV enthält Bezeichnungen und Notizen — vor Freigabe prüfen. Vollständige Sicherungen erhalten Einträge und Fahrzeuglöschung entfernt zugehörige Ausgaben. Diese Ausgabendetails bleiben außerhalb des KI-Kontexts und Verkaufsberichts; der Bericht enthält nur die Summe. Manuelle Eingabe und Sicherungsimport lehnen zukünftige Ausgabendaten ab; Lesen vorhandener Daten toleriert eine zurückgestellte Uhr. Version 0.3.0/Build 4 benötigt neue native Pakete; die geprüfte 0.2.2 enthält diese Funktion nicht.
 
 ## Offline-Katalog
 
@@ -57,7 +63,7 @@ Optional lässt sich das Formular nach separater Zustimmung zur Übertragung aus
 
 ## Speicherung und Datenschutz
 
-Auf dem Telefon wird `expo-sqlite/kv-store` verwendet, damit größere GPS-Verläufe nicht an das Limit eines einzelnen AsyncStorage-Datensatzes unter Android stoßen. Ältere Daten werden validiert und kopiert, bevor die Kopie im alten Speicher entfernt wird. Web verwendet AsyncStorage/localStorage und Web Locks. Das Repository bestätigt den Zustand erst nach dauerhafter Speicherung; beschädigte Daten werden nicht durch eine leere Garage ersetzt. Schemaversion 1 wird auf 2 migriert.
+Auf dem Telefon wird `expo-sqlite/kv-store` verwendet, damit größere GPS-Verläufe nicht an das Limit eines einzelnen AsyncStorage-Datensatzes unter Android stoßen. Ältere Daten werden validiert und kopiert, bevor die Kopie im alten Speicher entfernt wird. Web verwendet AsyncStorage/localStorage und Web Locks. Das Repository bestätigt den Zustand erst nach dauerhafter Speicherung; beschädigte Daten werden nicht durch eine leere Garage ersetzt. Die Schemata 1 und 2 werden auf 3 migriert. Das neue Format erhält Besitzkosten; ältere Apps können es nicht öffnen. Vor Rückkehr zu einer älteren Version eine Sicherung behalten.
 
 Die Datenbank wird durch die App nicht zusätzlich verschlüsselt. Android hat die automatische App-Sicherung deaktiviert; das Verhalten von iOS-Systemkopien hängt auch von der Plattform ab. Die App enthält einen Bildschirm zu Daten und freiwilliger Übertragung von KI-Kontext. Vor Veröffentlichung muss eine öffentliche Datenschutzerklärung für den tatsächlichen Betreiber erstellt werden.
 

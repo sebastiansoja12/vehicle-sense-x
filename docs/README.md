@@ -23,6 +23,7 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 - [Kompilacje natywne](verification/2026-11-26-native-builds.md)
 - [Weryfikacja implementacji VIN i GPX 0.2.1](verification/2026-11-26-vin-gpx-builds.md)
 - [Kompilacje powiadomień 0.2.2 i automatyczne kontrole](verification/2026-11-26-reminder-builds.md)
+- [Weryfikacja kosztów posiadania 0.3.0](verification/2026-11-26-ownership-expenses.md)
 - [Metadane artefaktu iOS (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Metadane artefaktu Android APK (JSON)](verification/2026-11-26-android-artifact.json)
 - [Metadane produkcyjnego Android AAB (JSON)](verification/2026-11-26-android-production-artifact.json)
@@ -39,6 +40,7 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 - [Eksport tras GPX](superpowers/plans/2026-11-26-trip-gpx.md)
 - [Dane pojazdu z VIN](superpowers/plans/2026-11-26-vin-enrichment.md)
 - [Automatyczne kontrole projektu](superpowers/plans/2026-11-26-continuous-checks.md)
+- [Koszty posiadania samochodu](superpowers/plans/2026-11-26-ownership-expenses.md)
 
 ## Specyfikacje projektu
 
@@ -48,6 +50,7 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 - [Katalog pojazdów offline](superpowers/specs/2026-11-25-offline-catalog-design.md)
 - [Eksport tras GPX](superpowers/specs/2026-11-26-trip-gpx-design.md)
 - [Dane pojazdu z VIN](superpowers/specs/2026-11-26-vin-enrichment.md)
+- [Koszty posiadania samochodu](superpowers/specs/2026-11-26-ownership-expenses.md)
 
 ## Dzienniki postępu
 

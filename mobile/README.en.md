@@ -2,7 +2,7 @@
 
 # VehicleSenseX — mobile app
 
-React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. Source version 0.2.2. The personal garage starts empty; the app has no demo mode, sample vehicle or measurement generator. A separate earlier HTML prototype is retained in the parent directory.
+React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. Source version 0.3.0. The personal garage starts empty; the app has no demo mode, sample vehicle or measurement generator. A separate earlier HTML prototype is retained in the parent directory.
 
 ## Running
 
@@ -27,11 +27,17 @@ Current-session preview: **http://127.0.0.1:8083/**. Bluetooth and raw TCP to an
 - Condition and value: dated diagnostic sources and owner entries, due dates, a range/median of at least two owner-provided offers from the last 90 days; a PDF report on phones or HTML on the web.
 - Assistant: a local factual summary and a real call to a configured OpenAI proxy after consent. No prewritten answers pretending to be AI. API setup is described in the [server documentation](../server/README.en.md).
 
-CSV export covers fuel, maintenance and trips separately. A full JSON backup retains all data, including VIN, plates, notes, photos, invoices and GPS coordinates. Files have a 1 MB limit, with up to 5 attachments per vehicle or service entry; vehicle photos are resized to 1200 px. Restoration first validates the format, displays the contents and requires confirmation before replacing the garage. Notifications from a backup must be re-enabled. The backup import limit is 20 MB.
+CSV export covers fuel, maintenance, ownership expenses and trips separately. A full JSON backup retains all data, including VIN, plates, notes, photos, invoices and GPS coordinates. Files have a 1 MB limit, with up to 5 attachments per vehicle or service entry; vehicle photos are resized to 1200 px. Restoration first validates the format, displays the contents and requires confirmation before replacing the garage. Notifications from a backup must be re-enabled. The backup import limit is 20 MB.
 
 GPX 1.1 export is available beside JSON for saved GPS trips. It contains real accepted points and UTC times; gaps remain separate segments, without invented elevation or speed. Manual entries or fewer than two valid points cannot produce GPX. The file exposes precise location and time.
 
 Version 0.2.2 corrects stale local reminder dates/content, migrates old schedules once and rechecks them when returning to the foreground, including timezone changes. Foreground reminders are displayed silently. Settings read the app version from Expo configuration. These changes are included in the verified signed Android 0.2.2 AAB and iOS simulator bundle.
+
+## Ownership expenses
+
+In fuel and costs, add insurance, parking, tolls, taxes/fees and other vehicle costs. Each entry has a date, category, title, PLN amount and optional note; edit it or delete after confirmation. Mileage remains unchanged. Month/year totals, home and the condition report count each entry once. Cost per 100 km estimates fuel alone.
+
+The expense CSV includes titles and notes — review them before sharing. Full backups retain entries and vehicle deletion cascades to its expenses. These expense details remain outside AI context and the sales report; the report includes only the total. Manual entry and backup import reject future expense dates; reading existing storage tolerates clock rollback. Version 0.3.0/build 4 needs new native packages; verified 0.2.2 does not include this feature.
 
 ## Offline catalog
 
@@ -57,7 +63,7 @@ Optional form completion uses the real NHTSA vPIC service after separate consent
 
 ## Persistence and privacy
 
-On phones, `expo-sqlite/kv-store` prevents larger GPS histories from hitting Android's single-record AsyncStorage limit. Older stored data is validated and copied before its copy in the old store is removed. Web uses AsyncStorage/localStorage and Web Locks. The repository commits state only after durable storage; it does not replace corrupt data with an empty garage. Schema version 1 is migrated to 2.
+On phones, `expo-sqlite/kv-store` prevents larger GPS histories from hitting Android's single-record AsyncStorage limit. Older stored data is validated and copied before its copy in the old store is removed. Web uses AsyncStorage/localStorage and Web Locks. The repository commits state only after durable storage; it does not replace corrupt data with an empty garage. Schemas 1 and 2 migrate to 3. The new format retains ownership expenses; older apps cannot open it. Keep a backup before returning to an older version.
 
 The database is not additionally encrypted by the app. Android automatic app backup is disabled; iOS system-backup behavior also depends on the platform. The app has a screen describing its data and voluntary AI context transmission. A public operator privacy policy must be prepared for the actual publisher before publication.
 

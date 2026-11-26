@@ -1,6 +1,6 @@
 {
   "name": "vehiclesensex-mobile",
-  "version": "0.2.2",
+  "version": "0.3.0",
   "main": "expo-router/entry",
   "dependencies": {
     "@expo/vector-icons": "^15.0.2",
@@ -50,7 +50,7 @@
     "test": "node --test tests/*.test.mjs",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
-    "export:web": "expo export --platform web",
+    "export:web": "expo export --platform web --clear",
     "export:native": "expo export --platform ios --platform android",
     "verify": "npm test && npm run typecheck && npm run lint",
     "build:native-check": "npx eas-cli@latest build --platform all --profile native-check",

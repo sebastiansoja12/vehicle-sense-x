@@ -1,6 +1,10 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Wydanie VehicleSenseX 0.2.2
+# Wydanie VehicleSenseX 0.3.0
+
+Kod 0.3.0/build 4 dodaje pozostałe wydatki z kategorią, dokładną kwotą PLN, edycją/usuwaniem, sumami miesiąca/roku i osobnym CSV. Schemat 3 migruje starsze garaże i kopie; starsze wersje aplikacji nie odczytają schematu 3. Import kopii odrzuca przyszłe daty wydatków, natomiast istniejący magazyn pozostaje dostępny po cofnięciu zegara. Szczegóły wydatków pozostają poza kontekstem AI i raportem sprzedażowym. Ten kod wymaga nowych paczek natywnych; zweryfikowane artefakty 0.2.2 poniżej nie zawierają rejestru.
+
+Bieżące kontrole kodu i wyniki interfejsu: [weryfikacja 0.3.0](../docs/verification/2026-11-26-ownership-expenses.md).
 
 Kod 0.2.2/build 3 poprawia nieaktualne harmonogramy i wyświetlanie powiadomień przy otwartej aplikacji, sprawdza je po powrocie i pobiera wyświetlaną wersję z konfiguracji Expo. Przeszło siedem nowych testów regresji; pełny zestaw ma wynik 171/171, typy i lint także przeszły. Paczki natywne 0.2.2 zostały zbudowane i sprawdzone; dostarczanie powiadomień na sprzęcie pozostaje niesprawdzone.
 

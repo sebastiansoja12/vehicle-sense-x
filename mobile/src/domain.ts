@@ -1,8 +1,8 @@
 import {ValidationError} from './validation.ts';
 import {parseVehicleSpec,validVehicleSpec,validAssets} from './media.ts';
 import type {VehicleSpec,Asset} from './media.ts';
-import {emptyExtensions,validateExtensions} from './records.ts';
-import type {Extensions} from './records.ts';
+import {emptyExtensions,validateExtensions,expenseCategories} from './records.ts';
+import type {Extensions,ExpenseEntry,ExpenseCategory} from './records.ts';
 import {validVinSource} from './vin.ts';
 import type {VinSource} from './vin.ts';
 import {validDecodedSource,retainDecodedSource} from './vin-decoder.ts';
@@ -11,13 +11,14 @@ export {ValidationError} from './validation.ts';
 export type Vehicle = { id: string; make: string; model: string; year: number; engine: string; mileage: number; plate: string; vin: string; spec?:VehicleSpec;photos?:Asset[];vinSource?:VinSource;decodedSource?:DecodedVehicleSource };
 export type FuelEntry = { id: string; vehicleId: string; date: string; mileage: number; volumeMl: number; priceCents: number; costCents: number; full: boolean };
 export type ServiceEntry = { id: string; vehicleId: string; date: string; mileage: number; title: string; costCents: number; note: string;attachments?:Asset[] };
-export type AppData = Extensions & { version: 2; activeVehicleId: string | null; vehicles: Vehicle[]; fuel: FuelEntry[]; service: ServiceEntry[] };
+export type AppData = Extensions & { version: 3; activeVehicleId: string | null; vehicles: Vehicle[]; fuel: FuelEntry[]; service: ServiceEntry[] };
 export type VehicleInput = { make: string; model: string; year: string; engine: string; mileage: string; plate: string; vin: string } & Partial<Record<keyof VehicleSpec,string>>;
 export type FuelInput = { vehicleId: string; date: string; mileage: string; liters: string; price: string; full: boolean };
 export type ServiceInput = { vehicleId: string; date: string; mileage: string; title: string; cost: string; note: string };
+export type ExpenseInput={vehicleId:string;date:string;category:ExpenseCategory;title:string;cost:string;note:string};
 
 export class StorageFormatError extends Error { constructor() { super('Nie można odczytać zapisanych danych. Nie zostały usunięte ani nadpisane.'); this.name = 'StorageFormatError'; } }
-export const emptyData = (): AppData => ({ version: 2, activeVehicleId: null, vehicles: [], fuel: [], service: [], ...emptyExtensions() });
+export const emptyData = (): AppData => ({ version: 3, activeVehicleId: null, vehicles: [], fuel: [], service: [], ...emptyExtensions() });
 export function localDay(now = new Date()): string { return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`; }
 const integer = (value: unknown, min: number, max: number): value is number => typeof value === 'number' && Number.isSafeInteger(value) && value >= min && value <= max;
 const text = (value: unknown, max = 100): value is string => typeof value === 'string' && value.trim().length > 0 && value.length <= max;
@@ -51,7 +52,7 @@ function withMileage(state: AppData, vehicleId: string, mileage: number): Vehicl
  return state.vehicles.map(v=>v.id===vehicleId ? {...v,mileage:Math.max(v.mileage,mileage)} : v);
 }
 function unusedId(state: AppData,id: string) {
- if (!text(id) || [...state.vehicles,...state.fuel,...state.service,...state.trips,...state.diagnostics,...state.reminders,...state.comparisons].some(r=>r.id===id)) throw new ValidationError('Identyfikator wpisu już istnieje. Spróbuj ponownie.');
+ if (!text(id) || [...state.vehicles,...state.fuel,...state.service,...state.trips,...state.diagnostics,...state.reminders,...state.comparisons,...state.expenses].some(r=>r.id===id)) throw new ValidationError('Identyfikator wpisu już istnieje. Spróbuj ponownie.');
 }
 export function addVehicle(state: AppData, input: VehicleInput, id: string, today: string): AppData {
  unusedId(state,id);
@@ -74,6 +75,12 @@ export function addService(state: AppData, input: ServiceInput, id: string, toda
  const entry: ServiceEntry={id,vehicleId:input.vehicleId,date,mileage,title:required(input.title,'Nazwa serwisu',100),costCents:decimal(input.cost,'Koszt',2,0,100000000),note:input.note.trim()};
  return {...state,service:[...state.service,entry],vehicles:withMileage(state,input.vehicleId,mileage)};
 }
+export function addExpense(state:AppData,input:ExpenseInput,id:string,today:string):AppData{
+ unusedId(state,id);findVehicle(state,input.vehicleId);const date=dateInput(input.date,today);
+ if(!expenseCategories.includes(input.category)||typeof input.note!=='string'||input.note.length>1000)throw new ValidationError('Wybierz kategorię; notatka może mieć najwyżej 1000 znaków.');
+ const entry:ExpenseEntry={id,vehicleId:input.vehicleId,date,category:input.category,title:required(input.title,'Nazwa wydatku',100),costCents:decimal(input.cost,'Kwota',2,1,100000000),note:input.note.trim()};
+ return {...state,expenses:[...state.expenses,entry]};
+}
 export function vehicleSummary(state: AppData, vehicleId: string, month: string) {
  const fuel=state.fuel.filter(r=>r.vehicleId===vehicleId);
  const service=state.service.filter(r=>r.vehicleId===vehicleId);
@@ -87,19 +94,20 @@ export function vehicleSummary(state: AppData, vehicleId: string, month: string)
  }
  const fuelCents=fuel.filter(r=>r.date.startsWith(month+'-')).reduce((sum,r)=>sum+r.costCents,0);
  const serviceCents=service.filter(r=>r.date.startsWith(month+'-')).reduce((sum,r)=>sum+r.costCents,0);
- return {fuelCents,serviceCents,totalCents:fuelCents+serviceCents,consumption:measuredDistance?measuredMl/1000/measuredDistance*100:null,measuredDistance,fuelCount:fuel.length,serviceCount:service.length};
+ const otherCents=state.expenses.filter(r=>r.vehicleId===vehicleId&&r.date.startsWith(month+'-')).reduce((sum,r)=>sum+r.costCents,0);
+ return {fuelCents,serviceCents,otherCents,totalCents:fuelCents+serviceCents+otherCents,consumption:measuredDistance?measuredMl/1000/measuredDistance*100:null,measuredDistance,fuelCount:fuel.length,serviceCount:service.length};
 }
 
 export function parseStoredData(raw: string|null): AppData {
  if (raw===null) return emptyData();
  try {
   const parsed=JSON.parse(raw);
-  const data: AppData=parsed?.version===1?{...parsed,version:2,...emptyExtensions()}:parsed;
-  if (!data || data.version!==2 || !Array.isArray(data.vehicles) || !Array.isArray(data.fuel) || !Array.isArray(data.service)) throw new StorageFormatError();
+  const data: AppData=parsed?.version===1?{...parsed,version:3,...emptyExtensions()}:parsed?.version===2?{...parsed,version:3,expenses:parsed.expenses===undefined?[]:parsed.expenses}:parsed;
+  if (!data || data.version!==3 || !Array.isArray(data.vehicles) || !Array.isArray(data.fuel) || !Array.isArray(data.service)) throw new StorageFormatError();
   const vehicleOwners=new Set<string>(data.vehicles.map(v=>v?.id));
   if(!validateExtensions(data,vehicleOwners))throw new StorageFormatError();
   const ids=new Set<string>();
-  for(const record of [...data.vehicles,...data.fuel,...data.service,...data.trips,...data.diagnostics,...data.reminders,...data.comparisons]) { if (!record||!text(record.id)||ids.has(record.id)) throw new StorageFormatError();ids.add(record.id); }
+  for(const record of [...data.vehicles,...data.fuel,...data.service,...data.trips,...data.diagnostics,...data.reminders,...data.comparisons,...data.expenses]) { if (!record||!text(record.id)||ids.has(record.id)) throw new StorageFormatError();ids.add(record.id); }
   for(const v of data.vehicles) if (!text(v.make,60)||!text(v.model,80)||!text(v.engine,100)||!text(v.plate,20)||typeof v.vin!=='string'||(v.vin!==''&&!/^[A-HJ-NPR-Z0-9]{17}$/.test(v.vin))||!integer(v.year,1900,9999)||!integer(v.mileage,0,5000000)) throw new StorageFormatError();
   for(const v of data.vehicles)if(v.vinSource!==undefined&&(!validVinSource(v.vinSource)||v.vinSource.vin!==v.vin))throw new StorageFormatError();
   for(const v of data.vehicles)if(v.decodedSource!==undefined){

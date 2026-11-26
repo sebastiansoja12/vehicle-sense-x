@@ -1,5 +1,5 @@
-import {ValidationError,addVehicle,addFuel,addService,validDate,parseStoredData} from './domain.ts';
-import type {AppData,VehicleInput,FuelInput,ServiceInput} from './domain.ts';
+import {ValidationError,addVehicle,addFuel,addService,addExpense,validDate,parseStoredData} from './domain.ts';
+import type {AppData,VehicleInput,FuelInput,ServiceInput,ExpenseInput} from './domain.ts';
 import {retainDecodedSource} from './vin-decoder.ts';
 import type {Reminder,Comparison} from './records.ts';
 import {validOfferUrl} from './records.ts';
@@ -8,7 +8,7 @@ import {analyzeTrip,validateTripRecord} from './trips.ts';
 import type {TripRecord} from './trips.ts';
 import {validateDiagnosticSnapshot} from './obd/types.ts';
 import type {DiagnosticSnapshot} from './obd/types.ts';
-const all=(state:AppData)=>[...state.vehicles,...state.fuel,...state.service,...state.trips,...state.diagnostics,...state.reminders,...state.comparisons];
+const all=(state:AppData)=>[...state.vehicles,...state.fuel,...state.service,...state.trips,...state.diagnostics,...state.reminders,...state.comparisons,...state.expenses];
 function check(state:AppData,vehicleId:string,id:string){if(!state.vehicles.some(v=>v.id===vehicleId))throw new ValidationError('Wybierz istniejący samochód.');if(!id||all(state).some(r=>r.id===id))throw new ValidationError('Wpis o tym identyfikatorze już istnieje.');}
 const target=(v:string):number|null=>{if(v.trim()==='')return null;if(!/^\d+$/.test(v.trim())||!Number.isSafeInteger(Number(v))||Number(v)>5000000)throw new ValidationError('Wpisz prawidłowy przebieg.');return Number(v);};
 export function addReminder(state:AppData,input:{vehicleId:string;title:string;dueDate:string;dueMileage:string},id:string,today:string):AppData{
@@ -28,12 +28,12 @@ export function addComparison(state:AppData,input:{vehicleId:string;price:string
 export function marketEstimate(state:AppData,vehicleId:string,today:string){const prices=state.comparisons.filter(c=>c.vehicleId===vehicleId&&c.date<=today&&(Date.parse(today)-Date.parse(c.date))/86400000<=90).map(c=>c.priceCents).sort((a,b)=>a-b);if(prices.length<2)return null;const mid=Math.floor(prices.length/2);return{lowCents:prices[0],highCents:prices.at(-1)!,medianCents:prices.length%2?prices[mid]:Math.round((prices[mid-1]+prices[mid])/2),count:prices.length,source:'manual-comparisons' as const};}
 export function addTrip(state:AppData,trip:TripRecord):AppData{check(state,trip.vehicleId,trip.id);if(!validateTripRecord(trip))throw new ValidationError('Przejazd zawiera nieprawidłowe dane.');const record=trip.fuelCostCents===null?{...trip,fuelCostCents:estimateTripFuelCost(state,trip.vehicleId,analyzeTrip(trip).distanceM)}:trip;return {...state,trips:[...state.trips,record]};}
 export function addDiagnostic(state:AppData,snapshot:DiagnosticSnapshot):AppData{check(state,snapshot.vehicleId,snapshot.id);if(!validateDiagnosticSnapshot(snapshot))throw new ValidationError('Nieprawidłowy odczyt diagnostyczny.');return {...state,diagnostics:[...state.diagnostics,snapshot]};}
-export type RecordKind='vehicle'|'fuel'|'service'|'trip'|'diagnostic'|'reminder'|'comparison';
+export type RecordKind='vehicle'|'fuel'|'service'|'trip'|'diagnostic'|'reminder'|'comparison'|'expense';
 export function removeRecord(state:AppData,kind:RecordKind,id:string):AppData{
  if(kind==='vehicle'){
-  const vehicles=state.vehicles.filter(v=>v.id!==id);return {...state,vehicles,activeVehicleId:state.activeVehicleId===id?(vehicles[0]?.id??null):state.activeVehicleId,fuel:state.fuel.filter(v=>v.vehicleId!==id),service:state.service.filter(v=>v.vehicleId!==id),trips:state.trips.filter(v=>v.vehicleId!==id),diagnostics:state.diagnostics.filter(v=>v.vehicleId!==id),reminders:state.reminders.filter(v=>v.vehicleId!==id),comparisons:state.comparisons.filter(v=>v.vehicleId!==id)};
+  const vehicles=state.vehicles.filter(v=>v.id!==id);return {...state,vehicles,activeVehicleId:state.activeVehicleId===id?(vehicles[0]?.id??null):state.activeVehicleId,fuel:state.fuel.filter(v=>v.vehicleId!==id),service:state.service.filter(v=>v.vehicleId!==id),trips:state.trips.filter(v=>v.vehicleId!==id),diagnostics:state.diagnostics.filter(v=>v.vehicleId!==id),reminders:state.reminders.filter(v=>v.vehicleId!==id),comparisons:state.comparisons.filter(v=>v.vehicleId!==id),expenses:state.expenses.filter(v=>v.vehicleId!==id)};
  }
- const key=({fuel:'fuel',service:'service',trip:'trips',diagnostic:'diagnostics',reminder:'reminders',comparison:'comparisons'} as const)[kind];return {...state,[key]:state[key].filter(r=>r.id!==id)};
+ const key=({fuel:'fuel',service:'service',trip:'trips',diagnostic:'diagnostics',reminder:'reminders',comparison:'comparisons',expense:'expenses'} as const)[kind];return {...state,[key]:state[key].filter(r=>r.id!==id)};
 }
 export function editVehicle(state:AppData,id:string,input:VehicleInput,today:string):AppData{
  const original=state.vehicles.find(v=>v.id===id);if(!original)throw new ValidationError('Nie znaleziono samochodu.');
@@ -50,4 +50,9 @@ export function editFuel(state:AppData,id:string,input:FuelInput,today:string):A
 export function editService(state:AppData,id:string,input:ServiceInput,today:string):AppData{
  const original=state.service.find(r=>r.id===id);if(!original||original.vehicleId!==input.vehicleId)throw new ValidationError('Nie znaleziono wpisu serwisowego.');
  const updated=addService({...state,service:state.service.filter(r=>r.id!==id)},input,id,today);return {...updated,service:state.service.map(r=>r.id===id?{...updated.service.at(-1)!,attachments:original.attachments}:r)};
+}
+export function editExpense(state:AppData,id:string,input:ExpenseInput,today:string):AppData{
+ const original=state.expenses.find(r=>r.id===id);if(!original||original.vehicleId!==input.vehicleId)throw new ValidationError('Nie znaleziono wydatku dla tego samochodu.');
+ const updated=addExpense({...state,expenses:state.expenses.filter(r=>r.id!==id)},input,id,today).expenses.at(-1)!;
+ return {...state,expenses:state.expenses.map(r=>r.id===id?updated:r)};
 }

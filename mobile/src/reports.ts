@@ -1,16 +1,19 @@
-import {parseStoredData,vehicleSummary} from './domain.ts';
+import {parseStoredData,vehicleSummary,localDay} from './domain.ts';
 import type {AppData} from './domain.ts';
 import {dueReminders,marketEstimate} from './features.ts';
 import {analyzeTrip} from './trips.ts';
+import {expenseCategoryLabels} from './expenses.ts';
 export const csvCell=(value:unknown)=>'"'+String(value??'').replace(/^(?=\s*[=+@-]|[\t\r\n])/,"'").replaceAll('"','""')+'"';
 const csv=(rows:unknown[][])=>'\uFEFF'+rows.map(row=>row.map(csvCell).join(';')).join('\r\n');
 export function fuelCsv(state:AppData,id:string){return csv([['Data','Przebieg km','Paliwo l','Cena PLN/l','Koszt PLN','Do pełna'],...state.fuel.filter(r=>r.vehicleId===id).map(r=>[r.date,r.mileage,(r.volumeMl/1000).toFixed(3),(r.priceCents/100).toFixed(2),(r.costCents/100).toFixed(2),r.full?'Tak':'Nie'])]);}
 export function serviceCsv(state:AppData,id:string){return csv([['Data','Nazwa','Przebieg km','Koszt PLN','Notatka'],...state.service.filter(r=>r.vehicleId===id).map(r=>[r.date,r.title,r.mileage,(r.costCents/100).toFixed(2),r.note])]);}
+export function expensesCsv(state:AppData,id:string){return csv([['Data','Kategoria','Nazwa','Koszt PLN','Notatka'],...state.expenses.filter(r=>r.vehicleId===id).map(r=>[r.date,expenseCategoryLabels[r.category],r.title,(r.costCents/100).toFixed(2),r.note])]);}
 export function tripsCsv(state:AppData,id:string){return csv([['Początek ISO','Nazwa','Źródło','Dystans km','Czas min','Szac. paliwo PLN'],...state.trips.filter(r=>r.vehicleId===id).map(r=>{const a=analyzeTrip(r);return[new Date(r.startedAt).toISOString(),r.label,r.source,(a.distanceM/1000).toFixed(3),(a.durationS/60).toFixed(1),r.fuelCostCents===null?'':(r.fuelCostCents/100).toFixed(2)];})]);}
 export function createBackup(state:AppData,day:string){const json=JSON.stringify({format:'vehiclesensex-backup',version:1,createdAt:day,data:parseStoredData(JSON.stringify(state))});if(new TextEncoder().encode(json).byteLength>20*1024*1024)throw new Error('Kopia przekracza limit importu 20 MB. Wyeksportuj osobne historie i pliki, zanim usuniesz dane.');return json;}
 export function parseBackup(raw:string):AppData{
  if(raw.length>20*1024*1024||new TextEncoder().encode(raw).byteLength>20*1024*1024)throw new Error('Kopia przekracza dopuszczalny rozmiar 20 MB.');
- const document=JSON.parse(raw);if(document?.format!=='vehiclesensex-backup'||document.version!==1)throw new Error('To nie jest obsługiwana kopia VehicleSenseX.');return parseStoredData(JSON.stringify(document.data));
+ const document=JSON.parse(raw);if(document?.format!=='vehiclesensex-backup'||document.version!==1)throw new Error('To nie jest obsługiwana kopia VehicleSenseX.');const data=parseStoredData(JSON.stringify(document.data));
+ if(data.expenses.some(e=>e.date>localDay()))throw new Error('Kopia zawiera wydatki z przyszłą datą. Sprawdź datę urządzenia; garaż nie został zastąpiony.');return data;
 }
 const esc=(value:unknown)=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]!));
 const pln=(v:number)=>(v/100).toFixed(2)+' zł';

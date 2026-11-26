@@ -2,7 +2,7 @@
 
 # VehicleSenseX — aplikacja mobilna
 
-React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.2.2. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
+React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.3.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
 
 ## Uruchomienie
 
@@ -27,11 +27,17 @@ Podgląd bieżącej sesji: **http://127.0.0.1:8083/**. Bluetooth i surowe TCP do
 - Kondycja i wartość: datowane źródła diagnostyczne i wpisy właściciela, terminy, przedział/mediana minimum dwóch ofert podanych przez właściciela z ostatnich 90 dni; raport PDF na telefonie lub HTML w przeglądarce.
 - Asystent: lokalne podsumowanie faktów oraz rzeczywiste wywołanie skonfigurowanego proxy OpenAI po zgodzie. Nie zawiera gotowych odpowiedzi udających AI. Uruchomienie API opisuje [serwer](../server/README.md).
 
-Eksport CSV obejmuje osobno paliwo, serwis i trasy. Pełna kopia JSON zachowuje wszystkie dane, także VIN, tablice, notatki, zdjęcia, faktury i współrzędne GPS. Pliki mają limit 1 MB oraz 5 załączników przy samochodzie lub serwisie; zdjęcia auta są zmniejszane do 1200 px. Przywrócenie najpierw waliduje format, pokazuje zawartość i wymaga potwierdzenia zastąpienia garażu. Powiadomienia z kopii trzeba włączyć ponownie. Limit importu kopii wynosi 20 MB.
+Eksport CSV obejmuje osobno paliwo, serwis, pozostałe wydatki i trasy. Pełna kopia JSON zachowuje wszystkie dane, także VIN, tablice, notatki, zdjęcia, faktury i współrzędne GPS. Pliki mają limit 1 MB oraz 5 załączników przy samochodzie lub serwisie; zdjęcia auta są zmniejszane do 1200 px. Przywrócenie najpierw waliduje format, pokazuje zawartość i wymaga potwierdzenia zastąpienia garażu. Powiadomienia z kopii trzeba włączyć ponownie. Limit importu kopii wynosi 20 MB.
 
 Eksport GPX 1.1 jest dostępny przy zapisanej trasie GPS, obok JSON. Zawiera rzeczywiste poprawne punkty i czasy UTC; przerwy są osobnymi segmentami, bez dopisywania wysokości ani prędkości. Wpis ręczny lub mniej niż dwa poprawne punkty nie tworzą GPX. Plik ujawnia dokładną lokalizację i czas.
 
 Wersja 0.2.2 poprawia nieaktualne daty i treści powiadomień serwisowych, jednorazowo zastępuje stare harmonogramy i sprawdza je po powrocie do aplikacji, także po zmianie strefy czasowej. Powiadomienia przy otwartej aplikacji są wyświetlane bez dźwięku. Ustawienia odczytują wersję z konfiguracji Expo. Te zmiany zawiera zweryfikowany podpisany AAB Androida 0.2.2 i pakiet iOS na symulator.
+
+## Pozostałe wydatki
+
+W module paliwa i kosztów dodasz ubezpieczenie, parking, opłaty drogowe, podatki/opłaty i inne koszty samochodu. Wpis zawiera datę, kategorię, nazwę, kwotę PLN i opcjonalną notatkę; możesz go edytować lub usunąć po potwierdzeniu. Przebieg pozostaje bez zmian. Sumy miesiąca/roku, ekran główny i raport kondycji uwzględniają każdy wpis raz. Koszt 100 km oznacza szacunek samego paliwa.
+
+CSV wydatków zawiera nazwy i notatki — sprawdź je przed udostępnieniem. Pełna kopia zachowuje wpisy, a usunięcie samochodu usuwa jego koszty. Szczegóły tych wydatków pozostają poza kontekstem AI i raportem sprzedażowym; raport uwzględnia tylko sumę. Wpis ręczny i import kopii odrzucają przyszłe daty wydatków; odczyt istniejącego magazynu toleruje cofnięcie zegara. Wersja 0.3.0/build 4 wymaga nowych paczek natywnych; zweryfikowane 0.2.2 nie zawiera tej funkcji.
 
 ## Katalog offline
 
@@ -57,7 +63,7 @@ Opcjonalne uzupełnienie formularza korzysta z rzeczywistego NHTSA vPIC po osobn
 
 ## Zapis i prywatność
 
-Na telefonie używamy `expo-sqlite/kv-store`, aby większe historie GPS nie trafiały na limit pojedynczego rekordu AsyncStorage na Androidzie. Starszy zapis jest walidowany i kopiowany przed usunięciem kopii ze starego magazynu. Web używa AsyncStorage/localStorage oraz Web Locks. Repozytorium zatwierdza stan dopiero po trwałym zapisie; nie zastępuje uszkodzonych danych pustym garażem. Wersja schematu 1 jest migrowana do 2.
+Na telefonie używamy `expo-sqlite/kv-store`, aby większe historie GPS nie trafiały na limit pojedynczego rekordu AsyncStorage na Androidzie. Starszy zapis jest walidowany i kopiowany przed usunięciem kopii ze starego magazynu. Web używa AsyncStorage/localStorage oraz Web Locks. Repozytorium zatwierdza stan dopiero po trwałym zapisie; nie zastępuje uszkodzonych danych pustym garażem. Schematy 1 i 2 są migrowane do 3. Nowy format zachowuje pozostałe wydatki; starsze aplikacje go nie otworzą. Przed powrotem do starszej wersji zachowaj kopię danych.
 
 Baza nie jest dodatkowo szyfrowana przez aplikację. Android ma wyłączoną automatyczną kopię aplikacji; zachowanie kopii systemowych iOS zależy również od platformy. W aplikacji jest ekran opisujący dane i dobrowolne wysyłanie kontekstu AI. Publiczną politykę operatora trzeba przygotować dla rzeczywistego wydawcy przed publikacją.
 

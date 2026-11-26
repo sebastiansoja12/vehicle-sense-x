@@ -8,7 +8,7 @@ const garage=()=>d.addVehicle(d.emptyData(),car,'v1',today);
 test('v1 migration preserves core records and initializes feature collections',()=>{
  const old={version:1,activeVehicleId:'v1',vehicles:garage().vehicles,fuel:[],service:[]};
  const migrated=d.parseStoredData(JSON.stringify(old));
- assert.equal(migrated.version,2);assert.equal(migrated.vehicles[0].id,'v1');assert.deepEqual(migrated.trips,[]);assert.deepEqual(migrated.diagnostics,[]);assert.deepEqual(migrated.reminders,[]);assert.deepEqual(migrated.comparisons,[]);
+ assert.equal(migrated.version,3);assert.equal(migrated.vehicles[0].id,'v1');assert.deepEqual(migrated.trips,[]);assert.deepEqual(migrated.diagnostics,[]);assert.deepEqual(migrated.reminders,[]);assert.deepEqual(migrated.comparisons,[]);assert.deepEqual(migrated.expenses,[]);
 });
 test('reminders become due by earlier time or mileage and completed reminders disappear',()=>{
  let state=f.addReminder(garage(),{vehicleId:'v1',title:'Olej',dueDate:'2026-12-01',dueMileage:'10000'},'r1',today);

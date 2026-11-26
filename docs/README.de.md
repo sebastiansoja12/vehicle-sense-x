@@ -23,6 +23,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [Native Builds](verification/2026-11-26-native-builds.de.md)
 - [Überprüfung der VIN- und GPX 0.2.1-Implementierung](verification/2026-11-26-vin-gpx-builds.de.md)
 - [Benachrichtigungsbuilds 0.2.2 und automatische Prüfungen](verification/2026-11-26-reminder-builds.de.md)
+- [Überprüfung der Besitzkosten 0.3.0](verification/2026-11-26-ownership-expenses.de.md)
 - [Metadaten des iOS-Artefakts (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Metadaten des Android-APK-Artefakts (JSON)](verification/2026-11-26-android-artifact.json)
 - [Metadaten des Android-Produktions-AAB (JSON)](verification/2026-11-26-android-production-artifact.json)
@@ -39,6 +40,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [GPX-Fahrtenexport](superpowers/plans/2026-11-26-trip-gpx.de.md)
 - [Fahrzeugdaten aus der VIN](superpowers/plans/2026-11-26-vin-enrichment.de.md)
 - [Automatische Projektprüfungen](superpowers/plans/2026-11-26-continuous-checks.de.md)
+- [Kosten des Fahrzeugbesitzes](superpowers/plans/2026-11-26-ownership-expenses.de.md)
 
 ## Entwurfsspezifikationen
 
@@ -48,6 +50,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [Offline-Fahrzeugkatalog](superpowers/specs/2026-11-25-offline-catalog-design.de.md)
 - [GPX-Fahrtenexport](superpowers/specs/2026-11-26-trip-gpx-design.de.md)
 - [Fahrzeugdaten aus der VIN](superpowers/specs/2026-11-26-vin-enrichment.de.md)
+- [Kosten des Fahrzeugbesitzes](superpowers/specs/2026-11-26-ownership-expenses.de.md)
 
 ## Fortschrittsprotokolle
 
