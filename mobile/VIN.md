@@ -24,8 +24,8 @@ VIN i jego źródła nie trafiają automatycznie do AI ani raportu sprzedaży. P
 
 ## Integracja i weryfikacja
 
-`vin-client.ts` używa wyłącznie oficjalnego endpointu HTTPS, limitu20 s i128 KiB odpowiedzi, bez poświadczeń i automatycznych ponowień. Stream w przeglądarce jest ograniczany bajtowo; natywne fetch może wcześniej buforować tekst, dlatego granica jest sprawdzana po odczycie. Stara lub spóźniona odpowiedź nie może nadpisać formularza. Surowe błędy dostawcy i VIN nie są logowane przez klienta.
+`vin-client.ts` używa wyłącznie oficjalnego endpointu HTTPS, limitu20 s i 128 KiB odpowiedzi, bez poświadczeń i automatycznych ponowień. Stream w przeglądarce jest ograniczany bajtowo; natywne fetch może wcześniej buforować tekst, dlatego granica jest sprawdzana po odczycie. Stara lub spóźniona odpowiedź nie może nadpisać formularza. Surowe błędy dostawcy i VIN nie są logowane przez klienta.
 
-Testy obejmują zgodę, dane błędne i częściowe, rozmiar, anulowanie, deadline mimo ignorowanego sygnału, nieaktualne pola, powiązania źródła, kopie i izolację AI/raportu. Rzeczywisty klient i formularz web sprawdzono na publicznym przykładowym VIN, bez zapisania przykładowego auta w garażu. Przeszły161 testów, typy i lint. Fizyczne urządzenia i systemowe zachowanie sieci wymagają osobnej weryfikacji; wcześniejsze binaria0.2.0 nie zawierają funkcji0.2.1.
+Testy obejmują zgodę, dane błędne i częściowe, rozmiar, anulowanie, deadline mimo ignorowanego sygnału, nieaktualne pola, powiązania źródła, kopie i izolację AI/raportu. Rzeczywisty klient i formularz web sprawdzono na publicznym przykładowym VIN, bez zapisania przykładowego auta w garażu. Przeszło 161 testów, typy i lint. Fizyczne urządzenia i systemowe zachowanie sieci wymagają osobnej weryfikacji; wcześniejsze binaria0.2.0 nie zawierają funkcji0.2.1.
 
 Źródła: [NHTSA vPIC API](https://vpic.nhtsa.dot.gov/api/), [FAQ i ograniczenia](https://vpic.nhtsa.dot.gov/api/home/index/faq), [oficjalny przykład danych](https://www.nhtsa.gov/sites/nhtsa.gov/files/frenchik-vin-vpic.pdf).

@@ -21,7 +21,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 
 - [Recherche zu öffentlichen Fahrzeugkatalogen](research/2026-11-25-vehicle-catalogs.de.md)
 - [Native Builds](verification/2026-11-26-native-builds.de.md)
-- [Überprüfung der VIN- und GPX0.2.1-Implementierung](verification/2026-11-26-vin-gpx-builds.de.md)
+- [Überprüfung der VIN- und GPX 0.2.1-Implementierung](verification/2026-11-26-vin-gpx-builds.de.md)
 - [Metadaten des iOS-Artefakts (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Metadaten des Android-APK-Artefakts (JSON)](verification/2026-11-26-android-artifact.json)
 - [Metadaten des Android-Produktions-AAB (JSON)](verification/2026-11-26-android-production-artifact.json)

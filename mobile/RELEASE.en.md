@@ -2,13 +2,13 @@
 
 # VehicleSenseX 0.2.1 release
 
-Version 0.2.1 code after revision `8056cf6` requires a fresh build. The reported 0.2.0 packages verify the earlier state and do not include the new GPX export or NHTSA data completion. The Android/iOS build number is 2.
+Version 0.2.1/build 2 from revision `63b273d` has a verified signed Android production AAB and iOS Release simulator bundle, including GPX export and NHTSA data completion. Results: [0.2.1 build report](../docs/verification/2026-11-26-vin-gpx-builds.en.md). The earlier installable validation APK remains version 0.2.0; it does not include these features.
 
 Status: implementation with real BLE/TCP/Android Classic transports and no demo measurements. The native iOS Release simulator build succeeded on 2026-11-26; the final app bundle, permissions and presence of BLE/TCP classes were checked. The Android Release APK also built successfully after fixing the Classic BuildConfig error through a CNG plugin; its manifest, modules, test signature and library alignment were checked. The production Android AAB was signed with a new key in Expo after explicit user approval and passed artifact verification. There is no store IPA or verified hardware matrix; no store submission was performed. Current results: [build report](../docs/verification/2026-11-26-native-builds.en.md).
 
 Configuration check on 2026-11-25: `expo prebuild --no-install --platform all` completed successfully in a separate temporary copy. No `ios/` or `android/` directories were created in the repository. Generated Info.plist, AndroidManifest and the light theme were checked. Camera/microphone/broad photo access/overlay permissions are removed, with no Always location or background recording. Result: [configuration report](../docs/verification/2026-11-25-native-config.json). This describes project configuration before library manifest merging and compilation, not an inspection result for a final APK/IPA.
 
-Expo Doctor: 19/20 checks. The missing direct `expo-font` peer was added through Expo CLI; `expo-system-ui` provides the declared light Android style. The remaining Directory check reports `react-native-bluetooth-classic` and `react-native-tcp-socket` as “Untested on New Architecture”. The warning has not been suppressed. TCP compiled and was linked into iOS Release through RN0.88 interop; Classic is Android-only. The compiler alone does not verify adapter connections or permission/event handling on a phone.
+Expo Doctor: 19/20 checks. The missing direct `expo-font` peer was added through Expo CLI; `expo-system-ui` provides the declared light Android style. The remaining Directory check reports `react-native-bluetooth-classic` and `react-native-tcp-socket` as “Untested on New Architecture”. The warning has not been suppressed. TCP compiled and was linked into iOS Release through RN 0.88 interop; Classic is Android-only. The compiler alone does not verify adapter connections or permission/event handling on a phone.
 
 ## Producing packages
 

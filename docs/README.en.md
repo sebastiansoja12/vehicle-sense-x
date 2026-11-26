@@ -21,7 +21,7 @@ When changing documentation, update all three versions and language links. Do no
 
 - [Research into public vehicle catalogs](research/2026-11-25-vehicle-catalogs.en.md)
 - [Native builds](verification/2026-11-26-native-builds.en.md)
-- [VIN and GPX0.2.1 implementation verification](verification/2026-11-26-vin-gpx-builds.en.md)
+- [VIN and GPX 0.2.1 implementation verification](verification/2026-11-26-vin-gpx-builds.en.md)
 - [iOS artifact metadata (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Android APK artifact metadata (JSON)](verification/2026-11-26-android-artifact.json)
 - [Production Android AAB metadata (JSON)](verification/2026-11-26-android-production-artifact.json)

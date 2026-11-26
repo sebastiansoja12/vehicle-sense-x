@@ -2,13 +2,13 @@
 
 # Wydanie VehicleSenseX 0.2.1
 
-Kod0.2.1 po rewizji `8056cf6` wymaga ponownej kompilacji. Opisane paczki0.2.0 potwierdzają wcześniejszy stan i nie zawierają nowego eksportu GPX ani uzupełniania danych NHTSA. Numer kompilacji Android/iOS to2.
+Wersja 0.2.1/build 2 z rewizji `63b273d` ma zweryfikowany podpisany produkcyjny AAB Androida i pakiet iOS Release na symulator, z eksportem GPX i uzupełnianiem danych NHTSA. Wyniki: [raport kompilacji 0.2.1](../docs/verification/2026-11-26-vin-gpx-builds.md). Wcześniejszy instalowalny APK walidacyjny pozostaje w wersji 0.2.0 i nie zawiera tych funkcji.
 
 Status: implementacja z rzeczywistymi transportami BLE/TCP/Android Classic, bez demonstracyjnych pomiarów. Natywna kompilacja iOS Release na symulator zakończyła się powodzeniem 2026-11-26; sprawdzono końcowy plik aplikacji, uprawnienia i obecność klas BLE/TCP. Android Release APK również zbudowano poprawnie po usunięciu błędu BuildConfig w Classic przez plugin CNG; sprawdzono manifest, moduły, podpis testowy i wyrównanie bibliotek. Produkcyjny AAB Androida został podpisany nowym kluczem w Expo po jawnej zgodzie użytkownika i przeszedł weryfikację artefaktu. Nie ma sklepowego IPA ani potwierdzonej macierzy sprzętowej; nie wykonano zgłoszenia do sklepów. Bieżące wyniki: [raport kompilacji](../docs/verification/2026-11-26-native-builds.md).
 
 Kontrola konfiguracji 2026-11-25: `expo prebuild --no-install --platform all` zakończył się poprawnie w oddzielnej kopii tymczasowej. Nie utworzono `ios/` ani `android/` w repozytorium. Sprawdzono wygenerowane Info.plist, AndroidManifest i jasny motyw. Kamera/mikrofon/szeroki dostęp do zdjęć/nakładki są usuwane, brak lokalizacji Always i rejestracji w tle. Wynik: [raport konfiguracji](../docs/verification/2026-11-25-native-config.json). To konfiguracja projektu przed scaleniem manifestów bibliotek i kompilacją, nie wynik kontroli finalnego APK/IPA.
 
-Expo Doctor: 19/20 kontroli. Brakujący bezpośredni peer `expo-font` uzupełniono przez Expo CLI; `expo-system-ui` zapewnia zadeklarowany jasny styl Androida. Pozostała kontrola Directory: `react-native-bluetooth-classic` i `react-native-tcp-socket` mają status „Untested on New Architecture”. Nie wyciszono ostrzeżenia. TCP skompilował się i został dołączony do iOS Release przez interop RN0.88; Classic jest tylko na Androidzie. Sam kompilator nie potwierdza połączenia z adapterem ani obsługi zgód i zdarzeń na telefonie.
+Expo Doctor: 19/20 kontroli. Brakujący bezpośredni peer `expo-font` uzupełniono przez Expo CLI; `expo-system-ui` zapewnia zadeklarowany jasny styl Androida. Pozostała kontrola Directory: `react-native-bluetooth-classic` i `react-native-tcp-socket` mają status „Untested on New Architecture”. Nie wyciszono ostrzeżenia. TCP skompilował się i został dołączony do iOS Release przez interop RN 0.88; Classic jest tylko na Androidzie. Sam kompilator nie potwierdza połączenia z adapterem ani obsługi zgód i zdarzeń na telefonie.
 
 ## Wytworzenie paczek
 
