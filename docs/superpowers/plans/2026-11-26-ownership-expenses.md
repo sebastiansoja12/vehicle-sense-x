@@ -11,4 +11,4 @@
 - [x] Testy walidacji, migracji 1/2, kopii, duplikatów i powiązań, sum, edycji/usuwania i eksportu; wykazać brak funkcji.
 - [x] Wdrożyć rejestr, migrację i sumy, zachowując zakres AI i szacowanie wyłącznie paliwa.
 - [x] Podłączyć formularz, historię miesiąca, edycję/usuwanie, CSV i trzy języki dokumentacji.
-- [ ] Testy, typy/lint, eksporty, przegląd i test formularza; commit/push, CI oraz nowe paczki natywne 0.3.0/build 4.
+- [x] Testy, typy/lint, eksporty, przegląd i test formularza; commit/push, CI oraz nowe paczki natywne 0.3.0/build 4.

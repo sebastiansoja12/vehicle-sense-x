@@ -37,7 +37,7 @@ Wersja 0.2.2 poprawia nieaktualne daty i treści powiadomień serwisowych, jedno
 
 W module paliwa i kosztów dodasz ubezpieczenie, parking, opłaty drogowe, podatki/opłaty i inne koszty samochodu. Wpis zawiera datę, kategorię, nazwę, kwotę PLN i opcjonalną notatkę; możesz go edytować lub usunąć po potwierdzeniu. Przebieg pozostaje bez zmian. Sumy miesiąca/roku, ekran główny i raport kondycji uwzględniają każdy wpis raz. Koszt 100 km oznacza szacunek samego paliwa.
 
-CSV wydatków zawiera nazwy i notatki — sprawdź je przed udostępnieniem. Pełna kopia zachowuje wpisy, a usunięcie samochodu usuwa jego koszty. Szczegóły tych wydatków pozostają poza kontekstem AI i raportem sprzedażowym; raport uwzględnia tylko sumę. Wpis ręczny i import kopii odrzucają przyszłe daty wydatków; odczyt istniejącego magazynu toleruje cofnięcie zegara. Wersja 0.3.0/build 4 wymaga nowych paczek natywnych; zweryfikowane 0.2.2 nie zawiera tej funkcji.
+CSV wydatków zawiera nazwy i notatki — sprawdź je przed udostępnieniem. Pełna kopia zachowuje wpisy, a usunięcie samochodu usuwa jego koszty. Szczegóły tych wydatków pozostają poza kontekstem AI i raportem sprzedażowym; raport uwzględnia tylko sumę. Wpis ręczny i import kopii odrzucają przyszłe daty wydatków; odczyt istniejącego magazynu toleruje cofnięcie zegara. Wersja 0.3.0/build 4 ma zweryfikowany podpisany AAB Androida i pakiet iOS na symulator, zawierające tę funkcję.
 
 ## Katalog offline
 

@@ -37,7 +37,7 @@ Version 0.2.2 corrects stale local reminder dates/content, migrates old schedule
 
 In fuel and costs, add insurance, parking, tolls, taxes/fees and other vehicle costs. Each entry has a date, category, title, PLN amount and optional note; edit it or delete after confirmation. Mileage remains unchanged. Month/year totals, home and the condition report count each entry once. Cost per 100 km estimates fuel alone.
 
-The expense CSV includes titles and notes — review them before sharing. Full backups retain entries and vehicle deletion cascades to its expenses. These expense details remain outside AI context and the sales report; the report includes only the total. Manual entry and backup import reject future expense dates; reading existing storage tolerates clock rollback. Version 0.3.0/build 4 needs new native packages; verified 0.2.2 does not include this feature.
+The expense CSV includes titles and notes — review them before sharing. Full backups retain entries and vehicle deletion cascades to its expenses. These expense details remain outside AI context and the sales report; the report includes only the total. Manual entry and backup import reject future expense dates; reading existing storage tolerates clock rollback. Version 0.3.0/build 4 has verified signed Android AAB and iOS simulator packages containing this feature.
 
 ## Offline catalog
 

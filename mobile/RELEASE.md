@@ -2,7 +2,7 @@
 
 # Wydanie VehicleSenseX 0.3.0
 
-Kod 0.3.0/build 4 dodaje pozostałe wydatki z kategorią, dokładną kwotą PLN, edycją/usuwaniem, sumami miesiąca/roku i osobnym CSV. Schemat 3 migruje starsze garaże i kopie; starsze wersje aplikacji nie odczytają schematu 3. Import kopii odrzuca przyszłe daty wydatków, natomiast istniejący magazyn pozostaje dostępny po cofnięciu zegara. Szczegóły wydatków pozostają poza kontekstem AI i raportem sprzedażowym. Ten kod wymaga nowych paczek natywnych; zweryfikowane artefakty 0.2.2 poniżej nie zawierają rejestru.
+Kod 0.3.0/build 4 dodaje pozostałe wydatki z kategorią, dokładną kwotą PLN, edycją/usuwaniem, sumami miesiąca/roku i osobnym CSV. Schemat 3 migruje starsze garaże i kopie; starsze wersje aplikacji nie odczytają schematu 3. Import kopii odrzuca przyszłe daty wydatków, natomiast istniejący magazyn pozostaje dostępny po cofnięciu zegara. Szczegóły wydatków pozostają poza kontekstem AI i raportem sprzedażowym. Podpisany AAB Androida 0.3.0 i pakiet iOS Release na symulator zostały zbudowane i sprawdzone wraz z rejestrem.
 
 Bieżące kontrole kodu i wyniki interfejsu: [weryfikacja 0.3.0](../docs/verification/2026-11-26-ownership-expenses.md).
 

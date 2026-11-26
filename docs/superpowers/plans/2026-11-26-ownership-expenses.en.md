@@ -11,4 +11,4 @@
 - [x] Tests for validation, schema 1/2 migration, backups, duplicate IDs/relationships, totals, editing/deletion and export; demonstrate missing behavior.
 - [x] Implement the ledger, migration and totals, preserving AI scope and fuel-only estimates.
 - [x] Connect the form, monthly history, editing/deletion, CSV and all three documentation languages.
-- [ ] Tests, types/lint, exports, review and form check; commit/push, CI and new 0.3.0/build 4 native packages.
+- [x] Tests, types/lint, exports, review and form check; commit/push, CI and new 0.3.0/build 4 native packages.

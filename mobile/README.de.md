@@ -37,7 +37,7 @@ Version 0.2.2 korrigiert veraltete Daten und Inhalte lokaler Wartungsbenachricht
 
 Unter Kraftstoff und Kosten lassen sich Versicherung, Parken, Maut, Steuern/Gebühren und andere Fahrzeugkosten hinzufügen. Jeder Eintrag hat Datum, Kategorie, Bezeichnung, PLN-Betrag und optionale Notiz; Bearbeiten oder Löschen nach Bestätigung ist möglich. Der Kilometerstand bleibt unverändert. Monats-/Jahressummen, Startseite und Zustandsbericht zählen jeden Eintrag einmal. Kosten pro 100 km schätzen nur Kraftstoff.
 
-Das Ausgaben-CSV enthält Bezeichnungen und Notizen — vor Freigabe prüfen. Vollständige Sicherungen erhalten Einträge und Fahrzeuglöschung entfernt zugehörige Ausgaben. Diese Ausgabendetails bleiben außerhalb des KI-Kontexts und Verkaufsberichts; der Bericht enthält nur die Summe. Manuelle Eingabe und Sicherungsimport lehnen zukünftige Ausgabendaten ab; Lesen vorhandener Daten toleriert eine zurückgestellte Uhr. Version 0.3.0/Build 4 benötigt neue native Pakete; die geprüfte 0.2.2 enthält diese Funktion nicht.
+Das Ausgaben-CSV enthält Bezeichnungen und Notizen — vor Freigabe prüfen. Vollständige Sicherungen erhalten Einträge und Fahrzeuglöschung entfernt zugehörige Ausgaben. Diese Ausgabendetails bleiben außerhalb des KI-Kontexts und Verkaufsberichts; der Bericht enthält nur die Summe. Manuelle Eingabe und Sicherungsimport lehnen zukünftige Ausgabendaten ab; Lesen vorhandener Daten toleriert eine zurückgestellte Uhr. Version 0.3.0/Build 4 hat geprüfte signierte Android-AAB- und iOS-Simulatorpakete mit dieser Funktion.
 
 ## Offline-Katalog
 
