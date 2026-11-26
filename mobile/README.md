@@ -31,7 +31,7 @@ Eksport CSV obejmuje osobno paliwo, serwis i trasy. Pełna kopia JSON zachowuje 
 
 Eksport GPX 1.1 jest dostępny przy zapisanej trasie GPS, obok JSON. Zawiera rzeczywiste poprawne punkty i czasy UTC; przerwy są osobnymi segmentami, bez dopisywania wysokości ani prędkości. Wpis ręczny lub mniej niż dwa poprawne punkty nie tworzą GPX. Plik ujawnia dokładną lokalizację i czas.
 
-Wersja 0.2.2 poprawia nieaktualne daty i treści powiadomień serwisowych, jednorazowo zastępuje stare harmonogramy i sprawdza je po powrocie do aplikacji, także po zmianie strefy czasowej. Powiadomienia przy otwartej aplikacji są wyświetlane bez dźwięku. Ustawienia odczytują wersję z konfiguracji Expo. Te zmiany źródłowe wymagają nowych paczek natywnych; opisane niżej zweryfikowane paczki 0.2.1 ich nie zawierają.
+Wersja 0.2.2 poprawia nieaktualne daty i treści powiadomień serwisowych, jednorazowo zastępuje stare harmonogramy i sprawdza je po powrocie do aplikacji, także po zmianie strefy czasowej. Powiadomienia przy otwartej aplikacji są wyświetlane bez dźwięku. Ustawienia odczytują wersję z konfiguracji Expo. Te zmiany zawiera zweryfikowany podpisany AAB Androida 0.2.2 i pakiet iOS na symulator.
 
 ## Katalog offline
 

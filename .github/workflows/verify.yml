@@ -1,0 +1,41 @@
+name: Verify
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version-file: mobile/.nvmrc
+          cache: npm
+          cache-dependency-path: mobile/package-lock.json
+      - name: Install locked mobile dependencies
+        run: npm ci --prefix mobile
+      - name: Test application, transports, backend and documentation validator
+        run: node --test tests.mjs tests/*.test.mjs mobile/tests/*.test.mjs server/*.test.mjs
+      - name: Check types and lint
+        run: npm run typecheck --prefix mobile && npm run lint --prefix mobile
+      - name: Check Polish, English and German documentation
+        run: python3 scripts/check-docs.py
+      - name: Export web application
+        working-directory: mobile
+        run: npm run export:web -- --output-dir "$RUNNER_TEMP/vehiclesensex-web"
+      - name: Export native Hermes bundles
+        working-directory: mobile
+        run: npm run export:native -- --output-dir "$RUNNER_TEMP/vehiclesensex-native"

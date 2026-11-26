@@ -1,0 +1,45 @@
+{
+  "buildId": "bdd4df2b-b15c-47ba-8b72-8615bba7e3b2",
+  "status": "FINISHED",
+  "completedAt": "2026-11-26T14:12:07.732Z",
+  "sourceCommit": "6c8394d9933181f84b78478f6784b62abf392ca6",
+  "artifact": "VehicleSenseX-0.2.2-ios-simulator.tar.gz",
+  "bytes": 28741233,
+  "sha256": "37deba3bbab323ba86c1fcea353434c641a3e24d182a360caf0b80efe2b47f10",
+  "version": "0.2.2",
+  "buildNumber": "3",
+  "platform": "ios-simulator",
+  "minimumOS": "16.4",
+  "sdk": "iphonesimulator27.1",
+  "bundleIdentifier": "com.vehiclesensex.app",
+  "usageDescriptionKeys": [
+    "NSBluetoothAlwaysUsageDescription",
+    "NSLocalNetworkUsageDescription",
+    "NSLocationWhenInUseUsageDescription",
+    "NSPhotoLibraryUsageDescription"
+  ],
+  "backgroundModes": [],
+  "bundledJavaScriptBytes": 3857147,
+  "featureMarkersVerified": [
+    "nhtsa-vpic",
+    "DecodeVinValues/",
+    "topografix.com/GPX/1/1",
+    "dueAt",
+    "shouldShowBanner",
+    "shouldShowList"
+  ],
+  "privacyManifestCount": 15,
+  "trackingDomains": [],
+  "runtimeTestedOnDevice": false,
+  "storeIpa": false,
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "nativeClassesVerified": [
+    "BlePlx",
+    "TcpSockets",
+    "TcpSocketClient"
+  ],
+  "signature": "ad-hoc simulator; no Apple team"
+}

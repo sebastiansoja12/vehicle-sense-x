@@ -61,3 +61,18 @@ Sources checked on November 25, 2026. The requirements below affect the design; 
 ## Limitations and verification
 
 Unit tests cover fuel-consumption calculations, refueling validation and safe CSV cells. The prototype has no backend, accounts, payments, real diagnostics, system notifications or store packages. Google Fonts require a connection; a system font provides the fallback. Fonts should be bundled in the mobile release. Browser persistence is not secure storage for production data.
+
+## Continuous checks
+
+The GitHub Actions workflow `.github/workflows/verify.yml` checks pushes and pull requests with Node from `mobile/.nvmrc`, locked mobile dependencies, the full test suite, TypeScript, lint, all three documentation languages and web/native JavaScript exports. It uses pinned official actions and read-only repository permissions. It does not sign, deploy or submit applications, use provider credentials or call paid APIs.
+
+From the repository root, after installing mobile dependencies:
+
+```sh
+node --test tests.mjs tests/*.test.mjs mobile/tests/*.test.mjs server/*.test.mjs
+npm run typecheck --prefix mobile
+npm run lint --prefix mobile
+python3 scripts/check-docs.py
+```
+
+The documentation checker requires Python 3.9+ and Git. It checks complete language variants, language navigation, local targets, command blocks, identifiers and heading/checkbox structure; it does not assess translation quality. Source checks complement the native builds and device checks in the [release guide](mobile/RELEASE.en.md).

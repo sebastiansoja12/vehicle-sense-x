@@ -6,7 +6,7 @@
   "description": "VehicleSenseX — interactive mobile-first product design",
   "scripts": {
     "start": "python3 -m http.server 5173 --bind 127.0.0.1",
-    "test": "node --test tests.mjs"
+    "test": "node --test tests.mjs tests/*.test.mjs"
   },
   "dependencies": {
     "expo": "^58.0.26"

@@ -61,3 +61,18 @@ Quellenstand geprüft am 25. November 2026. Die folgenden Anforderungen beeinflu
 ## Einschränkungen und Überprüfung
 
 Die Unit-Tests decken Verbrauchsberechnung, Tankvalidierung und sichere CSV-Zellen ab. Der Prototyp enthält kein Backend, keine Konten, Zahlungen, echte Diagnose, Systembenachrichtigungen oder Store-Pakete. Schriftarten von Google Fonts erfordern eine Verbindung; eine Systemschrift dient als Ersatz. In der mobilen Veröffentlichung müssen Schriftarten mitgeliefert werden. Browserspeicher ist kein sicherer Speicher für Produktionsdaten.
+
+## Automatische Prüfungen
+
+Der GitHub-Actions-Workflow `.github/workflows/verify.yml` prüft Pushes und Pull Requests mit Node aus `mobile/.nvmrc`, festgelegten mobilen Abhängigkeiten, der vollständigen Testsuite, TypeScript, Lint, allen drei Dokumentationssprachen sowie Web-/Native-JavaScript-Exporten. Er verwendet festgelegte offizielle Actions und reine Leserechte für das Repository. Er signiert, verteilt oder veröffentlicht keine Apps, verwendet keine Anbieterzugangsdaten und ruft keine kostenpflichtigen APIs auf.
+
+Im Hauptverzeichnis des Repositories nach Installation der mobilen Abhängigkeiten:
+
+```sh
+node --test tests.mjs tests/*.test.mjs mobile/tests/*.test.mjs server/*.test.mjs
+npm run typecheck --prefix mobile
+npm run lint --prefix mobile
+python3 scripts/check-docs.py
+```
+
+Die Dokumentationsprüfung benötigt Python 3.9+ und Git. Sie prüft vollständige Sprachvarianten, Sprachnavigation, lokale Ziele, Befehlsblöcke, Bezeichner sowie Überschriften-/Checkboxstruktur; sie beurteilt keine Übersetzungsqualität. Quellprüfungen ergänzen die nativen Builds und Gerätetests aus der [Releaseanleitung](mobile/RELEASE.de.md).

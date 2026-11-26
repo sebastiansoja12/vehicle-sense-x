@@ -2,9 +2,11 @@
 
 # VehicleSenseX 0.2.2 release
 
-Source 0.2.2/build 3 fixes stale reminder schedules and foreground display, rechecks on resume and derives the displayed version from Expo configuration. Seven new regression tests passed; the full suite is 171/171, with types and lint passing. Fresh native packages are required for these changes; hardware notification delivery remains untested.
+Source 0.2.2/build 3 fixes stale reminder schedules and foreground display, rechecks on resume and derives the displayed version from Expo configuration. Seven new regression tests passed; the full suite is 171/171, with types and lint passing. The native 0.2.2 packages have been built and inspected; hardware notification delivery remains untested.
 
 Independent review found no must-fix within this scope. A timezone change while continuously foregrounded is reconciled on the next resume; there is no continuous timezone watcher. Backup import already disables restored notifications until explicitly re-enabled.
+
+The signed Android 0.2.2 AAB and iOS Release simulator bundle have been verified. [Current verification and remaining work](../docs/verification/2026-11-26-reminder-builds.en.md).
 
 Version 0.2.1/build 2 from revision `63b273d` has a verified signed Android production AAB and iOS Release simulator bundle, including GPX export and NHTSA data completion. Results: [0.2.1 build report](../docs/verification/2026-11-26-vin-gpx-builds.en.md). The earlier installable validation APK remains version 0.2.0; it does not include these features.
 

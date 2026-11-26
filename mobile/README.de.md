@@ -31,7 +31,7 @@ CSV-Export umfasst getrennt Kraftstoff, Wartung und Fahrten. Eine vollständige 
 
 GPX-1.1-Export steht bei gespeicherten GPS-Fahrten neben JSON zur Verfügung. Er enthält echte gültige Punkte und UTC-Zeiten; Lücken bleiben getrennte Segmente, ohne erfundene Höhe oder Geschwindigkeit. Manuelle Einträge oder weniger als zwei gültige Punkte ergeben keine GPX-Datei. Die Datei enthält genaue Standorte und Zeiten.
 
-Version 0.2.2 korrigiert veraltete Daten und Inhalte lokaler Wartungsbenachrichtigungen, ersetzt alte Zeitpläne einmalig und prüft sie bei Rückkehr in den Vordergrund erneut, auch nach Zeitzonenänderungen. Vordergrundbenachrichtigungen erscheinen lautlos. Die Einstellungen lesen die Version aus der Expo-Konfiguration. Diese Quelländerungen erfordern neue native Pakete; die unten beschriebenen geprüften 0.2.1-Pakete enthalten sie nicht.
+Version 0.2.2 korrigiert veraltete Daten und Inhalte lokaler Wartungsbenachrichtigungen, ersetzt alte Zeitpläne einmalig und prüft sie bei Rückkehr in den Vordergrund erneut, auch nach Zeitzonenänderungen. Vordergrundbenachrichtigungen erscheinen lautlos. Die Einstellungen lesen die Version aus der Expo-Konfiguration. Diese Änderungen sind im geprüften signierten Android-0.2.2-AAB und iOS-Simulatorpaket enthalten.
 
 ## Offline-Katalog
 

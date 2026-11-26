@@ -59,3 +59,18 @@ Stan źródeł sprawdzony 25 listopada 2026. Poniższe wymagania wpływają na p
 ## Ograniczenia i weryfikacja
 
 Testy jednostkowe obejmują obliczanie spalania, walidację tankowania i bezpieczne komórki CSV. Prototyp nie zawiera serwera zaplecza, kont, płatności, rzeczywistej diagnostyki, systemowych powiadomień ani paczek sklepowych. Czcionki z Google Fonts wymagają połączenia; czcionka systemowa jest używana zastępczo. W wydaniu mobilnym czcionki należy dostarczyć w pakiecie. Zapis przeglądarkowy nie jest bezpiecznym magazynem dla danych produkcyjnych.
+
+## Automatyczne kontrole
+
+Workflow GitHub Actions `.github/workflows/verify.yml` sprawdza pushe i pull requesty przy użyciu Node z `mobile/.nvmrc`, zablokowanych wersji zależności mobilnych, pełnego zestawu testów, TypeScript, lint, trzech języków dokumentacji oraz eksportów JavaScript web/native. Korzysta z przypiętych oficjalnych akcji i uprawnień tylko do odczytu repozytorium. Nie podpisuje, nie wdraża ani nie wysyła aplikacji do sklepów, nie używa poświadczeń dostawców i nie wywołuje płatnych API.
+
+Z katalogu głównego repozytorium, po zainstalowaniu zależności mobilnych:
+
+```sh
+node --test tests.mjs tests/*.test.mjs mobile/tests/*.test.mjs server/*.test.mjs
+npm run typecheck --prefix mobile
+npm run lint --prefix mobile
+python3 scripts/check-docs.py
+```
+
+Walidator dokumentacji wymaga Python 3.9+ i Git. Sprawdza kompletność wersji językowych, nawigację, lokalne odnośniki, bloki poleceń, identyfikatory oraz strukturę nagłówków i pól wyboru; nie ocenia jakości tłumaczenia. Kontrole źródła uzupełniają natywne kompilacje i testy urządzeń opisane w [instrukcji wydania](mobile/RELEASE.md).

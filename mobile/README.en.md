@@ -31,7 +31,7 @@ CSV export covers fuel, maintenance and trips separately. A full JSON backup ret
 
 GPX 1.1 export is available beside JSON for saved GPS trips. It contains real accepted points and UTC times; gaps remain separate segments, without invented elevation or speed. Manual entries or fewer than two valid points cannot produce GPX. The file exposes precise location and time.
 
-Version 0.2.2 corrects stale local reminder dates/content, migrates old schedules once and rechecks them when returning to the foreground, including timezone changes. Foreground reminders are displayed silently. Settings read the app version from Expo configuration. These source changes require fresh native packages; the verified 0.2.1 packages described below do not include them.
+Version 0.2.2 corrects stale local reminder dates/content, migrates old schedules once and rechecks them when returning to the foreground, including timezone changes. Foreground reminders are displayed silently. Settings read the app version from Expo configuration. These changes are included in the verified signed Android 0.2.2 AAB and iOS simulator bundle.
 
 ## Offline catalog
 
