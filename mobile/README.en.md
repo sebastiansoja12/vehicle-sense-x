@@ -85,7 +85,7 @@ Model, repository, parser, migration and API-client tests run in Node 24. HTTP/T
 
 Complete factory-specification decoding for every make, external valuation, a map basemap, background recording, accounts and synchronization are not yet implemented. A limited, explicit NHTSA VIN lookup is available. The remaining features are not presented as working. Publication also requires real adapter/phone tests, signing, metadata and an operator policy, plus deployment and configuration of a personal server if AI is to be active.
 
-Version 0.2.1/build 2 includes GPX and NHTSA data completion in the verified signed Android AAB and iOS simulator bundle; see the [0.2.1 build report](../docs/verification/2026-11-26-vin-gpx-builds.en.md). The installable validation APK is still 0.2.0. Physical device tests and a signed store IPA remain outstanding.
+Version 0.2.1/build 2 includes GPX and NHTSA data completion in the verified signed Android AAB and iOS simulator bundle; see the [0.2.1 build report](../docs/verification/2026-11-26-vin-gpx-builds.en.md). The current signed preview APK is 0.4.0/build 6; the earlier 0.2.0 validation APK is historical. Physical device tests and a signed store IPA remain outstanding.
 
 ## API sources
 

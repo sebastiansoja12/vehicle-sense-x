@@ -139,5 +139,12 @@
     "keyManagedBy": "Expo"
   },
   "runtimeTested": false,
-  "submittedToGooglePlay": false
+  "submittedToGooglePlay": false,
+  "apkAabDexByteIdentical": true,
+  "nativeSpeechClassMapping": {
+    "sourceClass": "expo.modules.speech.SpeechModule",
+    "releaseClass": "be4",
+    "descriptorVerified": "Lbe4;",
+    "mappingFrom": "AAB BUNDLE-METADATA/com.android.tools.build.obfuscation/proguard.map"
+  }
 }

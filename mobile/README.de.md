@@ -85,7 +85,7 @@ Tests für Modell, Repository, Parser, Migrationen und API-Client laufen in Node
 
 Vollständiges Dekodieren der Werksdaten für alle Marken, externe Bewertung, Kartenunterlage, Hintergrundaufzeichnung, Konten und Synchronisierung fehlen noch. Verfügbar ist ein begrenzter, ausdrücklich gekennzeichneter Abruf von NHTSA-Daten anhand der VIN. Die noch ausstehenden Funktionen werden nicht als funktionsfähig dargestellt. Vor Veröffentlichung sind außerdem echte Adapter-/Telefontests, Signaturen, Metadaten und Betreiber-Datenschutzerklärung sowie Bereitstellung und Konfiguration eines eigenen Servers erforderlich, sofern KI aktiv sein soll.
 
-Version 0.2.1/Build 2 enthält GPX und NHTSA-Datenergänzung im geprüften signierten Android-AAB und iOS-Simulatorpaket; siehe [Buildbericht 0.2.1](../docs/verification/2026-11-26-vin-gpx-builds.de.md). Das installierbare Validierungs-APK bleibt Version 0.2.0. Tests auf physischen Geräten und ein signiertes Store-IPA stehen noch aus.
+Version 0.2.1/Build 2 enthält GPX und NHTSA-Datenergänzung im geprüften signierten Android-AAB und iOS-Simulatorpaket; siehe [Buildbericht 0.2.1](../docs/verification/2026-11-26-vin-gpx-builds.de.md). Das aktuelle signierte Vorschau-APK hat Version 0.4.0/Build 6; das frühere 0.2.0-Validierungs-APK ist historisch. Tests auf physischen Geräten und ein signiertes Store-IPA stehen noch aus.
 
 ## API-Quellen
 
