@@ -1,0 +1,12 @@
+import {localDay} from './domain';
+import {File,Paths} from 'expo-file-system';
+import * as Sharing from 'expo-sharing';
+import * as Print from 'expo-print';
+import * as DocumentPicker from 'expo-document-picker';
+export async function shareTextFile(name:string,content:string,mime='text/plain'){
+ if(!await Sharing.isAvailableAsync())throw new Error('Udostępnianie plików jest niedostępne.');const file=new File(Paths.cache,`${Date.now()}-${name.replace(/[^a-z0-9_.-]/gi,'_')}`);file.create();await file.write(content);await Sharing.shareAsync(file.uri,{mimeType:mime});
+}
+export async function shareReport(html:string){if(!await Sharing.isAvailableAsync())throw new Error('Udostępnianie jest niedostępne.');const result=await Print.printToFileAsync({html});await Sharing.shareAsync(result.uri,{mimeType:'application/pdf',UTI:'.pdf'});}
+export async function pickBackupText():Promise<string|null>{const result=await DocumentPicker.getDocumentAsync({type:['application/json','text/plain'],copyToCacheDirectory:true});if(result.canceled)return null;const asset=result.assets[0];if((asset.size??0)>20*1024*1024)throw new Error('Plik jest większy niż 20 MB.');return new File(asset.uri).text();}
+export async function pickAttachmentFile():Promise<import('./media').Asset|null>{const selection=await DocumentPicker.getDocumentAsync({type:['application/pdf','image/jpeg','image/png'],copyToCacheDirectory:true});if(selection.canceled)return null;const asset=selection.assets[0],file=new File(asset.uri);if((asset.size??file.size)>1024*1024)throw new Error('Załącznik może mieć maksymalnie 1 MB.');const mime=asset.mimeType??(asset.name.toLowerCase().endsWith('.pdf')?'application/pdf':asset.name.toLowerCase().endsWith('.png')?'image/png':'image/jpeg');if(!['application/pdf','image/jpeg','image/png'].includes(mime))throw new Error('Wybierz PDF, JPEG lub PNG.');return{id:'file-'+Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8),name:asset.name.slice(0,120),mime:mime as import('./media').Asset['mime'],base64:await file.base64(),date:localDay()};}
+export async function shareAssetFile(asset:import('./media').Asset){if(!await Sharing.isAvailableAsync())throw new Error('Udostępnianie plików jest niedostępne.');const {decode}=await import('base-64');const binary=decode(asset.base64),bytes=Uint8Array.from(binary,c=>c.charCodeAt(0));const file=new File(Paths.cache,`${Date.now()}-${asset.name.replace(/[^a-z0-9_.-]/gi,'_')}`);file.create();await file.write(bytes);await Sharing.shareAsync(file.uri,{mimeType:asset.mime});}

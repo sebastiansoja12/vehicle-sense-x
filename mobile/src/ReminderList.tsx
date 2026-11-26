@@ -1,0 +1,13 @@
+import {useState} from 'react';
+import {Text,View} from 'react-native';
+import {useApp} from './AppProvider';
+import {dueReminders,completeReminder} from './features';
+import {localDay} from './domain';
+import {requestReminderPermission} from './notifications';
+import {RecordActions} from './RecordActions';
+import {Section,Button,Empty,Note,number} from './ui';
+import {styles as s} from './theme';
+export function ReminderList({vehicleId}:{vehicleId:string}){const app=useApp();const[error,setError]=useState(''),[busy,setBusy]=useState(false);const day=localDay();const list=dueReminders(app.data,vehicleId,day);const completed=app.data.reminders.filter(r=>r.vehicleId===vehicleId&&r.completed);async function complete(id:string){setError('');try{await app.commit(state=>completeReminder(state,id));}catch(e){setError(e instanceof Error?e.message:'Nie udało się zamknąć terminu.');}}
+ async function notify(id:string){if(busy)return;setBusy(true);setError('');try{await requestReminderPermission();await app.commit(state=>({...state,reminders:state.reminders.map(r=>r.id===id?{...r,notificationId:'vsx-reminder-'+id}:r)}));}catch(e){setError(e instanceof Error?e.message:'Nie udało się włączyć powiadomienia.');}finally{setBusy(false);}}
+ return <Section title="Terminy serwisowe" action={<Button label="Dodaj termin" secondary disabled={app.busy} onPress={()=>app.openForm('reminder')}/>}>{list.length===0&&<Empty title="Brak otwartych terminów" description="Ustaw datę lub przebieg dla następnej wymiany oleju, przeglądu czy opon."/>}{list.map(r=><View key={r.id} style={s.listRow}><Text style={[s.body,{fontWeight:'600'}]}>{r.title}{r.due?' · termin osiągnięty':''}</Text><Text style={s.muted}>{r.dueDate??'Bez daty'} · {r.dueMileage===null?'bez limitu km':number(r.dueMileage)+' km'}</Text><View style={{gap:10,marginTop:12}}><Button label="Oznacz jako wykonane" secondary disabled={app.busy} onPress={()=>void complete(r.id)}/>{r.dueDate&&r.dueDate>localDay()&&<Button label={r.notificationId?'Powiadomienie włączone · godz. 9:00':'Włącz powiadomienie o dacie'} secondary disabled={app.busy||busy||r.notificationId!==null} onPress={()=>void notify(r.id)}/>}</View><RecordActions kind="reminder" id={r.id}/></View>)}{completed.map(r=><View style={s.listRow} key={r.id}><Text style={s.muted}>{r.title} · wykonane</Text><RecordActions kind="reminder" id={r.id}/></View>)}{error!==''&&<Text accessibilityRole="alert" style={s.error}>{error}</Text>}<Note>Termin przebiegowy sprawdzamy według przebiegu wpisanego w garażu. Powiadomienia systemowe o dacie włączasz osobno; nie monitorujemy przebiegu w tle. Oznaczenie jako wykonane nie tworzy wpisu serwisowego.</Note></Section>;
+}

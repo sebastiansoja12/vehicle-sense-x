@@ -1,0 +1,10 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {DraftStore,parseDraft} from '../src/trip-draft.ts';
+import {analyzeTrip,validateTripRecord} from '../src/trips.ts';
+const point=(longitude,timestamp,segmentBreak)=>({latitude:52,longitude,timestamp,accuracy:5,speedMps:10,...(segmentBreak?{segmentBreak:true}:{})});
+const trip={id:'draft',vehicleId:'car',label:'Przejazd',source:'gps',startedAt:1000,endedAt:4000,points:[point(21,1000),point(21.0001,2000),point(21.001,3000,true),point(21.0011,4000)],manualDistanceM:null,manualDurationS:null,fuelCostCents:null};
+test('pause creates a segment boundary even for short gaps without fabricated GPS points',()=>{assert.equal(validateTripRecord(trip),true);const a=analyzeTrip(trip);assert.equal(a.segments.length,2);assert.ok(a.distanceM>10&&a.distanceM<20);assert.equal(validateTripRecord({...trip,points:[{...trip.points[0],segmentBreak:'yes'}]}),false);});
+test('draft writes remain ordered and clear cannot be undone by an older slow write',async()=>{let value=null;const calls=[];const storage={async setItem(key,v){await new Promise(r=>setTimeout(r,5));value=v;calls.push('set');},async removeItem(){value=null;calls.push('clear');},async getItem(){return value;}};const store=new DraftStore(storage);const a=store.save(trip);const b=store.clear();await Promise.all([a,b]);assert.equal(value,null);assert.deepEqual(calls,['set','clear']);});
+test('draft rejects corrupt content and recovers validated original vehicle',()=>{assert.equal(parseDraft(JSON.stringify(trip)).vehicleId,'car');assert.throws(()=>parseDraft('{'));assert.throws(()=>parseDraft(JSON.stringify({...trip,source:'manual'})));});
+test('corrupt draft can be exported unchanged before the user discards it',async()=>{const original='{corrupt GPS record';const store=new DraftStore({async getItem(){return original;},async setItem(){assert.fail('must preserve');},async removeItem(){assert.fail('must preserve');}});await assert.rejects(store.load());assert.equal(await store.readRaw(),original);});

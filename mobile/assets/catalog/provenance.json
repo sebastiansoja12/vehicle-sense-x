@@ -1,0 +1,84 @@
+{
+  "upstreamCommit": "f37e44e01fad7f67d3625c95b792f2caa1524536",
+  "upstreamSha256": "405b677d96ee5f33bdc1e314ab74bcf5e7f5d112f176de335f1e9bafb5cff3a5",
+  "snapshotDate": "2026-11-25",
+  "sources": [
+    {
+      "source_id": "nhtsa-vpic",
+      "source_name": "NHTSA Vehicle Product Information Catalog",
+      "source_url": "https://vpic.nhtsa.dot.gov/api/",
+      "license": "U.S. government public data",
+      "region": "United States",
+      "description": "Model-year catalog from the National Highway Traffic Safety Administration vPIC API.",
+      "retrieved_at": "2026-09-22",
+      "vehicle_type_ids": [
+        2,
+        3,
+        7
+      ],
+      "year_from": 1990,
+      "year_to": 2027,
+      "make_count": 396,
+      "model_count": 52654
+    },
+    {
+      "source_id": "uk-dft-vehicle-licensing",
+      "source_name": "UK DfT/DVLA Vehicle Licensing Statistics",
+      "source_url": "https://www.gov.uk/government/statistical-data-sets/vehicle-licensing-statistics-data-files",
+      "license": "Open Government Licence v3.0",
+      "license_url": "https://www.nationalarchives.gov.uk/doc/open-government-licence/version/3/",
+      "region": "United Kingdom",
+      "description": "Registered fleet make/model catalog by year of manufacture, including cars, goods vehicles, motorcycles, buses and coaches, and other vehicles.",
+      "retrieved_at": "2026-10-23",
+      "vehicle_type_ids": [
+        1,
+        2,
+        3,
+        5,
+        10002
+      ],
+      "year_from": 1990,
+      "year_to": 2025,
+      "make_count": 701,
+      "model_count": 60243
+    },
+    {
+      "source_id": "eea-co2-monitoring",
+      "source_name": "EEA CO2 Monitoring of New Passenger Cars and Vans",
+      "source_url": "https://www.eea.europa.eu/en/datahub/datahubitem-view/fa8b1229-3db6-495d-b18e-9c9b3267c02b",
+      "license": "Creative Commons Attribution 4.0 International",
+      "license_url": "https://creativecommons.org/licenses/by/4.0/",
+      "region": "European Union, Iceland, and Norway",
+      "description": "Makes and commercial names of new passenger cars (M1) and vans (N1) registered in EU member states, Iceland, and Norway and reported to the European Environment Agency under Regulation (EU) 2019/631, keyed by registration year.",
+      "retrieved_at": "2026-09-03",
+      "vehicle_type_ids": [
+        2,
+        3
+      ],
+      "year_from": 2010,
+      "year_to": 2025,
+      "make_count": 235,
+      "model_count": 29939
+    },
+    {
+      "source_id": "rdw-nl-vehicle-register",
+      "source_name": "Netherlands RDW Vehicle Register",
+      "source_url": "https://opendata.rdw.nl/Voertuigen/Open-Data-RDW-Gekentekende_voertuigen/m9d7-ebf2",
+      "license": "Public Domain",
+      "license_url": "https://opendata.rdw.nl/",
+      "region": "Netherlands",
+      "description": "Makes and commercial names of passenger cars, commercial vehicles, buses, and motorcycles licensed in the Netherlands, keyed by year of first admission and refreshed daily by the RDW.",
+      "retrieved_at": "2026-09-22",
+      "vehicle_type_ids": [
+        1,
+        2,
+        3,
+        5
+      ],
+      "year_from": 1990,
+      "year_to": 2026,
+      "make_count": 627,
+      "model_count": 73299
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+import {useState} from 'react';
+import {Modal,View,Text,TextInput,ScrollView,KeyboardAvoidingView,Platform,Switch,Pressable} from 'react-native';
+import {addVehicle,addFuel,addService,localDay} from './domain';
+import type {AppData,VehicleInput,FuelInput,ServiceInput} from './domain';
+import {addReminder,addComparison,editVehicle,editFuel,editService} from './features';
+import {Button} from './ui';
+import {VehicleIdentityFields} from './VehicleIdentityFields';
+import {styles as s,colors} from './theme';
+export type FormSelection={type:'vehicle'|'fuel'|'service'|'reminder'|'comparison';vehicleId:string|null;recordId?:string};
+function Field({label,value,onChange,numeric=false,optional=false,multiline=false,limit}:{label:string;value:string;onChange:(value:string)=>void;numeric?:boolean;optional?:boolean;multiline?:boolean;limit?:number}){
+ return <View style={s.field}><Text style={s.label}>{label}{optional?' (opcjonalnie)':''}</Text><TextInput accessibilityLabel={label} value={value} onChangeText={onChange} style={[s.input,multiline&&{height:85,textAlignVertical:'top'}]} keyboardType={numeric?'decimal-pad':'default'} autoCorrect={false} autoCapitalize="none" multiline={multiline} maxLength={limit??(multiline?1000:label.startsWith('Adres')?1000:100)} /></View>;
+}
+export function EntryForm({selection,data,busy,save,onClose}:{selection:FormSelection;data:AppData;busy:boolean;save:(change:(state:AppData)=>AppData)=>Promise<void>;onClose:()=>void}){
+ const vehicle=data.vehicles.find(v=>v.id===selection.vehicleId);const type=selection.type;
+ const fuel=data.fuel.find(r=>r.id===selection.recordId);const service=data.service.find(r=>r.id===selection.recordId);
+ const [values,setValues]=useState<Record<string,string>>(()=>({make:'',model:'',year:'',engine:'',mileage:vehicle?String(vehicle.mileage):'',plate:'',vin:'',date:localDay(),liters:'',price:'',title:'',cost:'',note:'',dueDate:'',dueMileage:'',url:'',powerPs:'',torqueNm:'',displacementCc:'',transmission:'',drive:'',equipment:'',...(selection.recordId&&type==='vehicle'&&vehicle?{make:vehicle.make,model:vehicle.model,engine:vehicle.engine,plate:vehicle.plate,vin:vehicle.vin,year:String(vehicle.year),mileage:String(vehicle.mileage),powerPs:vehicle.spec?.powerPs==null?'':String(vehicle.spec.powerPs),torqueNm:vehicle.spec?.torqueNm==null?'':String(vehicle.spec.torqueNm),displacementCc:vehicle.spec?.displacementCc==null?'':String(vehicle.spec.displacementCc),transmission:vehicle.spec?.transmission??'',drive:vehicle.spec?.drive??'',equipment:vehicle.spec?.equipment??''}:{}),...(fuel?{date:fuel.date,mileage:String(fuel.mileage),liters:String(fuel.volumeMl/1000),price:String(fuel.priceCents/100)}:{}),...(service?{date:service.date,mileage:String(service.mileage),title:service.title,cost:String(service.costCents/100),note:service.note}:{})}));
+ const [full,setFull]=useState(fuel?.full??true);const [error,setError]=useState('');
+ const field=(name:string,label:string,options:{numeric?:boolean;optional?:boolean;multiline?:boolean;limit?:number}={})=><Field key={name} label={label} value={values[name]} onChange={value=>setValues(current=>({...current,[name]:value}))} {...options}/>;
+ async function submit(){
+  if(busy)return;setError('');const id=`${Date.now().toString(36)}-${Math.random().toString(36).slice(2,12)}`;
+  try{
+   await save(state=>{const today=localDay(),owner=selection.vehicleId!,recordId=selection.recordId;
+    if(type==='reminder')return addReminder(state,{vehicleId:owner,title:values.title,dueDate:values.dueDate,dueMileage:values.dueMileage},id,today);
+    if(type==='comparison')return addComparison(state,{vehicleId:owner,price:values.price,url:values.url,date:values.date,note:values.note},id,today);
+    if(type==='vehicle')return recordId?editVehicle(state,recordId,values as VehicleInput,today):addVehicle(state,values as VehicleInput,id,today);
+    if(type==='fuel'){const input={...values,vehicleId:owner,full} as FuelInput;return recordId?editFuel(state,recordId,input,today):addFuel(state,input,id,today);}
+    const input={...values,vehicleId:owner} as ServiceInput;return recordId?editService(state,recordId,input,today):addService(state,input,id,today);
+   });
+   onClose();
+  }catch(e){setError(e instanceof Error?e.message:'Nie udało się zapisać. Spróbuj ponownie.');}
+ }
+ const title=selection.recordId?'Edytuj wpis':({vehicle:'Dodaj samochód',fuel:'Dodaj tankowanie',service:'Dodaj serwis',reminder:'Przypomnienie',comparison:'Oferta porównawcza'}[type]);
+ return <Modal visible transparent animationType="fade" onRequestClose={()=>{if(!busy)onClose();}}><KeyboardAvoidingView behavior={Platform.OS==='ios'?'padding':'height'} style={s.modalBackground}><View style={s.modal}><View style={s.modalHeader}><Text accessibilityRole="header" style={[s.heading,{fontSize:23}]}>{title}</Text><Pressable accessibilityRole="button" accessibilityLabel="Zamknij formularz" disabled={busy} onPress={onClose} style={{minWidth:44,minHeight:44,alignItems:'center',justifyContent:'center'}}><Text style={{fontSize:27}}>×</Text></Pressable></View><ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={{paddingBottom:8}}><View pointerEvents={busy?'none':'auto'}>
+ {vehicle&&<Text style={[s.muted,{marginBottom:20}]}>{vehicle.make} {vehicle.model} · {vehicle.plate}</Text>}
+ {type==='reminder'?<>{field('title','Nazwa czynności')}{field('dueDate','Termin (RRRR-MM-DD)',{optional:true})}{field('dueMileage','Przebieg docelowy (km)',{numeric:true,optional:true})}</>:type==='comparison'?<>{field('price','Cena oferty (zł)',{numeric:true})}{field('url','Adres oferty (https://)')}{field('date','Data oferty (RRRR-MM-DD)')}{field('note','Uwagi porównawcze',{optional:true,multiline:true,limit:500})}</>:type==='vehicle'?<><VehicleIdentityFields value={{make:values.make,model:values.model}} disabled={busy} onChange={identity=>setValues(current=>({...current,...identity}))}/>{field('year','Rok produkcji',{numeric:true})}{field('engine','Silnik i wersja')}{field('mileage','Przebieg (km)',{numeric:true})}{field('plate','Numer rejestracyjny')}{field('vin','VIN',{optional:true})}<Text style={[s.sectionTitle,{marginVertical:18}]}>Dane techniczne</Text>{field('powerPs','Moc (KM)',{numeric:true,optional:true})}{field('torqueNm','Moment obrotowy (Nm)',{numeric:true,optional:true})}{field('displacementCc','Pojemność silnika (cm³)',{numeric:true,optional:true})}{field('transmission','Skrzynia biegów',{optional:true})}{field('drive','Rodzaj napędu',{optional:true})}{field('equipment','Wyposażenie',{optional:true,multiline:true})}</>:<>{field('date','Data (RRRR-MM-DD)')}{field('mileage','Przebieg (km)',{numeric:true})}{type==='fuel'?<>{field('liters','Ilość paliwa (l)',{numeric:true})}{field('price','Cena za litr (zł)',{numeric:true})}<View style={[s.between,{paddingVertical:10,marginBottom:20}]}><Text style={s.body}>Tankowanie do pełna</Text><Switch accessibilityLabel="Tankowanie do pełna" value={full} onValueChange={setFull} trackColor={{true:colors.ink,false:colors.line}} /></View></>:<>{field('title','Nazwa serwisu lub naprawy')}{field('cost','Koszt (zł)',{numeric:true})}{field('note','Notatka',{optional:true,multiline:true})}</>}</>}
+ </View>{error!==''&&<Text accessibilityRole="alert" accessibilityLiveRegion="polite" style={s.error}>{error}</Text>}<Button label={busy?'Zapisywanie…':'Zapisz'} disabled={busy} onPress={submit}/></ScrollView></View></KeyboardAvoidingView></Modal>;
+}

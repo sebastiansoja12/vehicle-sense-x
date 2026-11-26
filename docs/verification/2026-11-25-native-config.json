@@ -1,0 +1,91 @@
+{
+  "checkedOn": "2026-11-25",
+  "kind": "Expo prebuild configuration only — no native compilation/signing/hardware execution",
+  "command": "expo prebuild <temporary-copy> --no-install --platform all",
+  "prebuildExitCode": 0,
+  "ios": {
+    "NSBluetoothAlwaysUsageDescription": "VehicleSenseX łączy się z wybranym adapterem OBD2 BLE, aby odczytać parametry i kody usterek samochodu.",
+    "NSLocalNetworkUsageDescription": "VehicleSenseX łączy się z Twoim adapterem OBD2 Wi-Fi w sieci lokalnej, aby odczytać dane samochodu.",
+    "NSLocationWhenInUseUsageDescription": "VehicleSenseX używa lokalizacji do rejestrowania przejazdu po jego rozpoczęciu. Pomiar wstrzymuje się po przejściu aplikacji w tło.",
+    "NSPhotoLibraryUsageDescription": "VehicleSenseX pozwala wybrać własne zdjęcia samochodu do zapisania w garażu.",
+    "UIUserInterfaceStyle": "Light"
+  },
+  "iosDeploymentTarget": "16.4",
+  "android": {
+    "allowBackup": "false",
+    "uiStyle": "light",
+    "declaredPermissions": [
+      {
+        "name": "android.permission.ACCESS_COARSE_LOCATION",
+        "mergeAction": "keep"
+      },
+      {
+        "name": "android.permission.ACCESS_FINE_LOCATION",
+        "mergeAction": "keep"
+      },
+      {
+        "name": "android.permission.BLUETOOTH",
+        "mergeAction": "keep"
+      },
+      {
+        "name": "android.permission.BLUETOOTH_ADMIN",
+        "mergeAction": "keep"
+      },
+      {
+        "name": "android.permission.BLUETOOTH_CONNECT",
+        "mergeAction": "keep"
+      },
+      {
+        "name": "android.permission.BLUETOOTH_SCAN",
+        "mergeAction": "keep"
+      },
+      {
+        "name": "android.permission.CAMERA",
+        "mergeAction": "remove"
+      },
+      {
+        "name": "android.permission.INTERNET",
+        "mergeAction": "keep"
+      },
+      {
+        "name": "android.permission.READ_EXTERNAL_STORAGE",
+        "mergeAction": "remove"
+      },
+      {
+        "name": "android.permission.READ_MEDIA_IMAGES",
+        "mergeAction": "remove"
+      },
+      {
+        "name": "android.permission.READ_MEDIA_VIDEO",
+        "mergeAction": "remove"
+      },
+      {
+        "name": "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "mergeAction": "remove"
+      },
+      {
+        "name": "android.permission.RECORD_AUDIO",
+        "mergeAction": "remove"
+      },
+      {
+        "name": "android.permission.SYSTEM_ALERT_WINDOW",
+        "mergeAction": "remove"
+      },
+      {
+        "name": "android.permission.VIBRATE",
+        "mergeAction": "keep"
+      },
+      {
+        "name": "android.permission.WRITE_EXTERNAL_STORAGE",
+        "mergeAction": "remove"
+      }
+    ]
+  },
+  "doctor": {
+    "passed": 19,
+    "total": 20,
+    "remainingCheck": "React Native Directory marks react-native-bluetooth-classic and react-native-tcp-socket as untested on New Architecture; not suppressed"
+  },
+  "signedBinary": "not created",
+  "hardwareTests": "not executed"
+}

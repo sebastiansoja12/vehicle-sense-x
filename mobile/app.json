@@ -1,0 +1,97 @@
+{
+  "expo": {
+    "name": "VehicleSenseX",
+    "slug": "vehiclesensex",
+    "scheme": "vehiclesensex",
+    "version": "0.2.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.vehiclesensex.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSLocalNetworkUsageDescription": "VehicleSenseX łączy się z Twoim adapterem OBD2 Wi-Fi w sieci lokalnej, aby odczytać dane samochodu.",
+        "RCTAsyncStorageExcludeFromBackup": true
+      }
+    },
+    "android": {
+      "package": "com.vehiclesensex.app",
+      "versionCode": 1,
+      "blockedPermissions": [
+        "android.permission.READ_EXTERNAL_STORAGE",
+        "android.permission.WRITE_EXTERNAL_STORAGE",
+        "android.permission.READ_MEDIA_IMAGES",
+        "android.permission.READ_MEDIA_VIDEO",
+        "android.permission.READ_MEDIA_VISUAL_USER_SELECTED",
+        "android.permission.SYSTEM_ALERT_WINDOW"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/brand/icon.png",
+        "backgroundColor": "#f7f8f4"
+      },
+      "allowBackup": false
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "single",
+      "name": "VehicleSenseX",
+      "favicon": "./assets/brand/icon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sharing",
+      [
+        "expo-location",
+        {
+          "locationWhenInUsePermission": "VehicleSenseX używa lokalizacji do rejestrowania przejazdu po jego rozpoczęciu. Pomiar wstrzymuje się po przejściu aplikacji w tło.",
+          "isIosBackgroundLocationEnabled": false,
+          "isAndroidBackgroundLocationEnabled": false,
+          "isAndroidForegroundServiceEnabled": false,
+          "locationAlwaysAndWhenInUsePermission": false,
+          "locationAlwaysPermission": false,
+          "motionUsagePermission": false,
+          "locationFullAccuracyPermission": false,
+          "isAndroidMotionActivityEnabled": false
+        }
+      ],
+      [
+        "react-native-ble-plx",
+        {
+          "isBackgroundEnabled": false,
+          "neverForLocation": true,
+          "bluetoothAlwaysPermission": "VehicleSenseX łączy się z wybranym adapterem OBD2 BLE, aby odczytać parametry i kody usterek samochodu."
+        }
+      ],
+      "expo-notifications",
+      [
+        "expo-build-properties",
+        {
+          "android": {
+            "compileSdkVersion": 37,
+            "targetSdkVersion": 36,
+            "buildToolsVersion": "37.0.0"
+          },
+          "ios": {
+            "deploymentTarget": "16.4"
+          }
+        }
+      ],
+      "expo-sqlite",
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "VehicleSenseX pozwala wybrać własne zdjęcia samochodu do zapisania w garażu.",
+          "cameraPermission": false,
+          "microphonePermission": false
+        }
+      ],
+      "expo-font"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "icon": "./assets/brand/icon.png",
+    "backgroundColor": "#f8f8f6"
+  }
+}
