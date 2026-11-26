@@ -10,6 +10,7 @@ When changing documentation, update all three versions and language links. Do no
 
 - [Project overview](../README.en.md)
 - [Mobile application](../mobile/README.en.md)
+- [Vehicle details from VIN](../mobile/VIN.en.md)
 - [Builds, signing and release](../mobile/RELEASE.en.md)
 - [AI assistant backend](../server/README.en.md)
 - [OBD client boundaries and protocols](../mobile/src/obd/README.en.md)
@@ -20,6 +21,7 @@ When changing documentation, update all three versions and language links. Do no
 
 - [Research into public vehicle catalogs](research/2026-11-25-vehicle-catalogs.en.md)
 - [Native builds](verification/2026-11-26-native-builds.en.md)
+- [VIN and GPX0.2.1 implementation verification](verification/2026-11-26-vin-gpx-builds.en.md)
 - [iOS artifact metadata (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Android APK artifact metadata (JSON)](verification/2026-11-26-android-artifact.json)
 - [Production Android AAB metadata (JSON)](verification/2026-11-26-android-production-artifact.json)
@@ -34,6 +36,7 @@ When changing documentation, update all three versions and language links. Do no
 - [Offline vehicle catalog](superpowers/plans/2026-11-25-offline-catalog.en.md)
 - [Native builds](superpowers/plans/2026-11-26-native-builds.en.md)
 - [GPX trip export](superpowers/plans/2026-11-26-trip-gpx.en.md)
+- [Vehicle details from VIN](superpowers/plans/2026-11-26-vin-enrichment.en.md)
 
 ## Design specifications
 
@@ -42,6 +45,7 @@ When changing documentation, update all three versions and language links. Do no
 - [CAN and ECU selection](superpowers/specs/2026-11-25-can-ecu-design.en.md)
 - [Offline vehicle catalog](superpowers/specs/2026-11-25-offline-catalog-design.en.md)
 - [GPX trip export](superpowers/specs/2026-11-26-trip-gpx-design.en.md)
+- [Vehicle details from VIN](superpowers/specs/2026-11-26-vin-enrichment.en.md)
 
 ## Progress logs
 

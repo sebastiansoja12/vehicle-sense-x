@@ -1,8 +1,8 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Wydanie VehicleSenseX 0.2.0
+# Wydanie VehicleSenseX 0.2.1
 
-Nowszy kod po rewizji `8056cf6` wymaga ponownej kompilacji. Opisane paczki potwierdzają wcześniejszy stan i nie zawierają nowego eksportu GPX.
+Kod0.2.1 po rewizji `8056cf6` wymaga ponownej kompilacji. Opisane paczki0.2.0 potwierdzają wcześniejszy stan i nie zawierają nowego eksportu GPX ani uzupełniania danych NHTSA. Numer kompilacji Android/iOS to2.
 
 Status: implementacja z rzeczywistymi transportami BLE/TCP/Android Classic, bez demonstracyjnych pomiarów. Natywna kompilacja iOS Release na symulator zakończyła się powodzeniem 2026-11-26; sprawdzono końcowy plik aplikacji, uprawnienia i obecność klas BLE/TCP. Android Release APK również zbudowano poprawnie po usunięciu błędu BuildConfig w Classic przez plugin CNG; sprawdzono manifest, moduły, podpis testowy i wyrównanie bibliotek. Produkcyjny AAB Androida został podpisany nowym kluczem w Expo po jawnej zgodzie użytkownika i przeszedł weryfikację artefaktu. Nie ma sklepowego IPA ani potwierdzonej macierzy sprzętowej; nie wykonano zgłoszenia do sklepów. Bieżące wyniki: [raport kompilacji](../docs/verification/2026-11-26-native-builds.md).
 
@@ -64,3 +64,7 @@ Przed zgłoszeniem uzupełnij prawdziwe dane wydawcy, kontakt, publiczny adres p
 Ikona aplikacji jest w `assets/brand/icon.png`; źródło wektorowe w `icon.svg`. Nie są to zrzuty sklepowe ani potwierdzenie rejestracji znaku/nazwy. Nie uruchomiono publikacji, płatności za usługi ani automatycznego zgłoszenia do sklepów.
 
 Źródła: [Expo EAS](https://docs.expo.dev/build/eas-json/), [Android Local Network](https://developer.android.com/privacy-and-security/local-network-permission), [Apple Local Network](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy).
+
+## Zmiany0.2.1
+
+Eksport GPX zachowuje rzeczywiste segmenty GPS i czasy UTC, bez łączenia przerw. Opcjonalne zapytanie NHTSA wysyła VIN do usługi w USA dopiero po zgodzie powiązanej z tym VIN; przed zapisaniem wymaga wyboru pól. Źródło i czas pobrania są zachowane przy nadal zgodnych wartościach, także w kopii JSON. Nie trafiają do AI ani raportu sprzedaży. Zasady i ograniczenia: [dane z VIN](VIN.md). Deklaracje prywatności wydania muszą uwzględniać ten dobrowolny przepływ oraz eksport dokładnych tras GPX.

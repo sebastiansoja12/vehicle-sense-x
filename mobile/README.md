@@ -2,7 +2,7 @@
 
 # VehicleSenseX — aplikacja mobilna
 
-React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja aplikacji 0.2.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
+React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja aplikacji 0.2.1. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
 
 ## Uruchomienie
 
@@ -51,6 +51,8 @@ Obsługiwany jest strumień ASCII ELM327. Dla ISO 15765-4 CAN wykrywa rzeczywist
 
 Po wybraniu sterownika CAN w diagnostyce można wykonać lokalne zapytanie mode 09 PID 02. Nie każdy sterownik je obsługuje. Numer jest sprawdzany pod kątem formatu i kompletności; brak danych, niepełna odpowiedź i pusty numer złożony z zer są odrzucane. Zapis w profilu wymaga potwierdzenia, nie zmienia marki/modelu/silnika i chroni VIN zmieniony w międzyczasie. Źródło (czas, adapter, ECU) zostaje przy VIN i w kopii JSON. Ręczna zmiana numeru usuwa stare źródło. To odczyt ECU, bez potwierdzenia autentyczności czy specyfikacji pojazdu. VIN i jego źródło nie są wysyłane do AI ani zamieszczane w raporcie sprzedażowym.
 
+Opcjonalne uzupełnienie formularza korzysta z rzeczywistego NHTSA vPIC po osobnej zgodzie na wysłanie wyłącznie VIN. Wynik pokazuje podgląd i osobny wybór pól; domyślnie zaznaczone są tylko puste pola. Marka, model, rok modelowy, całkowita pojemność cm³, skrzynia i napęd mają zapisane źródło oraz czas pobrania. Zmiany pól i VIN unieważniają nieaktualne powiązania. NHTSA nie gwarantuje kompletności ani pokrycia aut europejskich. Szczegóły, ograniczenia i prywatność: [dane z VIN](VIN.md).
+
 ## Zapis i prywatność
 
 Na telefonie używamy `expo-sqlite/kv-store`, aby większe historie GPS nie trafiały na limit pojedynczego rekordu AsyncStorage na Androidzie. Starszy zapis jest walidowany i kopiowany przed usunięciem kopii ze starego magazynu. Web używa AsyncStorage/localStorage oraz Web Locks. Repozytorium zatwierdza stan dopiero po trwałym zapisie; nie zastępuje uszkodzonych danych pustym garażem. Wersja schematu 1 jest migrowana do 2.
@@ -73,7 +75,9 @@ Testy modelu, repozytorium, parserów, migracji i klienta API działają w Node 
 
 ## Pozostały zakres produktu
 
-Nie ma jeszcze zewnętrznego dekodowania specyfikacji po VIN, zewnętrznej wyceny, podkładu mapowego, rejestracji w tle, kont ani synchronizacji. Nie prezentujemy tych funkcji jako działających. Przed publikacją konieczne są również realne testy adaptera/telefonów, podpisy, metadane i polityka operatora oraz wdrożenie i konfiguracja własnego serwera, jeśli AI ma być aktywne.
+Nie ma jeszcze kompletnego dekodowania fabrycznej specyfikacji dla wszystkich marek, zewnętrznej wyceny, podkładu mapowego, rejestracji w tle, kont ani synchronizacji. Dostępny jest ograniczony, jawny odczyt danych NHTSA po VIN. Nie prezentujemy tych funkcji jako działających. Przed publikacją konieczne są również realne testy adaptera/telefonów, podpisy, metadane i polityka operatora oraz wdrożenie i konfiguracja własnego serwera, jeśli AI ma być aktywne.
+
+Wersja źródłowa0.2.1 zawiera GPX i uzupełnianie danych NHTSA; opisane wcześniej paczki0.2.0 nie zawierają tych zmian. Nowe kompilacje są wymagane przed dystrybucją tej wersji.
 
 ## Źródła API
 

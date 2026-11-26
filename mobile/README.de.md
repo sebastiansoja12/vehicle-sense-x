@@ -2,7 +2,7 @@
 
 # VehicleSenseX — mobile App
 
-React Native 0.88.1, Expo SDK 58, React 19.3 und TypeScript 6. App-Version 0.2.0. Die eigene Garage startet leer; die App hat keinen Demonstrationsmodus, kein Beispielfahrzeug und keinen Messwertgenerator. Im übergeordneten Verzeichnis ist ein separater früherer HTML-Prototyp erhalten.
+React Native 0.88.1, Expo SDK 58, React 19.3 und TypeScript 6. App-Version 0.2.1. Die eigene Garage startet leer; die App hat keinen Demonstrationsmodus, kein Beispielfahrzeug und keinen Messwertgenerator. Im übergeordneten Verzeichnis ist ein separater früherer HTML-Prototyp erhalten.
 
 ## Starten
 
@@ -51,6 +51,8 @@ Unterstützt wird ein ELM327-ASCII-Stream. Bei ISO 15765-4 CAN werden tatsächli
 
 Nach Auswahl eines CAN-Steuergeräts in der Diagnose kann lokal Modus 09 PID 02 abgefragt werden. Nicht jedes Steuergerät unterstützt dies. Die Nummer wird auf Format und Vollständigkeit geprüft; fehlende Daten, unvollständige Antworten und leere Nummern aus lauter Nullen werden verworfen. Speicherung im Profil erfordert Bestätigung, ändert Marke/Modell/Motor nicht und schützt eine zwischenzeitlich geänderte VIN. Die Quelle (Zeit, Adapter, ECU) bleibt bei der VIN und in der JSON-Sicherung. Manuelle Änderung der Nummer entfernt die alte Quelle. Es handelt sich um ein ECU-Auslesen ohne Bestätigung der Echtheit oder technischen Fahrzeugdaten. VIN und Quelle werden weder an KI gesendet noch im Verkaufsbericht aufgeführt.
 
+Optional lässt sich das Formular nach separater Zustimmung zur Übertragung ausschließlich der VIN mit echten Daten von NHTSA vPIC ergänzen. Das Ergebnis bietet eine Vorschau und eine gesonderte Feldauswahl; standardmäßig sind nur leere Felder ausgewählt. Für Marke, Modell, Modelljahr, ganzzahligen Hubraum in cm³, Getriebe und Antrieb werden Quelle und Abrufzeit gespeichert. Änderungen an Feldern und VIN machen veraltete Zuordnungen ungültig. NHTSA garantiert weder Vollständigkeit noch die Abdeckung europäischer Fahrzeuge. Einzelheiten, Grenzen und Datenschutz: [Fahrzeugdaten aus der VIN](VIN.de.md).
+
 ## Speicherung und Datenschutz
 
 Auf dem Telefon wird `expo-sqlite/kv-store` verwendet, damit größere GPS-Verläufe nicht an das Limit eines einzelnen AsyncStorage-Datensatzes unter Android stoßen. Ältere Daten werden validiert und kopiert, bevor die Kopie im alten Speicher entfernt wird. Web verwendet AsyncStorage/localStorage und Web Locks. Das Repository bestätigt den Zustand erst nach dauerhafter Speicherung; beschädigte Daten werden nicht durch eine leere Garage ersetzt. Schemaversion 1 wird auf 2 migriert.
@@ -73,7 +75,9 @@ Tests für Modell, Repository, Parser, Migrationen und API-Client laufen in Node
 
 ## Verbleibender Produktumfang
 
-Externes Dekodieren technischer Daten anhand der VIN, externe Bewertung, Kartenunterlage, Hintergrundaufzeichnung, Konten und Synchronisierung fehlen noch. Diese Funktionen werden nicht als funktionsfähig dargestellt. Vor Veröffentlichung sind außerdem echte Adapter-/Telefontests, Signaturen, Metadaten und Betreiber-Datenschutzerklärung sowie Bereitstellung und Konfiguration eines eigenen Servers erforderlich, sofern KI aktiv sein soll.
+Vollständiges Dekodieren der Werksdaten für alle Marken, externe Bewertung, Kartenunterlage, Hintergrundaufzeichnung, Konten und Synchronisierung fehlen noch. Verfügbar ist ein begrenzter, ausdrücklich gekennzeichneter Abruf von NHTSA-Daten anhand der VIN. Die noch ausstehenden Funktionen werden nicht als funktionsfähig dargestellt. Vor Veröffentlichung sind außerdem echte Adapter-/Telefontests, Signaturen, Metadaten und Betreiber-Datenschutzerklärung sowie Bereitstellung und Konfiguration eines eigenen Servers erforderlich, sofern KI aktiv sein soll.
+
+Die Quellversion 0.2.1 enthält GPX und das Ergänzen von NHTSA-Daten; die zuvor beschriebenen Pakete der Version 0.2.0 enthalten diese Änderungen nicht. Vor der Distribution dieser Version sind neue Builds erforderlich.
 
 ## API-Quellen
 

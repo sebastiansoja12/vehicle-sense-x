@@ -2,7 +2,7 @@
 
 # VehicleSenseX — mobile app
 
-React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. App version 0.2.0. The personal garage starts empty; the app has no demo mode, sample vehicle or measurement generator. A separate earlier HTML prototype is retained in the parent directory.
+React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. App version 0.2.1. The personal garage starts empty; the app has no demo mode, sample vehicle or measurement generator. A separate earlier HTML prototype is retained in the parent directory.
 
 ## Running
 
@@ -51,6 +51,8 @@ An ELM327 ASCII stream is supported. For ISO 15765-4 CAN, it discovers actual EC
 
 After selecting a CAN controller in diagnostics, a local mode 09 PID 02 query is available. Not every controller supports it. The number is checked for format and completeness; missing data, incomplete replies and an empty all-zero number are rejected. Saving to the profile requires confirmation, does not change make/model/engine and protects a VIN changed in the meantime. The source (time, adapter, ECU) remains attached to the VIN and in JSON backups. Manually changing the number removes the old source. This is an ECU reading, without confirmation of vehicle authenticity or specifications. VIN and its source are neither sent to AI nor included in the sales report.
 
+Optional form completion uses the real NHTSA vPIC service after separate consent to send only the VIN. The result provides a preview and individual field selection; only empty fields are selected by default. Make, model, model year, whole-number displacement in cm³, transmission and drivetrain retain their source and retrieval time. Changes to fields or VIN invalidate outdated associations. NHTSA does not guarantee completeness or coverage of European vehicles. Details, limitations and privacy: [VIN data](VIN.en.md).
+
 ## Persistence and privacy
 
 On phones, `expo-sqlite/kv-store` prevents larger GPS histories from hitting Android's single-record AsyncStorage limit. Older stored data is validated and copied before its copy in the old store is removed. Web uses AsyncStorage/localStorage and Web Locks. The repository commits state only after durable storage; it does not replace corrupt data with an empty garage. Schema version 1 is migrated to 2.
@@ -73,7 +75,9 @@ Model, repository, parser, migration and API-client tests run in Node 24. HTTP/T
 
 ## Remaining product scope
 
-External VIN specification decoding, external valuation, a map basemap, background recording, accounts and synchronization are not yet implemented. These features are not presented as working. Publication also requires real adapter/phone tests, signing, metadata and an operator policy, plus deployment and configuration of a personal server if AI is to be active.
+Complete factory-specification decoding for every make, external valuation, a map basemap, background recording, accounts and synchronization are not yet implemented. A limited, explicit NHTSA VIN lookup is available. The remaining features are not presented as working. Publication also requires real adapter/phone tests, signing, metadata and an operator policy, plus deployment and configuration of a personal server if AI is to be active.
+
+Source version 0.2.1 includes GPX and NHTSA data completion; the previously described 0.2.0 packages do not include these changes. New builds are required before distributing this version.
 
 ## API sources
 

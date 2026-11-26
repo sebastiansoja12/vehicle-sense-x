@@ -1,8 +1,8 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# VehicleSenseX 0.2.0 release
+# VehicleSenseX 0.2.1 release
 
-Newer code after revision `8056cf6` requires a fresh build. The reported binaries verify the earlier state and do not include the new GPX export.
+Version 0.2.1 code after revision `8056cf6` requires a fresh build. The reported 0.2.0 packages verify the earlier state and do not include the new GPX export or NHTSA data completion. The Android/iOS build number is 2.
 
 Status: implementation with real BLE/TCP/Android Classic transports and no demo measurements. The native iOS Release simulator build succeeded on 2026-11-26; the final app bundle, permissions and presence of BLE/TCP classes were checked. The Android Release APK also built successfully after fixing the Classic BuildConfig error through a CNG plugin; its manifest, modules, test signature and library alignment were checked. The production Android AAB was signed with a new key in Expo after explicit user approval and passed artifact verification. There is no store IPA or verified hardware matrix; no store submission was performed. Current results: [build report](../docs/verification/2026-11-26-native-builds.en.md).
 
@@ -64,3 +64,7 @@ Before submission, provide actual publisher details, contact information, a publ
 The app icon is in `assets/brand/icon.png`; its vector source is in `icon.svg`. These are not store screenshots or evidence of trademark/name registration. Publication, service payments and automatic store submission have not been initiated.
 
 Sources: [Expo EAS](https://docs.expo.dev/build/eas-json/), [Android Local Network](https://developer.android.com/privacy-and-security/local-network-permission), [Apple Local Network](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy).
+
+## Changes in 0.2.1
+
+GPX export retains actual GPS segments and UTC times without joining gaps. The optional NHTSA request sends the VIN to a US service only after consent tied to that VIN; field selection is required before saving. The source and retrieval time are retained for values that still match, including in JSON backups. They are excluded from AI and the sales report. Rules and limitations: [VIN data](VIN.en.md). Release privacy disclosures must account for this voluntary data flow and export of precise GPX routes.

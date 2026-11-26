@@ -1,8 +1,8 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Veröffentlichung von VehicleSenseX 0.2.0
+# Veröffentlichung von VehicleSenseX 0.2.1
 
-Neuerer Code nach Revision `8056cf6` benötigt einen neuen Build. Die beschriebenen Binärdateien bestätigen den früheren Stand und enthalten den neuen GPX-Export nicht.
+Code der Version 0.2.1 nach Revision `8056cf6` erfordert einen neuen Build. Die beschriebenen Pakete der Version 0.2.0 bestätigen den früheren Stand und enthalten weder den neuen GPX-Export noch das Ergänzen von NHTSA-Daten. Die Android-/iOS-Buildnummer ist 2.
 
 Status: Implementierung mit echten BLE-/TCP-/Android-Classic-Transporten, ohne Demonstrationsmessungen. Der native iOS-Release-Build für den Simulator wurde am 2026-11-26 erfolgreich abgeschlossen; finale App-Datei, Berechtigungen und Vorhandensein der BLE-/TCP-Klassen wurden geprüft. Auch das Android-Release-APK wurde nach Behebung des Classic-BuildConfig-Fehlers durch ein CNG-Plugin erfolgreich gebaut; Manifest, Module, Testsignatur und Bibliotheksausrichtung wurden geprüft. Der Android-Produktions-AAB wurde nach ausdrücklicher Zustimmung des Benutzers mit einem neuen Schlüssel in Expo signiert und erfolgreich geprüft. Noch kein Store-IPA und keine bestätigte Hardwarematrix; keine Einreichung in den Stores. Aktuelle Ergebnisse: [Buildbericht](../docs/verification/2026-11-26-native-builds.de.md).
 
@@ -64,3 +64,7 @@ Vor Einreichung echte Herausgeberdaten, Kontakt, öffentliche Datenschutzerklär
 Das App-Symbol liegt unter `assets/brand/icon.png`; die Vektorquelle unter `icon.svg`. Dies sind weder Store-Screenshots noch eine Bestätigung der Marken-/Namensregistrierung. Keine Veröffentlichung, Dienstzahlung oder automatische Store-Einreichung gestartet.
 
 Quellen: [Expo EAS](https://docs.expo.dev/build/eas-json/), [Android Local Network](https://developer.android.com/privacy-and-security/local-network-permission), [Apple Local Network](https://developer.apple.com/documentation/technotes/tn3179-understanding-local-network-privacy).
+
+## Änderungen 0.2.1
+
+Der GPX-Export erhält tatsächliche GPS-Segmente und UTC-Zeiten, ohne Lücken zu verbinden. Die optionale NHTSA-Abfrage sendet die VIN erst nach einer an diese VIN gebundenen Zustimmung an den Dienst in den USA; vor dem Speichern ist eine Feldauswahl erforderlich. Quelle und Abrufzeit bleiben bei weiterhin übereinstimmenden Werten erhalten, auch in der JSON-Sicherung. Sie gelangen weder an die KI noch in den Verkaufsbericht. Regeln und Grenzen: [Fahrzeugdaten aus der VIN](VIN.de.md). Die Datenschutzerklärungen der Veröffentlichung müssen diesen freiwilligen Datenfluss und den Export genauer GPX-Fahrten berücksichtigen.

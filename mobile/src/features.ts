@@ -1,5 +1,6 @@
 import {ValidationError,addVehicle,addFuel,addService,validDate,parseStoredData} from './domain.ts';
 import type {AppData,VehicleInput,FuelInput,ServiceInput} from './domain.ts';
+import {retainDecodedSource} from './vin-decoder.ts';
 import type {Reminder,Comparison} from './records.ts';
 import {validOfferUrl} from './records.ts';
 import {estimateTripFuelCost} from './expenses.ts';
@@ -38,7 +39,7 @@ export function editVehicle(state:AppData,id:string,input:VehicleInput,today:str
  const original=state.vehicles.find(v=>v.id===id);if(!original)throw new ValidationError('Nie znaleziono samochodu.');
  const record=addVehicle({...state,vehicles:state.vehicles.filter(v=>v.id!==id)},input,id,today).vehicles.at(-1)!;
  const observed=Math.max(0,...state.fuel.filter(r=>r.vehicleId===id).map(r=>r.mileage),...state.service.filter(r=>r.vehicleId===id).map(r=>r.mileage));if(record.mileage<observed)throw new ValidationError('Przebieg jest niższy niż zapisany we wpisach.');
- return {...state,vehicles:state.vehicles.map(v=>v.id===id?{...record,photos:original.photos,vinSource:record.vin===original.vin?original.vinSource:undefined}:v)};
+ return {...state,vehicles:state.vehicles.map(v=>v.id===id?{...record,photos:original.photos,vinSource:record.vin===original.vin?original.vinSource:undefined,decodedSource:retainDecodedSource(record,original.decodedSource)}:v)};
 }
 export function editFuel(state:AppData,id:string,input:FuelInput,today:string):AppData{
  const original=state.fuel.find(r=>r.id===id);if(!original||original.vehicleId!==input.vehicleId)throw new ValidationError('Nie znaleziono tankowania dla tego auta.');

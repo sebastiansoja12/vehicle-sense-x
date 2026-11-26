@@ -5,8 +5,10 @@ import {emptyExtensions,validateExtensions} from './records.ts';
 import type {Extensions} from './records.ts';
 import {validVinSource} from './vin.ts';
 import type {VinSource} from './vin.ts';
+import {validDecodedSource,retainDecodedSource} from './vin-decoder.ts';
+import type {DecodedVehicleSource} from './vin-decoder.ts';
 export {ValidationError} from './validation.ts';
-export type Vehicle = { id: string; make: string; model: string; year: number; engine: string; mileage: number; plate: string; vin: string; spec?:VehicleSpec;photos?:Asset[];vinSource?:VinSource };
+export type Vehicle = { id: string; make: string; model: string; year: number; engine: string; mileage: number; plate: string; vin: string; spec?:VehicleSpec;photos?:Asset[];vinSource?:VinSource;decodedSource?:DecodedVehicleSource };
 export type FuelEntry = { id: string; vehicleId: string; date: string; mileage: number; volumeMl: number; priceCents: number; costCents: number; full: boolean };
 export type ServiceEntry = { id: string; vehicleId: string; date: string; mileage: number; title: string; costCents: number; note: string;attachments?:Asset[] };
 export type AppData = Extensions & { version: 2; activeVehicleId: string | null; vehicles: Vehicle[]; fuel: FuelEntry[]; service: ServiceEntry[] };
@@ -100,6 +102,11 @@ export function parseStoredData(raw: string|null): AppData {
   for(const record of [...data.vehicles,...data.fuel,...data.service,...data.trips,...data.diagnostics,...data.reminders,...data.comparisons]) { if (!record||!text(record.id)||ids.has(record.id)) throw new StorageFormatError();ids.add(record.id); }
   for(const v of data.vehicles) if (!text(v.make,60)||!text(v.model,80)||!text(v.engine,100)||!text(v.plate,20)||typeof v.vin!=='string'||(v.vin!==''&&!/^[A-HJ-NPR-Z0-9]{17}$/.test(v.vin))||!integer(v.year,1900,9999)||!integer(v.mileage,0,5000000)) throw new StorageFormatError();
   for(const v of data.vehicles)if(v.vinSource!==undefined&&(!validVinSource(v.vinSource)||v.vinSource.vin!==v.vin))throw new StorageFormatError();
+  for(const v of data.vehicles)if(v.decodedSource!==undefined){
+   if(!validDecodedSource(v.decodedSource))throw new StorageFormatError();
+   const retained=retainDecodedSource(v,v.decodedSource);
+   if(!retained||Object.keys(retained.fields).length!==Object.keys(v.decodedSource.fields).length)throw new StorageFormatError();
+  }
   const vehicleIds=new Set(data.vehicles.map(v=>v.id));
   if ((data.vehicles.length===0&&data.activeVehicleId!==null)||(data.vehicles.length>0&&!vehicleIds.has(data.activeVehicleId??''))) throw new StorageFormatError();
   for(const e of [...data.fuel,...data.service]) if (!vehicleIds.has(e.vehicleId)||typeof e.date!=='string'||!validDate(e.date)||!integer(e.mileage,0,5000000)||!integer(e.costCents,0,100000000)||e.mileage>findVehicle(data,e.vehicleId).mileage) throw new StorageFormatError();

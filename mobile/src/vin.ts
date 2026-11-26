@@ -3,6 +3,7 @@ import type {CanEcu} from './obd/can.ts';
 import {validCanEcu} from './obd/can.ts';
 import {ObdError,responseLines} from './obd/protocol.ts';
 import {ValidationError} from './validation.ts';
+import {retainDecodedSource} from './vin-decoder.ts';
 export type VinSource={source:'obd';vin:string;timestamp:number;adapterName:string;ecu:CanEcu};
 export type VinObservation=VinSource&{vehicleId:string};
 export function validVinSource(value:unknown):value is VinSource{
@@ -23,5 +24,5 @@ export function applyVinObservation(state:AppData,reading:VinObservation,expecte
  if(!car)throw new ValidationError('Samochód z tego odczytu nie jest już dostępny.');
  if(car.vin!==expectedVin)throw new ValidationError('VIN w profilu zmienił się od wyświetlenia odczytu. Sprawdź profil i odczytaj go ponownie.');
  const vinSource:VinSource={source:'obd',vin:reading.vin,timestamp:reading.timestamp,adapterName:reading.adapterName,ecu:{protocol:reading.ecu.protocol,responseId:reading.ecu.responseId}};
- return {...state,vehicles:state.vehicles.map(vehicle=>vehicle.id===car.id?{...vehicle,vin:reading.vin,vinSource}:vehicle)};
+ return {...state,vehicles:state.vehicles.map(vehicle=>vehicle.id===car.id?{...vehicle,vin:reading.vin,vinSource,decodedSource:retainDecodedSource({...vehicle,vin:reading.vin},vehicle.decodedSource)}:vehicle)};
 }

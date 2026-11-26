@@ -10,6 +10,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 
 - [Projektübersicht](../README.de.md)
 - [Mobile Anwendung](../mobile/README.de.md)
+- [Fahrzeugdaten aus der VIN](../mobile/VIN.de.md)
 - [Builds, Signierung und Veröffentlichung](../mobile/RELEASE.de.md)
 - [Backend des KI-Assistenten](../server/README.de.md)
 - [Grenzen und Protokolle des OBD-Clients](../mobile/src/obd/README.de.md)
@@ -20,6 +21,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 
 - [Recherche zu öffentlichen Fahrzeugkatalogen](research/2026-11-25-vehicle-catalogs.de.md)
 - [Native Builds](verification/2026-11-26-native-builds.de.md)
+- [Überprüfung der VIN- und GPX0.2.1-Implementierung](verification/2026-11-26-vin-gpx-builds.de.md)
 - [Metadaten des iOS-Artefakts (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Metadaten des Android-APK-Artefakts (JSON)](verification/2026-11-26-android-artifact.json)
 - [Metadaten des Android-Produktions-AAB (JSON)](verification/2026-11-26-android-production-artifact.json)
@@ -34,6 +36,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [Offline-Fahrzeugkatalog](superpowers/plans/2026-11-25-offline-catalog.de.md)
 - [Native Builds](superpowers/plans/2026-11-26-native-builds.de.md)
 - [GPX-Fahrtenexport](superpowers/plans/2026-11-26-trip-gpx.de.md)
+- [Fahrzeugdaten aus der VIN](superpowers/plans/2026-11-26-vin-enrichment.de.md)
 
 ## Entwurfsspezifikationen
 
@@ -42,6 +45,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [CAN und ECU-Auswahl](superpowers/specs/2026-11-25-can-ecu-design.de.md)
 - [Offline-Fahrzeugkatalog](superpowers/specs/2026-11-25-offline-catalog-design.de.md)
 - [GPX-Fahrtenexport](superpowers/specs/2026-11-26-trip-gpx-design.de.md)
+- [Fahrzeugdaten aus der VIN](superpowers/specs/2026-11-26-vin-enrichment.de.md)
 
 ## Fortschrittsprotokolle
 

@@ -10,6 +10,7 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 
 - [Opis projektu](../README.md)
 - [Aplikacja mobilna](../mobile/README.md)
+- [Dane pojazdu z VIN](../mobile/VIN.md)
 - [Kompilacje, podpisy i wydanie](../mobile/RELEASE.md)
 - [Backend asystenta AI](../server/README.md)
 - [Granice i protokoły klienta OBD](../mobile/src/obd/README.md)
@@ -20,6 +21,7 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 
 - [Badanie publicznych katalogów pojazdów](research/2026-11-25-vehicle-catalogs.md)
 - [Kompilacje natywne](verification/2026-11-26-native-builds.md)
+- [Weryfikacja implementacji VIN i GPX0.2.1](verification/2026-11-26-vin-gpx-builds.md)
 - [Metadane artefaktu iOS (JSON)](verification/2026-11-26-ios-artifact.json)
 - [Metadane artefaktu Android APK (JSON)](verification/2026-11-26-android-artifact.json)
 - [Metadane produkcyjnego Android AAB (JSON)](verification/2026-11-26-android-production-artifact.json)
@@ -34,6 +36,7 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 - [Katalog pojazdów offline](superpowers/plans/2026-11-25-offline-catalog.md)
 - [Kompilacje natywne](superpowers/plans/2026-11-26-native-builds.md)
 - [Eksport tras GPX](superpowers/plans/2026-11-26-trip-gpx.md)
+- [Dane pojazdu z VIN](superpowers/plans/2026-11-26-vin-enrichment.md)
 
 ## Specyfikacje projektu
 
@@ -42,6 +45,7 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 - [CAN i wybór ECU](superpowers/specs/2026-11-25-can-ecu-design.md)
 - [Katalog pojazdów offline](superpowers/specs/2026-11-25-offline-catalog-design.md)
 - [Eksport tras GPX](superpowers/specs/2026-11-26-trip-gpx-design.md)
+- [Dane pojazdu z VIN](superpowers/specs/2026-11-26-vin-enrichment.md)
 
 ## Dzienniki postępu
 
