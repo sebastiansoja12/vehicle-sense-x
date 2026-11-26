@@ -16,3 +16,4 @@ node_modules/
 *.key
 *.pem
 *.mobileprovision
+/artifacts/
