@@ -2,7 +2,7 @@
 
 # VehicleSenseX — mobile App
 
-React Native 0.88.1, Expo SDK 58, React 19.3 und TypeScript 6. App-Version 0.2.1. Die eigene Garage startet leer; die App hat keinen Demonstrationsmodus, kein Beispielfahrzeug und keinen Messwertgenerator. Im übergeordneten Verzeichnis ist ein separater früherer HTML-Prototyp erhalten.
+React Native 0.88.1, Expo SDK 58, React 19.3 und TypeScript 6. Quellversion 0.2.2. Die eigene Garage startet leer; die App hat keinen Demonstrationsmodus, kein Beispielfahrzeug und keinen Messwertgenerator. Im übergeordneten Verzeichnis ist ein separater früherer HTML-Prototyp erhalten.
 
 ## Starten
 
@@ -30,6 +30,8 @@ Vorschau der aktuellen Sitzung: **http://127.0.0.1:8083/**. Bluetooth und direkt
 CSV-Export umfasst getrennt Kraftstoff, Wartung und Fahrten. Eine vollständige JSON-Sicherung erhält alle Daten, auch VIN, Kennzeichen, Notizen, Fotos, Rechnungen und GPS-Koordinaten. Dateien sind auf 1 MB sowie 5 Anhänge pro Fahrzeug oder Wartungseintrag begrenzt; Fahrzeugfotos werden auf 1200 px verkleinert. Die Wiederherstellung validiert zunächst das Format, zeigt den Inhalt und erfordert die Bestätigung des Ersetzens der Garage. Benachrichtigungen aus einer Sicherung müssen erneut aktiviert werden. Das Sicherungsimportlimit beträgt 20 MB.
 
 GPX-1.1-Export steht bei gespeicherten GPS-Fahrten neben JSON zur Verfügung. Er enthält echte gültige Punkte und UTC-Zeiten; Lücken bleiben getrennte Segmente, ohne erfundene Höhe oder Geschwindigkeit. Manuelle Einträge oder weniger als zwei gültige Punkte ergeben keine GPX-Datei. Die Datei enthält genaue Standorte und Zeiten.
+
+Version 0.2.2 korrigiert veraltete Daten und Inhalte lokaler Wartungsbenachrichtigungen, ersetzt alte Zeitpläne einmalig und prüft sie bei Rückkehr in den Vordergrund erneut, auch nach Zeitzonenänderungen. Vordergrundbenachrichtigungen erscheinen lautlos. Die Einstellungen lesen die Version aus der Expo-Konfiguration. Diese Quelländerungen erfordern neue native Pakete; die unten beschriebenen geprüften 0.2.1-Pakete enthalten sie nicht.
 
 ## Offline-Katalog
 

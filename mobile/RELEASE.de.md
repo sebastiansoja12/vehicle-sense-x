@@ -1,6 +1,10 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Veröffentlichung von VehicleSenseX 0.2.1
+# Veröffentlichung von VehicleSenseX 0.2.2
+
+Quellversion 0.2.2/Build 3 korrigiert veraltete Benachrichtigungszeitpläne und die Vordergrundanzeige, prüft beim Zurückkehren erneut und liest die angezeigte Version aus der Expo-Konfiguration. Sieben neue Regressionstests bestanden; die vollständige Suite besteht mit 171/171, ebenso Typprüfung und Lint. Diese Änderungen erfordern neue native Pakete; die Zustellung auf Hardware bleibt ungeprüft.
+
+Die unabhängige Prüfung fand innerhalb dieses Umfangs keine notwendigen Korrekturen. Eine Zeitzonenänderung bei durchgehend geöffneter App wird bei der nächsten Rückkehr berücksichtigt; eine ständige Zeitzonenüberwachung gibt es nicht. Der Sicherungsimport deaktivierte wiederhergestellte Benachrichtigungen bereits bis zur erneuten ausdrücklichen Aktivierung.
 
 Version 0.2.1/Build 2 aus Revision `63b273d` hat einen geprüften signierten Android-Produktions-AAB und ein iOS-Release-Simulatorpaket mit GPX-Export und NHTSA-Datenergänzung. Ergebnisse: [Buildbericht 0.2.1](../docs/verification/2026-11-26-vin-gpx-builds.de.md). Das frühere installierbare Validierungs-APK bleibt Version 0.2.0 und enthält diese Funktionen nicht.
 

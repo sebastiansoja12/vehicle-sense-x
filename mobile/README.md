@@ -2,7 +2,7 @@
 
 # VehicleSenseX — aplikacja mobilna
 
-React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja aplikacji 0.2.1. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
+React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.2.2. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
 
 ## Uruchomienie
 
@@ -30,6 +30,8 @@ Podgląd bieżącej sesji: **http://127.0.0.1:8083/**. Bluetooth i surowe TCP do
 Eksport CSV obejmuje osobno paliwo, serwis i trasy. Pełna kopia JSON zachowuje wszystkie dane, także VIN, tablice, notatki, zdjęcia, faktury i współrzędne GPS. Pliki mają limit 1 MB oraz 5 załączników przy samochodzie lub serwisie; zdjęcia auta są zmniejszane do 1200 px. Przywrócenie najpierw waliduje format, pokazuje zawartość i wymaga potwierdzenia zastąpienia garażu. Powiadomienia z kopii trzeba włączyć ponownie. Limit importu kopii wynosi 20 MB.
 
 Eksport GPX 1.1 jest dostępny przy zapisanej trasie GPS, obok JSON. Zawiera rzeczywiste poprawne punkty i czasy UTC; przerwy są osobnymi segmentami, bez dopisywania wysokości ani prędkości. Wpis ręczny lub mniej niż dwa poprawne punkty nie tworzą GPX. Plik ujawnia dokładną lokalizację i czas.
+
+Wersja 0.2.2 poprawia nieaktualne daty i treści powiadomień serwisowych, jednorazowo zastępuje stare harmonogramy i sprawdza je po powrocie do aplikacji, także po zmianie strefy czasowej. Powiadomienia przy otwartej aplikacji są wyświetlane bez dźwięku. Ustawienia odczytują wersję z konfiguracji Expo. Te zmiany źródłowe wymagają nowych paczek natywnych; opisane niżej zweryfikowane paczki 0.2.1 ich nie zawierają.
 
 ## Katalog offline
 

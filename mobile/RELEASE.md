@@ -1,6 +1,10 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Wydanie VehicleSenseX 0.2.1
+# Wydanie VehicleSenseX 0.2.2
+
+Kod 0.2.2/build 3 poprawia nieaktualne harmonogramy i wyświetlanie powiadomień przy otwartej aplikacji, sprawdza je po powrocie i pobiera wyświetlaną wersję z konfiguracji Expo. Przeszło siedem nowych testów regresji; pełny zestaw ma wynik 171/171, typy i lint także przeszły. Te zmiany wymagają nowych paczek natywnych; dostarczanie powiadomień na sprzęcie pozostaje niesprawdzone.
+
+Niezależny przegląd nie wykazał problemów wymagających poprawy w tym zakresie. Zmiana strefy czasowej przy ciągle otwartej aplikacji jest uwzględniana po następnym powrocie; nie ma stałego obserwatora strefy czasowej. Import kopii już wcześniej wyłączał przywrócone powiadomienia do ich ponownego jawnego włączenia.
 
 Wersja 0.2.1/build 2 z rewizji `63b273d` ma zweryfikowany podpisany produkcyjny AAB Androida i pakiet iOS Release na symulator, z eksportem GPX i uzupełnianiem danych NHTSA. Wyniki: [raport kompilacji 0.2.1](../docs/verification/2026-11-26-vin-gpx-builds.md). Wcześniejszy instalowalny APK walidacyjny pozostaje w wersji 0.2.0 i nie zawiera tych funkcji.
 

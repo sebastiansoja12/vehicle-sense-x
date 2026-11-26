@@ -2,7 +2,7 @@
 
 # VehicleSenseX — mobile app
 
-React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. App version 0.2.1. The personal garage starts empty; the app has no demo mode, sample vehicle or measurement generator. A separate earlier HTML prototype is retained in the parent directory.
+React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. Source version 0.2.2. The personal garage starts empty; the app has no demo mode, sample vehicle or measurement generator. A separate earlier HTML prototype is retained in the parent directory.
 
 ## Running
 
@@ -30,6 +30,8 @@ Current-session preview: **http://127.0.0.1:8083/**. Bluetooth and raw TCP to an
 CSV export covers fuel, maintenance and trips separately. A full JSON backup retains all data, including VIN, plates, notes, photos, invoices and GPS coordinates. Files have a 1 MB limit, with up to 5 attachments per vehicle or service entry; vehicle photos are resized to 1200 px. Restoration first validates the format, displays the contents and requires confirmation before replacing the garage. Notifications from a backup must be re-enabled. The backup import limit is 20 MB.
 
 GPX 1.1 export is available beside JSON for saved GPS trips. It contains real accepted points and UTC times; gaps remain separate segments, without invented elevation or speed. Manual entries or fewer than two valid points cannot produce GPX. The file exposes precise location and time.
+
+Version 0.2.2 corrects stale local reminder dates/content, migrates old schedules once and rechecks them when returning to the foreground, including timezone changes. Foreground reminders are displayed silently. Settings read the app version from Expo configuration. These source changes require fresh native packages; the verified 0.2.1 packages described below do not include them.
 
 ## Offline catalog
 
