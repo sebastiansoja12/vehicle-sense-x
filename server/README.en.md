@@ -18,6 +18,32 @@ The default bind address is `127.0.0.1:8787`. Keep it for local work. For a phys
 
 `OPENAI_MODEL` defaults to documented Responses-compatible `gpt-5-mini`; override it server-side with a text model available to your OpenAI project. `OPENAI_API_KEY` is read only from the server environment. `APP_API_TOKEN` must have 32–512 URL-safe characters (`A-Z a-z 0-9 . _ ~ -`). Missing/invalid configuration disables paid requests with HTTP 503. Authentication compares SHA-256 token digests with Node's constant-time comparison. CORS is disabled for browser origins by default; native requests without Origin are accepted after authentication. `ALLOWED_ORIGINS` is an optional comma-separated exact allowlist (`https://app.example.com`); wildcard, paths and trailing slashes are invalid. CORS supplements authentication.
 
+## Private container deployment
+
+The image uses official `node:24.18.0-bookworm-slim`, runs Node directly as the nonroot `node` user, and copies only `index.mjs`. No packages are installed. `.dockerignore` allows only build files and runtime code; `.env` files, secrets, tests and documentation are excluded from the build context. Inject private configuration at runtime, never through `ARG`, `COPY` or public mobile environment variables.
+
+After preparing a local `.env` as described above, from the `server` directory:
+
+```sh
+docker build --pull -t vehiclesensex-assistant:local .
+docker run --detach --name vehiclesensex-assistant \
+  --env-file .env -e HOST=0.0.0.0 -e PORT=8787 \
+  --read-only --cap-drop ALL --security-opt no-new-privileges \
+  --pids-limit 64 --memory 128m --cpus 1 --stop-timeout 10 \
+  -p 127.0.0.1:18787:8787 vehiclesensex-assistant:local
+curl --fail http://127.0.0.1:18787/health
+docker stop --time 10 vehiclesensex-assistant
+docker rm vehiclesensex-assistant
+```
+
+Explicit `-e HOST=0.0.0.0 -e PORT=8787` overrides `.env` values (the example has `HOST=127.0.0.1`) so the port is reachable inside the container. Publishing remains limited to host loopback; a phone still needs controlled access through an HTTPS reverse proxy or private tunnel. Do not publish the port directly to the internet. Protect `.env` and host/Docker administrative access, which can read the container environment. Review image security updates and deliberately update the pinned version.
+
+The Docker healthcheck checks only HTTP 200 from `GET /health`, every 30 seconds with a 3-second limit. It does not call OpenAI. A container can be healthy with `configured: false`; check this value separately before use. `configured: true` still does not verify provider permissions or credits.
+
+The directly launched Node process and container handle `SIGTERM` and `SIGINT`: they stop accepting new connections, give active requests up to 5 seconds to finish, then close remaining HTTP connections. Closing a response aborts its pending provider call. Repeated signals do not restart the grace period. Set the container stop timeout to at least 10 seconds to avoid an early `SIGKILL`. Tests exercise this behavior with local HTTP and a fake provider.
+
+This packaging supports controlled private deployment. Per-user authentication and a shared gateway rate limit remain required before public multi-user access or running multiple processes.
+
 ## HTTP contract
 
 - `GET /health` → `{ "configured": true | false }`, no paid call or secret details. `configured` means local configuration is syntactically valid; health does not verify the OpenAI account.

@@ -18,6 +18,32 @@ Domyślny adres nasłuchiwania to `127.0.0.1:8787`. Zachowaj go do pracy lokalne
 
 `OPENAI_MODEL` ma domyślną wartość `gpt-5-mini`, udokumentowaną jako zgodną z Responses; można ją zmienić na serwerze na model tekstowy dostępny w projekcie OpenAI. `OPENAI_API_KEY` jest odczytywany wyłącznie ze środowiska serwera. `APP_API_TOKEN` musi mieć 32–512 znaków bezpiecznych w URL (`A-Z a-z 0-9 . _ ~ -`). Brakująca lub niepoprawna konfiguracja blokuje płatne żądania odpowiedzią HTTP 503. Uwierzytelnienie porównuje skróty SHA-256 tokenów mechanizmem Node o stałym czasie porównania. Domyślnie CORS jest wyłączony dla originów przeglądarkowych; żądania natywne bez Origin są przyjmowane po uwierzytelnieniu. `ALLOWED_ORIGINS` jest opcjonalną, rozdzieloną przecinkami listą dokładnych dozwolonych originów (`https://app.example.com`); symbole wieloznaczne, ścieżki i końcowe ukośniki są niepoprawne. CORS uzupełnia uwierzytelnienie.
 
+## Prywatne wdrożenie w kontenerze
+
+Obraz korzysta z oficjalnego `node:24.18.0-bookworm-slim`, uruchamia Node bezpośrednio jako użytkownik `node` (bez roota) i kopiuje wyłącznie `index.mjs`. Nie instaluje pakietów. `.dockerignore` dopuszcza tylko pliki budowania i kod uruchomieniowy; pliki `.env`, sekrety, testy i dokumentacja nie trafiają do kontekstu budowania. Wstrzykuj prywatną konfigurację dopiero przy uruchomieniu, nigdy przez `ARG`, `COPY` ani publiczne zmienne aplikacji mobilnej.
+
+Po przygotowaniu lokalnego `.env` zgodnie z instrukcją powyżej, z katalogu `server`:
+
+```sh
+docker build --pull -t vehiclesensex-assistant:local .
+docker run --detach --name vehiclesensex-assistant \
+  --env-file .env -e HOST=0.0.0.0 -e PORT=8787 \
+  --read-only --cap-drop ALL --security-opt no-new-privileges \
+  --pids-limit 64 --memory 128m --cpus 1 --stop-timeout 10 \
+  -p 127.0.0.1:18787:8787 vehiclesensex-assistant:local
+curl --fail http://127.0.0.1:18787/health
+docker stop --time 10 vehiclesensex-assistant
+docker rm vehiclesensex-assistant
+```
+
+Jawne `-e HOST=0.0.0.0 -e PORT=8787` nadpisuje wartości z `.env` (przykład ma `HOST=127.0.0.1`), aby port był osiągalny wewnątrz kontenera. Publikacja pozostaje wyłącznie na pętli zwrotnej hosta; dla telefonu nadal potrzebujesz kontrolowanego dostępu przez HTTPS reverse proxy lub prywatny tunel. Nie publikuj portu bezpośrednio w internecie. Chroń `.env` i dostęp administracyjny do hosta/Dockera, który pozwala odczytać środowisko kontenera. Sprawdzaj aktualizacje bezpieczeństwa obrazu i świadomie aktualizuj przypiętą wersję.
+
+Dockerowy healthcheck sprawdza wyłącznie HTTP 200 z `GET /health`, co 30 sekund, z limitem 3 sekund. Nie wywołuje OpenAI. Kontener może być zdrowy z `configured: false`; przed użyciem sprawdź tę wartość osobno. `configured: true` nadal nie potwierdza uprawnień ani salda dostawcy.
+
+Bezpośrednio uruchomiony proces Node oraz kontener obsługują `SIGTERM` i `SIGINT`: przestają przyjmować nowe połączenia, dają aktywnym żądaniom do 5 sekund na zakończenie, a potem zamykają pozostałe połączenia HTTP. Zamknięcie odpowiedzi anuluje oczekujące wywołanie dostawcy. Ponowny sygnał nie rozpoczyna nowego okresu oczekiwania. Ustaw czas zatrzymania kontenera na co najmniej 10 sekund, aby uniknąć przedwczesnego `SIGKILL`. Testy tego zachowania używają lokalnego HTTP i fikcyjnego dostawcy.
+
+To opakowanie służy kontrolowanemu prywatnemu wdrożeniu. Uwierzytelnienie osobnych użytkowników i wspólny limit na bramie nadal są wymagane przed publicznym dostępem wielu użytkowników lub uruchomieniem wielu procesów.
+
 ## Kontrakt HTTP
 
 - `GET /health` → `{ "configured": true | false }`, bez płatnego wywołania i szczegółów sekretów. `configured` oznacza składniową poprawność konfiguracji lokalnej; ten endpoint nie weryfikuje konta OpenAI.

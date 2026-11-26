@@ -188,4 +188,14 @@ if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) 
   if (!Number.isInteger(port) || port < 1 || port > 65535) throw new Error('Invalid PORT');
   const server = createAssistantServer();
   server.listen(port, host, () => console.log('VehicleSenseX assistant server listening.'));
+  let stopping = false;
+  const shutdown = () => {
+    if (stopping) return;
+    stopping = true;
+    // Leave time before the container's 10-second stop deadline.
+    const deadline = setTimeout(() => server.closeAllConnections(), 5000);
+    server.close(() => clearTimeout(deadline));
+  };
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 }

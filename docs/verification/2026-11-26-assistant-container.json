@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-26",
+  "imageTag": "vehiclesensex-assistant:local-check",
+  "imageId": "sha256:acb2794227d5eac9f7345c5dec7da9fb6b65b8c47ac70884f9d4b3cc33fac04e",
+  "architecture": "arm64",
+  "baseImage": "node:24.18.0-bookworm-slim",
+  "runtimeNode": "24.18.0",
+  "user": "node",
+  "workingDirectory": "/app",
+  "command": [
+    "node",
+    "index.mjs"
+  ],
+  "runtimeFiles": [
+    "/app/index.mjs"
+  ],
+  "sourceSha256": "e7829d8bb94414aa4a34c176ce48ae6a19c7d432b15c449441746b39ae79e5a8",
+  "credentialsBakedIntoImage": false,
+  "verification": {
+    "backendTests": 13,
+    "fullRegressionTests": 164,
+    "healthStatus": "healthy",
+    "configured": false,
+    "uid": 1000,
+    "readOnlyRootFilesystem": true,
+    "publishedOnlyAt": "127.0.0.1:18787",
+    "exitCode": 0,
+    "oomKilled": false,
+    "testContainerRemoved": true
+  },
+  "deployedPublicly": false,
+  "realProviderCallPerformed": false
+}
