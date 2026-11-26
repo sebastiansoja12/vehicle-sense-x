@@ -29,6 +29,8 @@ Current-session preview: **http://127.0.0.1:8083/**. Bluetooth and raw TCP to an
 
 CSV export covers fuel, maintenance and trips separately. A full JSON backup retains all data, including VIN, plates, notes, photos, invoices and GPS coordinates. Files have a 1 MB limit, with up to 5 attachments per vehicle or service entry; vehicle photos are resized to 1200 px. Restoration first validates the format, displays the contents and requires confirmation before replacing the garage. Notifications from a backup must be re-enabled. The backup import limit is 20 MB.
 
+GPX 1.1 export is available beside JSON for saved GPS trips. It contains real accepted points and UTC times; gaps remain separate segments, without invented elevation or speed. Manual entries or fewer than two valid points cannot produce GPX. The file exposes precise location and time.
+
 ## Offline catalog
 
 The add/edit vehicle form lets users choose a make and then its model. Changing the make clears the previous model; manual entry and mode switching preserve other fields. Previously entered vehicles unknown to the catalog open in manual mode. The existing vehicle format is saved — no migration or automatic name replacement.

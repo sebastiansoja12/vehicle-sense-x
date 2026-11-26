@@ -33,6 +33,7 @@ When changing documentation, update all three versions and language links. Do no
 - [OBD VIN reading](superpowers/plans/2026-11-25-obd-vin.en.md)
 - [Offline vehicle catalog](superpowers/plans/2026-11-25-offline-catalog.en.md)
 - [Native builds](superpowers/plans/2026-11-26-native-builds.en.md)
+- [GPX trip export](superpowers/plans/2026-11-26-trip-gpx.en.md)
 
 ## Design specifications
 
@@ -40,6 +41,7 @@ When changing documentation, update all three versions and language links. Do no
 - [Connected modules](superpowers/specs/2026-11-25-connected-modules-design.en.md)
 - [CAN and ECU selection](superpowers/specs/2026-11-25-can-ecu-design.en.md)
 - [Offline vehicle catalog](superpowers/specs/2026-11-25-offline-catalog-design.en.md)
+- [GPX trip export](superpowers/specs/2026-11-26-trip-gpx-design.en.md)
 
 ## Progress logs
 
@@ -49,3 +51,4 @@ When changing documentation, update all three versions and language links. Do no
 - [OBD VIN reading](superpowers/progress/2026-11-25-obd-vin.en.md)
 - [Offline vehicle catalog](superpowers/progress/2026-11-25-offline-catalog.en.md)
 - [Release preflight](superpowers/progress/2026-11-25-release-preflight.en.md)
+- [GPX trip export](superpowers/progress/2026-11-26-trip-gpx.en.md)

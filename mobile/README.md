@@ -29,6 +29,8 @@ Podgląd bieżącej sesji: **http://127.0.0.1:8083/**. Bluetooth i surowe TCP do
 
 Eksport CSV obejmuje osobno paliwo, serwis i trasy. Pełna kopia JSON zachowuje wszystkie dane, także VIN, tablice, notatki, zdjęcia, faktury i współrzędne GPS. Pliki mają limit 1 MB oraz 5 załączników przy samochodzie lub serwisie; zdjęcia auta są zmniejszane do 1200 px. Przywrócenie najpierw waliduje format, pokazuje zawartość i wymaga potwierdzenia zastąpienia garażu. Powiadomienia z kopii trzeba włączyć ponownie. Limit importu kopii wynosi 20 MB.
 
+Eksport GPX 1.1 jest dostępny przy zapisanej trasie GPS, obok JSON. Zawiera rzeczywiste poprawne punkty i czasy UTC; przerwy są osobnymi segmentami, bez dopisywania wysokości ani prędkości. Wpis ręczny lub mniej niż dwa poprawne punkty nie tworzą GPX. Plik ujawnia dokładną lokalizację i czas.
+
 ## Katalog offline
 
 Formularz dodawania/edycji auta pozwala wybrać markę, a następnie jej model. Zmiana marki czyści poprzedni model; wpis ręczny i przełączanie trybów zachowują pozostałe pola. Wpisane wcześniej, nieznane katalogowi samochody otwierają się jako wpis ręczny. Zapisywany jest dotychczasowy format pojazdu — nie ma migracji ani automatycznej podmiany nazw.

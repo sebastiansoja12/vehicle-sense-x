@@ -2,6 +2,8 @@
 
 # Wydanie VehicleSenseX 0.2.0
 
+Nowszy kod po rewizji `8056cf6` wymaga ponownej kompilacji. Opisane paczki potwierdzają wcześniejszy stan i nie zawierają nowego eksportu GPX.
+
 Status: implementacja z rzeczywistymi transportami BLE/TCP/Android Classic, bez demonstracyjnych pomiarów. Natywna kompilacja iOS Release na symulator zakończyła się powodzeniem 2026-11-26; sprawdzono końcowy plik aplikacji, uprawnienia i obecność klas BLE/TCP. Android Release APK również zbudowano poprawnie po usunięciu błędu BuildConfig w Classic przez plugin CNG; sprawdzono manifest, moduły, podpis testowy i wyrównanie bibliotek. Produkcyjny AAB Androida został podpisany nowym kluczem w Expo po jawnej zgodzie użytkownika i przeszedł weryfikację artefaktu. Nie ma sklepowego IPA ani potwierdzonej macierzy sprzętowej; nie wykonano zgłoszenia do sklepów. Bieżące wyniki: [raport kompilacji](../docs/verification/2026-11-26-native-builds.md).
 
 Kontrola konfiguracji 2026-11-25: `expo prebuild --no-install --platform all` zakończył się poprawnie w oddzielnej kopii tymczasowej. Nie utworzono `ios/` ani `android/` w repozytorium. Sprawdzono wygenerowane Info.plist, AndroidManifest i jasny motyw. Kamera/mikrofon/szeroki dostęp do zdjęć/nakładki są usuwane, brak lokalizacji Always i rejestracji w tle. Wynik: [raport konfiguracji](../docs/verification/2026-11-25-native-config.json). To konfiguracja projektu przed scaleniem manifestów bibliotek i kompilacją, nie wynik kontroli finalnego APK/IPA.

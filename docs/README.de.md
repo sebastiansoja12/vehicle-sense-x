@@ -33,6 +33,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [VIN-Auslesen über OBD](superpowers/plans/2026-11-25-obd-vin.de.md)
 - [Offline-Fahrzeugkatalog](superpowers/plans/2026-11-25-offline-catalog.de.md)
 - [Native Builds](superpowers/plans/2026-11-26-native-builds.de.md)
+- [GPX-Fahrtenexport](superpowers/plans/2026-11-26-trip-gpx.de.md)
 
 ## Entwurfsspezifikationen
 
@@ -40,6 +41,7 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [An Daten angebundene Module](superpowers/specs/2026-11-25-connected-modules-design.de.md)
 - [CAN und ECU-Auswahl](superpowers/specs/2026-11-25-can-ecu-design.de.md)
 - [Offline-Fahrzeugkatalog](superpowers/specs/2026-11-25-offline-catalog-design.de.md)
+- [GPX-Fahrtenexport](superpowers/specs/2026-11-26-trip-gpx-design.de.md)
 
 ## Fortschrittsprotokolle
 
@@ -49,3 +51,4 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [VIN-Auslesen über OBD](superpowers/progress/2026-11-25-obd-vin.de.md)
 - [Offline-Fahrzeugkatalog](superpowers/progress/2026-11-25-offline-catalog.de.md)
 - [Release-Vorprüfung](superpowers/progress/2026-11-25-release-preflight.de.md)
+- [GPX-Fahrtenexport](superpowers/progress/2026-11-26-trip-gpx.de.md)

@@ -29,6 +29,8 @@ Vorschau der aktuellen Sitzung: **http://127.0.0.1:8083/**. Bluetooth und direkt
 
 CSV-Export umfasst getrennt Kraftstoff, Wartung und Fahrten. Eine vollständige JSON-Sicherung erhält alle Daten, auch VIN, Kennzeichen, Notizen, Fotos, Rechnungen und GPS-Koordinaten. Dateien sind auf 1 MB sowie 5 Anhänge pro Fahrzeug oder Wartungseintrag begrenzt; Fahrzeugfotos werden auf 1200 px verkleinert. Die Wiederherstellung validiert zunächst das Format, zeigt den Inhalt und erfordert die Bestätigung des Ersetzens der Garage. Benachrichtigungen aus einer Sicherung müssen erneut aktiviert werden. Das Sicherungsimportlimit beträgt 20 MB.
 
+GPX-1.1-Export steht bei gespeicherten GPS-Fahrten neben JSON zur Verfügung. Er enthält echte gültige Punkte und UTC-Zeiten; Lücken bleiben getrennte Segmente, ohne erfundene Höhe oder Geschwindigkeit. Manuelle Einträge oder weniger als zwei gültige Punkte ergeben keine GPX-Datei. Die Datei enthält genaue Standorte und Zeiten.
+
 ## Offline-Katalog
 
 Das Formular zum Hinzufügen/Bearbeiten eines Autos ermöglicht erst die Wahl der Marke, dann ihres Modells. Markenwechsel löscht das vorherige Modell; manuelle Eingabe und Moduswechsel erhalten die übrigen Felder. Zuvor eingegebene, im Katalog unbekannte Autos öffnen sich als manuelle Eingabe. Gespeichert wird das bisherige Fahrzeugformat — keine Migration und kein automatischer Austausch von Namen.
