@@ -1,0 +1,43 @@
+{
+  "buildId": "48e1c018-f2c8-413f-b25e-819c89693d4c",
+  "status": "FINISHED",
+  "completedAt": "2026-11-26T21:23:48.474Z",
+  "gitCommitHash": "7810d01cf889beba20d50908144afabc199398a7",
+  "artifact": "VehicleSenseX-0.4.0-ios-simulator.tar.gz",
+  "bytes": 28818236,
+  "sha256": "519cce73a30a67b750b11dfc50a28a82fac3734d24a3e8955546a580fec0d475",
+  "version": "0.4.0",
+  "buildNumber": "6",
+  "platform": "ios-simulator",
+  "minimumOS": "16.4",
+  "sdk": "iphonesimulator27.1",
+  "bundleIdentifier": "com.vehiclesensex.app",
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "usageDescriptionKeys": [
+    "NSBluetoothAlwaysUsageDescription",
+    "NSLocalNetworkUsageDescription",
+    "NSLocationWhenInUseUsageDescription",
+    "NSPhotoLibraryUsageDescription"
+  ],
+  "backgroundModes": [],
+  "bundledJavaScriptBytes": 3907368,
+  "featureMarkersVerified": [
+    "readLiveParameters",
+    "getAvailableVoicesAsync",
+    "useApplicationAudioSession"
+  ],
+  "nativeClassesVerified": [
+    "BlePlx",
+    "TcpSockets",
+    "TcpSocketClient",
+    "ExpoSpeech"
+  ],
+  "privacyManifestCount": 15,
+  "trackingDomains": [],
+  "runtimeTestedOnDevice": false,
+  "storeIpa": false,
+  "signature": "ad-hoc simulator; no Apple team"
+}
