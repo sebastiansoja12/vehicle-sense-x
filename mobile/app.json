@@ -93,7 +93,8 @@
           "microphonePermission": false
         }
       ],
-      "expo-font"
+      "expo-font",
+      "./plugins/withClassicBuildConfig.cjs"
     ],
     "experiments": {
       "typedRoutes": true
