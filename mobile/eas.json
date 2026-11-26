@@ -3,6 +3,12 @@
   "build": {
     "development": {"developmentClient": true, "distribution": "internal", "node": "24.18.0"},
     "preview": {"distribution": "internal", "node": "24.18.0", "android": {"buildType": "apk"}},
-    "production": {"distribution": "store", "node": "24.18.0", "android": {"buildType": "app-bundle"}}
+    "production": {"distribution": "store", "node": "24.18.0", "android": {"buildType": "app-bundle"}},
+    "native-check": {
+      "distribution": "internal",
+      "node": "24.18.0",
+      "android": {"withoutCredentials": true, "gradleCommand": ":app:assembleRelease"},
+      "ios": {"simulator": true, "buildConfiguration": "Release"}
+    }
   }
 }
