@@ -1,3 +1,5 @@
+import {validOilObservation,maintenanceComponents} from './maintenance-model.ts';
+import type {OilObservation,MaintenanceComponent} from './maintenance-model.ts';
 import {ValidationError} from './validation.ts';
 import {parseVehicleSpec,validVehicleSpec,validAssets} from './media.ts';
 import type {VehicleSpec,Asset} from './media.ts';
@@ -10,7 +12,7 @@ import type {DecodedVehicleSource} from './vin-decoder.ts';
 export {ValidationError} from './validation.ts';
 export type Vehicle = { id: string; make: string; model: string; year: number; engine: string; mileage: number; plate: string; vin: string; spec?:VehicleSpec;photos?:Asset[];vinSource?:VinSource;decodedSource?:DecodedVehicleSource };
 export type FuelEntry = { id: string; vehicleId: string; date: string; mileage: number; volumeMl: number; priceCents: number; costCents: number; full: boolean };
-export type ServiceEntry = { id: string; vehicleId: string; date: string; mileage: number; title: string; costCents: number; note: string;attachments?:Asset[] };
+export type ServiceEntry = { id: string; vehicleId: string; date: string; mileage: number; title: string; costCents: number; note: string;attachments?:Asset[];oilObservation?:OilObservation;maintenanceComponent?:MaintenanceComponent };
 export type AppData = Extensions & { version: 3; activeVehicleId: string | null; vehicles: Vehicle[]; fuel: FuelEntry[]; service: ServiceEntry[] };
 export type VehicleInput = { make: string; model: string; year: string; engine: string; mileage: string; plate: string; vin: string } & Partial<Record<keyof VehicleSpec,string>>;
 export type FuelInput = { vehicleId: string; date: string; mileage: string; liters: string; price: string; full: boolean };
@@ -124,6 +126,7 @@ export function parseStoredData(raw: string|null): AppData {
    for(let i=1;i<history.length;i++)if(history[i].mileage<history[i-1].mileage)throw new StorageFormatError();
   }
   for(const s of data.service) if (!text(s.title,100)||typeof s.note!=='string'||s.note.length>1000) throw new StorageFormatError();
+  for(const v of data.service)if(v.oilObservation!==undefined&&!validOilObservation(v.oilObservation)||v.maintenanceComponent!==undefined&&!Object.hasOwn(maintenanceComponents,v.maintenanceComponent))throw new StorageFormatError();
   for(const v of data.vehicles)if(v.spec!==undefined&&!validVehicleSpec(v.spec)||v.photos!==undefined&&!validAssets(v.photos,true))throw new StorageFormatError();
   for(const v of data.service)if(v.attachments!==undefined&&!validAssets(v.attachments))throw new StorageFormatError();
   return data;

@@ -18,6 +18,7 @@ A mobile app for OBD2 diagnostics, vehicle records, trip recording and ownership
 | AI Car Assistant | Local summary and real requests to a configured server after consent; the provider key stays on the server |
 | Trips | Manual entries, foreground GPS, draft recovery, trace without map tiles and GPX/JSON/CSV export |
 | Vehicle Health & Value | Evidence and missing data, owner offer comparisons and a PDF/HTML presale report |
+| Recommended accessories | All 563 makes and manual entries, four categories, vehicle-specific offer searches, compatibility guidance and additional catalogues for 19 manufacturers |
 
 Five main tabs: Home, Diagnostics, Trips, Costs and Garage. Maintenance, condition, driving analysis and the assistant are accessible from Garage. The light interface uses graphite and a red accent, with explicit units, sources and dates.
 
@@ -58,3 +59,5 @@ The documentation validator needs Python 3.9+ and Git. Code and form results: [0
 Interface design files remain at the repository root as historical material. Run them with `npm run prototype` at http://127.0.0.1:5173. The current app is in `mobile/`.
 
 Version 0.4.0 adds an automatic ECU scan, separate Live Data, connection-loss handling and a radio audio test through system Bluetooth. [0.4.0](docs/verification/2026-11-26-obd-radio.en.md)
+
+Added in-app OpenStreetMap workshops and eBay part offers. A private server must be configured; prices also require eBay Browse API access. [VehicleSenseX Services](mobile/SERVICES.en.md)

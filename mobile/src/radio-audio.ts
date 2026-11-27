@@ -8,7 +8,8 @@ type SpeechEngine = {
 export function createRadioAudioTest(speech: SpeechEngine, timeoutMs = 20000) {
   let cancel: (() => void) | null = null;
   return {
-    play(): Promise<void> {
+    play(text = 'VehicleSenseX. Próba dźwięku. Jeśli słyszysz ten komunikat w głośnikach samochodu, telefon przesyła dźwięk do radia.'): Promise<void> {
+      if (typeof text !== 'string' || !text.trim() || text.length > 2000) return Promise.reject(new Error('Nieprawidłowy komunikat do odczytania.'));
       if (cancel) return Promise.reject(new Error('Próba dźwięku już trwa.'));
       return new Promise((resolve, reject) => {
         let settled = false;
@@ -29,7 +30,7 @@ export function createRadioAudioTest(speech: SpeechEngine, timeoutMs = 20000) {
             const voices = await speech.getAvailableVoicesAsync();
             if (settled) return;
             if (!voices.length) { finish(new Error('Brak głosu syntezy mowy. Zainstaluj głos w ustawieniach systemu.')); return; }
-            speech.speak('VehicleSenseX. Próba dźwięku. Jeśli słyszysz ten komunikat w głośnikach samochodu, telefon przesyła dźwięk do radia.', {
+            speech.speak(text, {
             language: 'pl-PL', useApplicationAudioSession: false,
             onDone: () => finish(),
             onStopped: () => finish(new Error('Próba dźwięku została przerwana.')),

@@ -49,7 +49,7 @@ export function editFuel(state:AppData,id:string,input:FuelInput,today:string):A
 }
 export function editService(state:AppData,id:string,input:ServiceInput,today:string):AppData{
  const original=state.service.find(r=>r.id===id);if(!original||original.vehicleId!==input.vehicleId)throw new ValidationError('Nie znaleziono wpisu serwisowego.');
- const updated=addService({...state,service:state.service.filter(r=>r.id!==id)},input,id,today);return {...updated,service:state.service.map(r=>r.id===id?{...updated.service.at(-1)!,attachments:original.attachments}:r)};
+ const updated=addService({...state,service:state.service.filter(r=>r.id!==id)},input,id,today);return {...updated,service:state.service.map(r=>r.id===id?{...updated.service.at(-1)!,attachments:original.attachments,...(original.oilObservation?{oilObservation:original.oilObservation}:{}),...(original.maintenanceComponent?{maintenanceComponent:original.maintenanceComponent}:{})}:r)};
 }
 export function editExpense(state:AppData,id:string,input:ExpenseInput,today:string):AppData{
  const original=state.expenses.find(r=>r.id===id);if(!original||original.vehicleId!==input.vehicleId)throw new ValidationError('Nie znaleziono wydatku dla tego samochodu.');

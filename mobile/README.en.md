@@ -95,3 +95,29 @@ Version 0.2.1/build 2 includes GPX and NHTSA data completion in the verified sig
 - [Expo Build profiles](https://docs.expo.dev/build/eas-json/), [BuildProperties](https://docs.expo.dev/versions/v58.0.0/sdk/build-properties/)
 
 Version 0.4.0 adds an automatic ECU scan, separate Live Data, connection-loss handling and a radio audio test through system Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.en.md)
+
+## Recommended accessories
+
+Open “Polecane akcesoria” from Home or Garage. The module uses the active vehicle’s make. It offers Protection, Transport, Comfort and Care categories, plus case- and accent-insensitive search. VW and Škoda spellings are recognized. Changing vehicles updates suggestions and resets filters.
+
+The module covers all 563 makes in the garage catalogue and any manually entered makes. Each has suggestions in all four categories and Allegro offer search buttons using make, model, model year and accessory type. Verified manufacturer catalogues are additionally available for 19 makes, including Mercedes-Benz, Honda, Volvo, Nissan, Lexus, SEAT, Tesla, Peugeot and Opel. They are not required to use the module for other makes. The list works offline; catalogues and offer searches open on click and need internet access. Sources were checked on November 26–27, 2026. Each suggestion describes its purpose and checks before purchase; BMW Travel & Comfort and Dacia YouClip appear only for their respective makes.
+
+These are recommendations of accessory types, without confirmation that a particular part fits a generation, body style or model year. Check prices and availability with the seller. After pressing “Szukaj ofert”, Allegro receives only make, model, model year and accessory type. VIN, plates, history and notes are not included. Manufacturer catalogues receive no vehicle data from the app. Offers are not fetched in the background; searches do not guarantee results or part compatibility, especially for historic and niche makes.
+
+Added in-app OpenStreetMap workshops and eBay part offers. A private server must be configured; prices also require eBay Browse API access. [VehicleSenseX Services](SERVICES.en.md)
+
+[Diagnostic comparison and workshop report](DIAGNOSTIC-COMPARISON.en.md)
+
+## Adapter-free radio, CarPlay and Android Auto
+
+Connections handles radio audio independently of OBD2: Bluetooth settings, an audio test, manually triggered reading of the local vehicle summary and phone audio outputs. The summary includes make/model, recorded mileage, consumption calculated from tankings and the number of reached service deadlines. It omits VIN, plates, reminder titles and notes. The system speech engine processes the text; offline voice availability depends on phone configuration. Reading stops on screen exit or app backgrounding.
+
+A local Expo module reads the current iOS audio session route and available Android audio outputs. The Android list does not confirm the active output; iOS Car Audio also does not confirm app projection. Device names are neither stored nor sent to a server. Refresh is manual and on return to the app. Older builds or Expo Go explain that the module needs rebuilding; basic pairing and speech still work.
+
+CarPlay/Android Auto can work with a compatible radio without an OBD2 adapter — over data-capable USB or supported wireless mode with Wi-Fi. An ordinary Bluetooth radio does not gain these systems through an app update. The animated cockpit remains app UI; optional CarPlay list source is disabled by default and requires Apple approval. CarPlay requires an Apple entitlement, provisioning and native templates; Android Auto requires a supported category and separate UI. Selected Android Car Hardware API data depends on the host and permissions; full DTC reading/clearing in this app still uses OBD2.
+
+[CarPlay setup](https://support.apple.com/guide/iphone/connect-to-carplay-iph6860e6b53/ios) · [Android Auto setup](https://support.google.com/androidauto/answer/6348019) · [Apple requirements](https://developer.apple.com/documentation/carplay/preparing-your-ios-app-for-carplay-development) · [Android Car Hardware API](https://developer.android.com/training/cars/apps/library/car-hardware-api)
+
+[Vehicle evidence audit and OBD readiness](VEHICLE-EVIDENCE.en.md)
+
+[Cockpit, owner vehicle photo and CarPlay/Android Auto limits](COCKPIT.en.md)

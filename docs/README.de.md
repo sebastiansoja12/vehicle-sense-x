@@ -61,3 +61,15 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [Offline-Fahrzeugkatalog](superpowers/progress/2026-11-25-offline-catalog.de.md)
 - [Release-Vorprüfung](superpowers/progress/2026-11-25-release-preflight.de.md)
 - [GPX-Fahrtenexport](superpowers/progress/2026-11-26-trip-gpx.de.md)
+
+[VehicleSenseX Services](../mobile/SERVICES.de.md)
+
+[VehicleSenseX Services — verification](verification/2026-11-26-automotive-services.de.md)
+
+[Diagnosevergleich und Werkstattbericht](../mobile/DIAGNOSTIC-COMPARISON.de.md)
+
+[Diagnosevergleich — Prüfung](verification/2026-11-27-diagnostic-comparison.de.md)
+
+[Markt und Machbarkeit für VehicleSenseX](research/2026-11-27-market-and-feasibility.de.md)
+
+[Datenprüfung und OBD-Bereitschaft](../mobile/VEHICLE-EVIDENCE.de.md)

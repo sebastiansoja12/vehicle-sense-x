@@ -17,7 +17,7 @@ export function responseLines(raw: string, command: string): string[] {
   if (!lines.length) throw new ObdError('Empty ELM327 response');
   return lines;
 }
-function bytes(raw: string, command: string): number[] {
+export function responseBytes(raw: string, command: string): number[] {
   const lines = responseLines(raw, command);
   if (lines.length !== 1) throw new ObdError('Multiple ECU responses or unsupported segmented reply; select a single ECU', 'ambiguous');
   const line = lines[0];
@@ -27,19 +27,19 @@ function bytes(raw: string, command: string): number[] {
   return hex.match(/../g)!.map(b => parseInt(b, 16));
 }
 export function parseSupportedPids(raw: string, page = 0): number[] {
-  if (page !== 0 && page !== 32) throw new ObdError('Unsupported PID bitmap page');
-  const b = bytes(raw, `01${page.toString(16).padStart(2, '0')}`);
+  if (page !== 0 && page !== 32 && page !== 64) throw new ObdError('Unsupported PID bitmap page');
+  const b = responseBytes(raw, `01${page.toString(16).padStart(2, '0')}`);
   if (b.length !== 6 || b[0] !== 0x41 || b[1] !== page) throw new ObdError('Invalid supported PID response');
   const supported: number[] = [];
   for (let i = 0; i < 32; i++) if (b[2 + Math.floor(i / 8)] & (0x80 >>> (i % 8))) supported.push(page + i + 1);
   return supported;
 }
-export function parsePid(raw: string, command: '010C' | '0105' | '0104'): number {
-  const b = bytes(raw, command);
+export function parsePid(raw: string, command: '010C' | '0105' | '0104' | '015C'): number {
+  const b = responseBytes(raw, command);
   const pid = parseInt(command.slice(2), 16);
   if (b[0] !== 0x41 || b[1] !== pid || b.length !== (pid === 12 ? 4 : 3)) throw new ObdError('Unexpected PID response');
   if (pid === 12) return (b[2] * 256 + b[3]) / 4;
-  if (pid === 5) return b[2] - 40;
+  if (pid === 5 || pid === 0x5C) return b[2] - 40;
   return b[2] * 100 / 255;
 }
 export function parseVoltage(raw: string): number {
@@ -48,7 +48,7 @@ export function parseVoltage(raw: string): number {
   return Number(lines[0].slice(0, -1));
 }
 export function parseDtc(raw: string, mode: '03' | '07' | '0A',format:'auto'|'can'='auto'): Dtc[] {
-  const b = bytes(raw, mode);
+  const b = responseBytes(raw, mode);
   if (b[0] !== parseInt(mode, 16) + 0x40 || b.length < 2) throw new ObdError('Invalid DTC response');
   let data = b.slice(1);
   if(format==='can'&&data.length%2!==1)throw new ObdError('Missing CAN DTC count');
@@ -70,7 +70,7 @@ export function parseDtc(raw: string, mode: '03' | '07' | '0A',format:'auto'|'ca
   return result;
 }
 export function parseClearResponse(raw: string): true {
-  const b = bytes(raw, '04');
+  const b = responseBytes(raw, '04');
   if (b.length !== 1 || b[0] !== 0x44) throw new ObdError('Vehicle did not acknowledge fault clearing');
   return true;
 }

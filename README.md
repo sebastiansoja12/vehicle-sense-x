@@ -18,6 +18,7 @@ Aplikacja mobilna do diagnostyki OBD2, prowadzenia garażu, rejestrowania tras i
 | AI Car Assistant | Lokalne podsumowanie oraz rzeczywiste zapytania do skonfigurowanego serwera po zgodzie; klucz dostawcy pozostaje na serwerze |
 | Trips | Wpisy ręczne, GPS przy otwartej aplikacji, odzyskiwanie szkicu, ślad bez podkładu mapowego i eksport GPX/JSON/CSV |
 | Vehicle Health & Value | Źródła i braki danych, porównanie ofert właściciela oraz raport PDF/HTML przed sprzedażą |
+| Polecane akcesoria | Wszystkie 563 marki i wpis ręczny, cztery kategorie, wyszukiwanie ofert dla auta, wskazówki dopasowania i dodatkowe katalogi 19 producentów |
 
 Pięć głównych zakładek: Start, Diagnostyka, Trasy, Koszty i Garaż. Serwis, kondycja, analiza jazdy i asystent są dostępne z garażu. Jasny interfejs używa grafitu i czerwonego akcentu, jawnych jednostek, źródeł i dat.
 
@@ -58,3 +59,5 @@ Walidator dokumentacji wymaga Python 3.9+ i Git. Wyniki kodu i formularza: [wery
 Pliki projektu interfejsu pozostają w katalogu głównym jako materiał historyczny. Uruchomisz je poleceniem `npm run prototype`, pod adresem http://127.0.0.1:5173. Bieżąca aplikacja znajduje się w `mobile/`.
 
 Wersja 0.4.0 dodaje automatyczny skan ECU, osobne Live Data, obsługę utraty połączenia i próbę dźwięku radia przez systemowe Bluetooth. [0.4.0](docs/verification/2026-11-26-obd-radio.md)
+
+Dodano moduły warsztatów z OpenStreetMap i ofert części z eBay, wyświetlane w aplikacji. Wymagają konfiguracji prywatnego serwera; ceny także dostępu eBay Browse API. [VehicleSenseX Services](mobile/SERVICES.md)

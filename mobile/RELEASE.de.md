@@ -82,3 +82,7 @@ Quellen: [Expo EAS](https://docs.expo.dev/build/eas-json/), [Android Local Netwo
 ## Änderungen 0.2.1
 
 Der GPX-Export erhält tatsächliche GPS-Segmente und UTC-Zeiten, ohne Lücken zu verbinden. Die optionale NHTSA-Abfrage sendet die VIN erst nach einer an diese VIN gebundenen Zustimmung an den Dienst in den USA; vor dem Speichern ist eine Feldauswahl erforderlich. Quelle und Abrufzeit bleiben bei weiterhin übereinstimmenden Werten erhalten, auch in der JSON-Sicherung. Sie gelangen weder an die KI noch in den Verkaufsbericht. Regeln und Grenzen: [Fahrzeugdaten aus der VIN](VIN.de.md). Die Datenschutzerklärungen der Veröffentlichung müssen diesen freiwilligen Datenfluss und den Export genauer GPX-Fahrten berücksichtigen.
+
+Das Radiomodul ist ein lokales Expo-Modul in `mobile/modules/vehicle-radio`; das EAS-Archiv muss Swift-/Kotlin-Quellen und Konfiguration enthalten. Die Ausgangserkennung benötigt einen neuen nativen Build; ein reines JS-Update fügt das Modul keiner bestehenden App hinzu. Das optionale CarPlay-Plugin ist standardmäßig deaktiviert: die Standardkonfiguration ergänzt weder CarPlay-Entitlement noch Szene. Android Auto wird nicht deklariert. Vor Veröffentlichung A2DP-/USB-Radio, Ausgangswechsel und Trennung, iOS Car Audio, Offline-Stimme, Sprachabbruch im Hintergrund und verweigerte Bluetooth-Berechtigung auf echten Telefonen testen.
+
+[Cockpit, eigenes Fahrzeugfoto und CarPlay-/Android-Auto-Grenzen](COCKPIT.de.md)

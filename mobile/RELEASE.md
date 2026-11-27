@@ -82,3 +82,7 @@ Ikona aplikacji jest w `assets/brand/icon.png`; źródło wektorowe w `icon.svg`
 ## Zmiany0.2.1
 
 Eksport GPX zachowuje rzeczywiste segmenty GPS i czasy UTC, bez łączenia przerw. Opcjonalne zapytanie NHTSA wysyła VIN do usługi w USA dopiero po zgodzie powiązanej z tym VIN; przed zapisaniem wymaga wyboru pól. Źródło i czas pobrania są zachowane przy nadal zgodnych wartościach, także w kopii JSON. Nie trafiają do AI ani raportu sprzedaży. Zasady i ograniczenia: [dane z VIN](VIN.md). Deklaracje prywatności wydania muszą uwzględniać ten dobrowolny przepływ oraz eksport dokładnych tras GPX.
+
+Moduł radia jest lokalnym modułem Expo w `mobile/modules/vehicle-radio`; archiwum EAS musi zawierać jego źródła Swift/Kotlin i konfigurację. Odczyt wyjść wymaga nowej kompilacji natywnej; aktualizacja samego JS nie doda modułu do istniejącej aplikacji. Opcjonalny plugin CarPlay jest domyślnie wyłączony: standardowa konfiguracja nie dodaje entitlement ani sceny CarPlay. Android Auto nie jest zadeklarowane. Przed wydaniem sprawdź radio A2DP/USB, zmianę wyjścia i odłączenie, iOS Car Audio, głos offline, przerwanie czytania w tle i brak uprawnienia Bluetooth na konkretnych telefonach.
+
+[Kokpit, własne zdjęcie auta i ograniczenia CarPlay/Android Auto](COCKPIT.md)

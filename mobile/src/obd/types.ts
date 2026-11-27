@@ -1,5 +1,7 @@
 import {validCanEcu} from './can.ts';
 import type {CanEcu} from './can.ts';
+import {validReadiness} from './readiness.ts';
+import type {ReadinessData} from './readiness.ts';
 export type Dtc = { code: string; status: 'stored' | 'pending' | 'permanent' };
 export type DiagnosticSnapshot = {
   id: string;
@@ -12,6 +14,8 @@ export type DiagnosticSnapshot = {
   parameters: { rpm: number | null; coolantC: number | null; loadPercent: number | null; voltageV: number | null };
   supportedPids: number[];
   ecu?:CanEcu;
+  readiness?:ReadinessData|null;
+  oilTemperatureC?:number|null;
 };
 export interface CommandTransport { send(command: string): Promise<string> }
 export type LiveParameters = Pick<DiagnosticSnapshot, 'vehicleId' | 'timestamp' | 'adapterName' | 'parameters' | 'ecu'>;
@@ -33,6 +37,11 @@ export function validateDiagnosticSnapshot(value: unknown): value is DiagnosticS
   const statuses = value.readStatuses;
   if (!value.codes.every(c => record(c) && typeof c.code === 'string' && /^[PCBU][0-3][0-9A-F]{3}$/.test(c.code) && statuses.includes(c.status))) return false;
   if (!value.supportedPids.every(p => Number.isInteger(p) && p > 0 && p <= 255) || new Set(value.supportedPids).size !== value.supportedPids.length) return false;
+  if(value.readiness!==undefined){
+    if(!value.supportedPids.includes(1))return false;
+    if(value.readiness!==null&&(!validReadiness(value.readiness)||(value.readiness.warmupsSinceClear!==null&&!value.supportedPids.includes(0x30))||(value.readiness.distanceSinceClearKm!==null&&!value.supportedPids.includes(0x31))))return false;
+  }
+  if(value.oilTemperatureC!==undefined&&(!value.supportedPids.includes(0x5C)||!measurement(value.oilTemperatureC,-40,215)))return false;
   const p = value.parameters;
   return measurement(p.rpm, 0, 16383.75) && measurement(p.coolantC, -40, 215) && measurement(p.loadPercent, 0, 100) && measurement(p.voltageV, 0, 100);
 }

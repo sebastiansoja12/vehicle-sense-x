@@ -5,6 +5,8 @@ import {EcuSelectionRequired,parseProtocol,parseCanMessages,requestIdFor} from '
 import type {CanEcu,CanProtocol} from './can.ts';
 import {parseObdVin} from '../vin.ts';
 import type {VinObservation} from '../vin.ts';
+import {parseReadinessStatus,parseClearCounter} from './readiness.ts';
+import type {ReadinessData} from './readiness.ts';
 
 export type ClearFaultOptions = { confirmed: boolean; backedUpSnapshot: DiagnosticSnapshot; vehicleId: string; tripRecording?: boolean };
 export type ClearFaultResult = { acknowledged: true; rawResponse: string; timestamp: number; backupSnapshotId: string };
@@ -116,7 +118,25 @@ export class Elm327Driver {
       this.liveContext = null;
       const supportedPids = parseSupportedPids(await this.pidStart());
       if (supportedPids.includes(32)) supportedPids.push(...parseSupportedPids(this.payload(await this.transport.send('0120'),'0120'), 32));
+      if (supportedPids.includes(64)) supportedPids.push(...parseSupportedPids(this.payload(await this.transport.send('0140'),'0140'), 64));
       const parameters = await this.readParameters(supportedPids);
+      let oilTemperatureC:number|null|undefined;
+      if(supportedPids.includes(0x5C)){
+        oilTemperatureC=null;
+        try{oilTemperatureC=parsePid(this.payload(await this.transport.send('015C'),'015C'),'015C');}
+        catch(error){if(!(error instanceof ObdError)||error.kind!=='no-data')throw error;}
+      }
+      let readiness:ReadinessData|null|undefined;
+      if(supportedPids.includes(1)){
+        readiness=null;
+        try{readiness={statusBytes:parseReadinessStatus(this.payload(await this.transport.send('0101'),'0101')),warmupsSinceClear:null,distanceSinceClearKm:null};}
+        catch(error){if(!(error instanceof ObdError)||error.kind!=='no-data')throw error;}
+        if(readiness)for(const [pid,command,key] of [[0x30,'0130','warmupsSinceClear'],[0x31,'0131','distanceSinceClearKm']] as const){
+          if(!supportedPids.includes(pid))continue;
+          try{readiness[key]=parseClearCounter(this.payload(await this.transport.send(command),command),command);}
+          catch(error){if(!(error instanceof ObdError)||error.kind!=='no-data')throw error;}
+        }
+      }
       const codes: Dtc[] = [];
       const readStatuses: Dtc['status'][] = [];
       for (const [mode, status] of [['03', 'stored'], ['07', 'pending'], ['0A', 'permanent']] as const) {
@@ -127,6 +147,8 @@ export class Elm327Driver {
       const timestamp = Date.now();
       const snapshot: DiagnosticSnapshot = { id: `obd-${timestamp}-${++sequence}-${Math.random().toString(36).slice(2, 9)}`, vehicleId, timestamp, source: 'obd', adapterName: this.adapterName, codes, readStatuses, parameters, supportedPids };
       if(this.selectedEcu)snapshot.ecu={...this.selectedEcu};
+      if(readiness!==undefined)snapshot.readiness=readiness;
+      if(oilTemperatureC!==undefined)snapshot.oilTemperatureC=oilTemperatureC;
       if (!validateDiagnosticSnapshot(snapshot)) throw new ObdError('Invalid diagnostic snapshot');
       this.lastSnapshot = JSON.stringify(snapshot);
       this.liveContext = { vehicleId, supportedPids: [...supportedPids] };
