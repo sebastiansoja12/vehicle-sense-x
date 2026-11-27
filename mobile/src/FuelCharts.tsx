@@ -11,14 +11,14 @@ function Chart({ points, unit, bars = false, selected, select }: { points: Point
   const max = Math.max(1, ...points.map(p => p.value)) * 1.1, x = (i: number) => 44 + (points.length === 1 ? 139 : i / (points.length - 1) * 278), y = (v: number) => 164 - v / max * 140;
   const selectedPoint = points[selected], barWidth = Math.min(24, 220 / points.length);
   return <View style={{ marginTop: 18 }}>
-    <Svg width="100%" height={210} viewBox="0 0 350 210" accessibilityLabel={`Wykres ${unit}. Wartości i wybór punktów poniżej.`}>
+    <View accessible accessibilityRole="image" accessibilityLabel={`Wykres ${unit}. Wartości i wybór punktów poniżej.`}><Svg width="100%" height={210} viewBox="0 0 350 210">
       {[0, .5, 1].map(t => <Line key={t} x1={40} x2={332} y1={y(max * t)} y2={y(max * t)} stroke={colors.line} />)}
       {[0, .5, 1].map(t => <SvgText key={t} x={35} y={y(max * t) + 4} textAnchor="end" fontSize={10} fill={colors.muted}>{number(max * t, max < 20 ? 1 : 0)}</SvgText>)}
       {bars ? points.map((p, i) => <Rect key={p.id} x={x(i) - barWidth / 2} y={y(p.value)} width={barWidth} height={164 - y(p.value)} fill={i === selected ? colors.red : colors.ink} />)
         : <><Polyline points={points.map((p, i) => `${x(i)},${y(p.value)}`).join(' ')} fill="none" stroke={colors.ink} strokeWidth={2} />{points.map((p, i) => <Circle key={p.id} cx={x(i)} cy={y(p.value)} r={i === selected ? 5 : 3} fill={i === selected ? colors.red : colors.ink} />)}</>}
       <SvgText x={44} y={190} textAnchor="start" fontSize={10} fill={colors.muted}>{points[0].label}</SvgText><SvgText x={322} y={190} textAnchor="end" fontSize={10} fill={colors.muted}>{points.at(-1)!.label}</SvgText>
       <SvgText x={44} y={12} fontSize={10} fill={colors.muted}>{unit}</SvgText>
-    </Svg>
+    </Svg></View>
     <Text accessibilityLiveRegion="polite" style={[s.body, { fontWeight: '600', marginBottom: 12 }]}>{selectedPoint.label} · {number(selectedPoint.value, 2)} {unit}</Text>
     <View style={{ flexDirection: 'row', gap: 10 }}><View style={{ flex: 1 }}><Button label="Poprzedni punkt" secondary disabled={selected <= 0} onPress={() => select(selected - 1)} /></View><View style={{ flex: 1 }}><Button label="Następny punkt" secondary disabled={selected >= points.length - 1} onPress={() => select(selected + 1)} /></View></View>
   </View>;
