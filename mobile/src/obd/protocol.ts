@@ -17,7 +17,7 @@ export function responseLines(raw: string, command: string): string[] {
   if (!lines.length) throw new ObdError('Empty ELM327 response');
   return lines;
 }
-function bytes(raw: string, command: string): number[] {
+export function responseBytes(raw: string, command: string): number[] {
   const lines = responseLines(raw, command);
   if (lines.length !== 1) throw new ObdError('Multiple ECU responses or unsupported segmented reply; select a single ECU', 'ambiguous');
   const line = lines[0];
@@ -26,16 +26,17 @@ function bytes(raw: string, command: string): number[] {
   if (hex.length % 2) throw new ObdError('Incomplete hexadecimal byte');
   return hex.match(/../g)!.map(b => parseInt(b, 16));
 }
-export function parseSupportedPids(raw: string, page = 0): number[] {
-  if (page !== 0 && page !== 32) throw new ObdError('Unsupported PID bitmap page');
-  const b = bytes(raw, `01${page.toString(16).padStart(2, '0')}`);
-  if (b.length !== 6 || b[0] !== 0x41 || b[1] !== page) throw new ObdError('Invalid supported PID response');
+export function parseSupportedPids(raw: string, page = 0, mode: 1 | 2 = 1): number[] {
+  if (!Number.isInteger(page) || page < 0 || page > 224 || page % 32 !== 0 || ![1, 2].includes(mode)) throw new ObdError('Unsupported PID bitmap page');
+  const b = responseBytes(raw, `0${mode}${page.toString(16).padStart(2, '0')}${mode === 2 ? '00' : ''}`);
+  const headerLength = mode === 2 ? 3 : 2;
+  if (b.length !== headerLength + 4 || b[0] !== 0x40 + mode || b[1] !== page || (mode === 2 && b[2] !== 0)) throw new ObdError('Invalid supported PID response');
   const supported: number[] = [];
-  for (let i = 0; i < 32; i++) if (b[2 + Math.floor(i / 8)] & (0x80 >>> (i % 8))) supported.push(page + i + 1);
+  for (let i = 0; i < 32 && page + i + 1 <= 255; i++) if (b[headerLength + Math.floor(i / 8)] & (0x80 >>> (i % 8))) supported.push(page + i + 1);
   return supported;
 }
 export function parsePid(raw: string, command: '010C' | '0105' | '0104'): number {
-  const b = bytes(raw, command);
+  const b = responseBytes(raw, command);
   const pid = parseInt(command.slice(2), 16);
   if (b[0] !== 0x41 || b[1] !== pid || b.length !== (pid === 12 ? 4 : 3)) throw new ObdError('Unexpected PID response');
   if (pid === 12) return (b[2] * 256 + b[3]) / 4;
@@ -48,7 +49,7 @@ export function parseVoltage(raw: string): number {
   return Number(lines[0].slice(0, -1));
 }
 export function parseDtc(raw: string, mode: '03' | '07' | '0A',format:'auto'|'can'='auto'): Dtc[] {
-  const b = bytes(raw, mode);
+  const b = responseBytes(raw, mode);
   if (b[0] !== parseInt(mode, 16) + 0x40 || b.length < 2) throw new ObdError('Invalid DTC response');
   let data = b.slice(1);
   if(format==='can'&&data.length%2!==1)throw new ObdError('Missing CAN DTC count');
@@ -62,15 +63,19 @@ export function parseDtc(raw: string, mode: '03' | '07' | '0A',format:'auto'|'ca
   const status = { '03': 'stored', '07': 'pending', '0A': 'permanent' }[mode] as Dtc['status'];
   const result: Dtc[] = [];
   for (let i = 0; i < data.length; i += 2) {
-    const value = data[i] * 256 + data[i + 1];
-    if (value === 0) continue;
-    const code = 'PCBU'[data[i] >>> 6] + ((data[i] >>> 4) & 3) + (value & 0xFFF).toString(16).toUpperCase().padStart(3, '0');
+    const code = decodeDtcPair(data[i], data[i + 1]);
+    if (code === null) continue;
     if (!result.some(c => c.code === code)) result.push({ code, status });
   }
   return result;
 }
+export function decodeDtcPair(high: number, low: number): string | null {
+  if (![high, low].every(byte => Number.isInteger(byte) && byte >= 0 && byte <= 255)) throw new ObdError('Invalid DTC bytes');
+  const value = high * 256 + low;
+  return value === 0 ? null : 'PCBU'[high >>> 6] + ((high >>> 4) & 3) + (value & 0xFFF).toString(16).toUpperCase().padStart(3, '0');
+}
 export function parseClearResponse(raw: string): true {
-  const b = bytes(raw, '04');
+  const b = responseBytes(raw, '04');
   if (b.length !== 1 || b[0] !== 0x44) throw new ObdError('Vehicle did not acknowledge fault clearing');
   return true;
 }

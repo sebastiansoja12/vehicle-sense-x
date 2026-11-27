@@ -1,5 +1,8 @@
 import {validCanEcu} from './can.ts';
 import type {CanEcu} from './can.ts';
+import {validDiagnosticDetails} from './details.ts';
+import type {DiagnosticDetails} from './details.ts';
+import type {ObdMeasurement,ParameterScaling} from './parameters.ts';
 export type Dtc = { code: string; status: 'stored' | 'pending' | 'permanent' };
 export type DiagnosticSnapshot = {
   id: string;
@@ -12,9 +15,10 @@ export type DiagnosticSnapshot = {
   parameters: { rpm: number | null; coolantC: number | null; loadPercent: number | null; voltageV: number | null };
   supportedPids: number[];
   ecu?:CanEcu;
+  extended?: DiagnosticDetails;
 };
 export interface CommandTransport { send(command: string): Promise<string> }
-export type LiveParameters = Pick<DiagnosticSnapshot, 'vehicleId' | 'timestamp' | 'adapterName' | 'parameters' | 'ecu'>;
+export type LiveParameters = Pick<DiagnosticSnapshot, 'vehicleId' | 'timestamp' | 'adapterName' | 'parameters' | 'ecu'> & { measurements?: ObdMeasurement[]; scaling?: ParameterScaling };
 export interface BleTransport extends CommandTransport { adapterName: string; disconnect(): Promise<void>; onDisconnected(listener: () => void): () => void }
 export type BleProfile = { deviceId: string; adapterName: string; serviceUUID: string; writeUUID: string; notifyUUID: string };
 export type ScannedDevice = { id: string; name: string | null; rssi: number | null };
@@ -34,5 +38,6 @@ export function validateDiagnosticSnapshot(value: unknown): value is DiagnosticS
   if (!value.codes.every(c => record(c) && typeof c.code === 'string' && /^[PCBU][0-3][0-9A-F]{3}$/.test(c.code) && statuses.includes(c.status))) return false;
   if (!value.supportedPids.every(p => Number.isInteger(p) && p > 0 && p <= 255) || new Set(value.supportedPids).size !== value.supportedPids.length) return false;
   const p = value.parameters;
-  return measurement(p.rpm, 0, 16383.75) && measurement(p.coolantC, -40, 215) && measurement(p.loadPercent, 0, 100) && measurement(p.voltageV, 0, 100);
+  return measurement(p.rpm, 0, 16383.75) && measurement(p.coolantC, -40, 215) && measurement(p.loadPercent, 0, 100) && measurement(p.voltageV, 0, 100)
+    && (value.extended === undefined || validDiagnosticDetails(value.extended, value.supportedPids));
 }
