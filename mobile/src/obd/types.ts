@@ -40,6 +40,7 @@ export function validateDiagnosticSnapshot(value: unknown): value is DiagnosticS
   const p = value.parameters;
   if(value.extended!==undefined){
     if(!validDiagnosticDetails(value.extended,value.supportedPids))return false;
+    if(value.extended.identification!==undefined&&value.ecu===undefined)return false;
     for(const [key,pid] of [['rpm',12],['coolantC',5],['loadPercent',4]] as const){
       if(p[key] !== (value.extended.measurements.find(m=>m.pid===pid)?.value??null))return false;
     }

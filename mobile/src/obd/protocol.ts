@@ -26,8 +26,8 @@ export function responseBytes(raw: string, command: string): number[] {
   if (hex.length % 2) throw new ObdError('Incomplete hexadecimal byte');
   return hex.match(/../g)!.map(b => parseInt(b, 16));
 }
-export function parseSupportedPids(raw: string, page = 0, mode: 1 | 2 = 1): number[] {
-  if (!Number.isInteger(page) || page < 0 || page > 224 || page % 32 !== 0 || ![1, 2].includes(mode)) throw new ObdError('Unsupported PID bitmap page');
+export function parseSupportedPids(raw: string, page = 0, mode: 1 | 2 | 9 = 1): number[] {
+  if (!Number.isInteger(page) || page < 0 || page > 224 || page % 32 !== 0 || ![1, 2, 9].includes(mode)) throw new ObdError('Unsupported PID bitmap page');
   const b = responseBytes(raw, `0${mode}${page.toString(16).padStart(2, '0')}${mode === 2 ? '00' : ''}`);
   const headerLength = mode === 2 ? 3 : 2;
   if (b.length !== headerLength + 4 || b[0] !== 0x40 + mode || b[1] !== page || (mode === 2 && b[2] !== 0)) throw new ObdError('Invalid supported PID response');
