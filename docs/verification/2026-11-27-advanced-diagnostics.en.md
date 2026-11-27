@@ -31,10 +31,20 @@ Independent review found seven issues, all fixed with regression tests: collidin
 
 ## Packages and limits
 
-Builds for 0.5.0/build 7 are being verified separately. The existing 0.4.0/build 6 APK/AAB does not contain the 0.5.0 extensions. No active Apple Developer account still prevents a signed App Store IPA. No app was submitted to stores.
+Signed Android APK/AAB and iOS Release simulator packages for 0.5.0/build 7 from source `35258e9` have been verified. Earlier 0.4.0/build 6 APK/AAB packages do not contain the 0.5.0 extensions. No active Apple Developer account still prevents a signed App Store IPA. No app was submitted to stores.
 
 No physical phone, adapter or vehicle connection has been tested. Before publication, verify each transport and selected ECU, permission denial, range loss, scaling, monitors, frame changes during collection, cancellation of long scans, native export and a new scan after clearing. Ordinary Bluetooth radios carry system audio rather than OBD data. ECU coding, actuator tests and universal ABS/airbag support were not added.
 
 Expo Doctor: 19/20 checks. React Native Directory still marks `react-native-bluetooth-classic` and `react-native-tcp-socket` as untested on New Architecture. The warning was not suppressed. Compilation does not replace transport tests on a physical phone.
 
 [GitHub Actions](https://github.com/sebastiansoja12/vehicle-sense-x/actions/runs/46007837184) · `35258e9`
+
+APK and AAB use the same existing Expo certificate. Both passed checks for 54 64-bit libraries and 16 KB alignment; bundletool 1.18.3 accepted the AAB. Permissions match 0.4.0 and APK/AAB DEX files are identical. BLE, Classic, TCP and Speech modules and the new diagnostic paths in Hermes bytecode were confirmed. The iOS package contains arm64 and x86_64, an ad-hoc signature without an Apple team, and 15 privacy manifests without tracking domains. Packages have not been run on a physical phone or simulator.
+
+| Package | Bytes | Metadata and SHA-256 |
+| --- | ---: | --- |
+| Android APK | 109956116 | [Result](2026-11-27-android-050-apk-artifact.json) |
+| Android AAB | 75809780 | [Result](2026-11-27-android-050-aab-artifact.json) |
+| iOS simulator | 28854557 | [Result](2026-11-27-ios-050-artifact.json) |
+
+[Android APK](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/375e55aa-934c-4439-bb4b-786952755484) · [Android AAB](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/999d0ca0-15ef-48e8-a135-3b5cbb30043e) · [iOS](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/53dc6f54-3426-4d0d-b228-f7612d3b5c32)

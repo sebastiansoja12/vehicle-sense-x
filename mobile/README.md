@@ -85,7 +85,7 @@ Testy modelu, repozytorium, parserów, migracji i klienta API działają w Node 
 
 Nie ma jeszcze kompletnego dekodowania fabrycznej specyfikacji dla wszystkich marek, zewnętrznej wyceny, podkładu mapowego, rejestracji w tle, kont ani synchronizacji. Dostępny jest ograniczony, jawny odczyt danych NHTSA po VIN. Nie prezentujemy tych funkcji jako działających. Przed publikacją konieczne są również realne testy adaptera/telefonów, podpisy, metadane i polityka operatora oraz wdrożenie i konfiguracja własnego serwera, jeśli AI ma być aktywne.
 
-Wersja 0.2.1/build 2 zawiera GPX i uzupełnianie danych NHTSA w zweryfikowanym podpisanym AAB Androida oraz pakiecie iOS na symulator; zobacz [raport kompilacji 0.2.1](../docs/verification/2026-11-26-vin-gpx-builds.md). Aktualny podpisany APK preview ma wersję 0.4.0/build 6; poprzedni APK walidacyjny 0.2.0 jest historyczny. Pozostają testy fizycznych urządzeń i podpisany sklepowy IPA.
+Wersja 0.2.1/build 2 zawiera GPX i uzupełnianie danych NHTSA w zweryfikowanym podpisanym AAB Androida oraz pakiecie iOS na symulator; zobacz [raport kompilacji 0.2.1](../docs/verification/2026-11-26-vin-gpx-builds.md). Aktualny podpisany APK preview ma wersję 0.5.0/build 7; poprzedni APK walidacyjny 0.2.0 jest historyczny. Pozostają testy fizycznych urządzeń i podpisany sklepowy IPA.
 
 ## Źródła API
 

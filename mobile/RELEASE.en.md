@@ -4,7 +4,7 @@
 
 Version 0.5.0/build 7 expands diagnostics with a catalog of 54 standard measurements, emissions readiness, freeze frame 0, selectable Live Data, a 300-cycle chart, scan comparisons and JSON/CSV/PDF/HTML export.
 
-Builds for 0.5.0/build 7 are being verified separately. The existing 0.4.0/build 6 APK/AAB does not contain the 0.5.0 extensions. No active Apple Developer account still prevents a signed App Store IPA. No app was submitted to stores. [Scope and verification](../docs/verification/2026-11-27-advanced-diagnostics.en.md)
+Signed Android APK/AAB and iOS Release simulator packages for 0.5.0/build 7 from source `35258e9` have been verified. Earlier 0.4.0/build 6 APK/AAB packages do not contain the 0.5.0 extensions. No active Apple Developer account still prevents a signed App Store IPA. No app was submitted to stores. [Scope and verification](../docs/verification/2026-11-27-advanced-diagnostics.en.md)
 
 Version 0.4.0 adds an automatic ECU scan, separate Live Data, connection-loss handling and a radio audio test through system Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.en.md)
 

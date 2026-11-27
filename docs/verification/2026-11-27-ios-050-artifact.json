@@ -1,0 +1,49 @@
+{
+  "id": "53dc6f54-3426-4d0d-b228-f7612d3b5c32",
+  "status": "FINISHED",
+  "completedAt": "2026-11-27T13:41:39.779Z",
+  "gitCommitHash": "35258e976a4804f665002550430a6106ed3794be",
+  "platform": "IOS",
+  "buildProfile": "native-check",
+  "appVersion": "0.5.0",
+  "appBuildVersion": "7",
+  "artifact": "VehicleSenseX-0.5.0-ios-simulator.tar.gz",
+  "bytes": 28854557,
+  "sha256": "6f31f98ceaa7fd14b84f189c8aee3051923fbaff2506f76a9e8a6559a211ec15",
+  "runtimeTestedOnDevice": false,
+  "version": "0.5.0",
+  "buildNumber": "7",
+  "bundleIdentifier": "com.vehiclesensex.app",
+  "minimumOS": "16.4",
+  "sdk": "iphonesimulator27.1",
+  "usageDescriptionKeys": [
+    "NSBluetoothAlwaysUsageDescription",
+    "NSLocalNetworkUsageDescription",
+    "NSLocationWhenInUseUsageDescription",
+    "NSPhotoLibraryUsageDescription"
+  ],
+  "backgroundModes": [],
+  "signature": "ad-hoc simulator; no Apple team",
+  "storeIpa": false,
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "nativeClassesVerified": [
+    "BlePlx",
+    "TcpSockets",
+    "TcpSocketClient",
+    "ExpoSpeech"
+  ],
+  "javascript": {
+    "bytes": 3982370,
+    "hermes": true,
+    "diagnosticMarkers": [
+      "readFreezeFrame",
+      "freeze-frame",
+      "Rozszerzony skan diagnostyczny"
+    ]
+  },
+  "privacyManifestCount": 15,
+  "trackingDomains": []
+}

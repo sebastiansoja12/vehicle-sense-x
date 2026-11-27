@@ -31,10 +31,20 @@ Ein unabhängiges Review fand sieben Probleme, die mit Regressionstests behoben 
 
 ## Pakete und Grenzen
 
-Builds für 0.5.0/Build 7 werden separat geprüft. Vorhandene APK/AAB für 0.4.0/Build 6 enthalten die Erweiterungen von 0.5.0 nicht. Ein fehlendes aktives Apple-Developer-Konto verhindert weiterhin eine signierte App-Store-IPA. Es erfolgte keine Einreichung bei Stores.
+Signierte Android-APK/AAB und iOS-Release-Simulatorpakete für 0.5.0/Build 7 aus Quelle `35258e9` wurden geprüft. Frühere APK/AAB für 0.4.0/Build 6 enthalten die Erweiterungen von 0.5.0 nicht. Ein fehlendes aktives Apple-Developer-Konto verhindert weiterhin eine signierte App-Store-IPA. Es erfolgte keine Einreichung bei Stores.
 
 Es wurde keine Verbindung mit physischem Telefon, Adapter oder Fahrzeug getestet. Vor Veröffentlichung jeden Transport und ausgewählte ECU, Berechtigungsverweigerung, Reichweitenverlust, Skalierung, Monitore, Rahmenwechsel während der Erfassung, Abbruch langer Scans, nativen Export und erneuten Scan nach dem Löschen prüfen. Gewöhnliche Bluetooth-Radios übertragen Systemaudio statt OBD-Daten. ECU-Codierung, Stellgliedtests und allgemeine ABS-/Airbag-Unterstützung wurden nicht hinzugefügt.
 
 Expo Doctor: 19/20 Prüfungen. React Native Directory kennzeichnet `react-native-bluetooth-classic` und `react-native-tcp-socket` weiterhin als nicht mit New Architecture getestet. Die Warnung wurde nicht unterdrückt. Kompilierung ersetzt keine Transporttests auf einem physischen Telefon.
 
 [GitHub Actions](https://github.com/sebastiansoja12/vehicle-sense-x/actions/runs/46007837184) · `35258e9`
+
+APK und AAB verwenden dasselbe bisherige Expo-Zertifikat. Beide bestanden Prüfungen von 54 64-Bit-Bibliotheken und 16-KB-Ausrichtung; bundletool 1.18.3 akzeptierte das AAB. Berechtigungen entsprechen 0.4.0, die DEX-Dateien von APK/AAB sind identisch. BLE-, Classic-, TCP- und Speech-Module sowie neue Diagnosepfade im Hermes-Bytecode wurden bestätigt. Das iOS-Paket enthält arm64 und x86_64, eine Ad-hoc-Signatur ohne Apple-Team und 15 Datenschutzmanifeste ohne Tracking-Domains. Die Pakete wurden weder auf einem physischen Telefon noch im Simulator ausgeführt.
+
+| Paket | Bytes | Metadaten und SHA-256 |
+| --- | ---: | --- |
+| Android APK | 109956116 | [Ergebnis](2026-11-27-android-050-apk-artifact.json) |
+| Android AAB | 75809780 | [Ergebnis](2026-11-27-android-050-aab-artifact.json) |
+| iOS-Simulator | 28854557 | [Ergebnis](2026-11-27-ios-050-artifact.json) |
+
+[Android APK](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/375e55aa-934c-4439-bb4b-786952755484) · [Android AAB](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/999d0ca0-15ef-48e8-a135-3b5cbb30043e) · [iOS](https://expo.dev/accounts/rubisco4471/projects/vehiclesensex/builds/53dc6f54-3426-4d0d-b228-f7612d3b5c32)
