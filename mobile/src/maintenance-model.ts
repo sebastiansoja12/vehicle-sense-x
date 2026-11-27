@@ -1,6 +1,6 @@
 import { ValidationError } from './validation.ts';
 export const maintenanceComponents = {
-  'engine-oil': 'Olej silnikowy', 'oil-filter': 'Filtr oleju', 'air-filter': 'Filtr powietrza', 'cabin-filter': 'Filtr kabinowy',
+  'engine-oil': 'Olej silnikowy', 'oil-level': 'Poziom oleju — kontrola', 'oil-filter': 'Filtr oleju', 'air-filter': 'Filtr powietrza', 'cabin-filter': 'Filtr kabinowy',
   'fuel-filter': 'Filtr paliwa', 'brake-fluid': 'Płyn hamulcowy', coolant: 'Płyn chłodniczy', timing: 'Rozrząd',
   transmission: 'Olej skrzyni biegów', 'spark-plugs': 'Świece zapłonowe', brakes: 'Hamulce', tires: 'Opony', battery: 'Akumulator', other: 'Inna czynność',
 } as const;

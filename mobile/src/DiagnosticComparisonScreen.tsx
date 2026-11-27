@@ -6,6 +6,7 @@ import type { Vehicle } from './domain';
 import { compareDiagnostics, selectDiagnosticPair, diagnosticParameterKeys, diagnosticParameters, dtcStatusLabels, codeChangeLabels } from './obd/comparison';
 import type { DiagnosticComparison } from './obd/comparison';
 import type { DiagnosticSnapshot } from './obd/types';
+import { OilTemperatureDetails } from './obd/OilTemperatureDetails';
 import { ReadinessDetails } from './obd/ReadinessDetails';
 import { diagnosticComparisonHtml } from './reports';
 import { shareReport } from './file-export';
@@ -21,6 +22,7 @@ function ReadingDetails({ value, label }: { value: DiagnosticSnapshot; label: st
     <Text style={s.fine}>{value.source === 'obd' ? 'Zapisany odczyt OBD2' : 'Import · bez weryfikacji adaptera'} · {value.adapterName}</Text>
     <Text style={[s.muted, { marginTop: 8 }]}>Odczytane statusy: {value.readStatuses.map(status => dtcStatusLabels[status]).join(', ')}</Text>
     <Text selectable style={[s.body, { marginTop: 8 }]}>{value.codes.length ? value.codes.map(c => `${c.code} (${dtcStatusLabels[c.status]})`).join(' · ') : 'Brak kodów w odczytanych statusach.'}</Text>
+    <OilTemperatureDetails value={value} />
     {value.readiness !== undefined && <ReadinessDetails value={value} />}
   </Section>;
 }

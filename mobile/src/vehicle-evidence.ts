@@ -22,7 +22,7 @@ export const followUpLabels: Record<ServiceFollowUp['status'], string> = {
 const dateOf = (s: DiagnosticSnapshot) => localDay(new Date(s.timestamp));
 const scopeKey = (s: DiagnosticSnapshot) => s.ecu ? `${s.ecu.protocol}/${s.ecu.responseId}` : null;
 export function findServiceFollowUp(state: AppData, vehicleId: string, today: string): ServiceFollowUp {
-  const service = state.service.filter(s => s.vehicleId === vehicleId && s.date <= today).sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id))[0];
+  const service = state.service.filter(s => s.vehicleId === vehicleId && s.date <= today && !s.oilObservation).sort((a, b) => b.date.localeCompare(a.date) || a.id.localeCompare(b.id))[0];
   const result: ServiceFollowUp = { serviceId: service?.id ?? null, serviceDate: service?.date ?? null, beforeId: null, afterId: null, status: 'no-service', sameDayCount: 0, commonStatuses: [] };
   if (!service) return result;
   const readings = state.diagnostics.filter(s => s.vehicleId === vehicleId && dateOf(s) <= today).sort((a, b) => b.timestamp - a.timestamp || a.id.localeCompare(b.id));
@@ -82,7 +82,7 @@ export function buildVehicleEvidence(state: AppData, vehicleId: string, today: s
     followUpLabels[followUp.status], ...(followUp.serviceDate ? [`Dzień ostatniego zapisanego serwisu: ${followUp.serviceDate}. Odczytów z tego samego dnia: ${followUp.sameDayCount}; nie ustalamy ich kolejności względem naprawy.`] : []),
     'Powiązanie według dat i metadanych nie dowodzi, że wykonano naprawę ani że była skuteczna. Importy nie wypełniają automatycznie tego dowodu.',
   ], action: 'comparison' });
-  const summary = vehicleSummary({ ...state, fuel: state.fuel.filter(f => f.date <= today) }, vehicleId, today.slice(0, 7));
+  const summary = vehicleSummary({ ...state, fuel: state.fuel.filter(f => f.date <= today) }, vehicleId, today.slice(0, 7), today);
   add({ id: 'fuel', title: 'Podstawa obliczeń spalania', status: summary.consumption === null ? 'missing' : 'present', details: [summary.consumption === null ? 'Brak wystarczających tankowań do pełna z rosnącym przebiegiem.' : `Spalanie z wpisów pełny–pełny obejmuje ${summary.measuredDistance} km. Wynik zależy od kompletności i poprawności wpisów.`, 'Nie obejmuje pomiaru przepływu paliwa ani niezależnej weryfikacji licznika.'], action: 'expenses' });
   return { vehicleId, checkedOn: today, items, mileageConflicts, followUp };
 }

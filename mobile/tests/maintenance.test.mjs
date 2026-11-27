@@ -58,3 +58,29 @@ test('new optional fields round-trip old storage and reject tampered due dates o
  for(const patch of [{level:'ok'},{addedMl:-1},{source:'obd'},{oilLifePercent:101}])assert.throws(()=>parseStoredData(JSON.stringify({...o,service:[{...o.service[0],oilObservation:{...o.service[0].oilObservation,...patch}}]})));
  assert.equal(removeRecord(s,'vehicle','v').reminders.length,0);
 });
+test('oil observation corrections replace only the matching vehicle entry and preserve attachments',()=>{
+ const input={vehicleId:'v',date:day,mileage:'15000',level:'low',addedLiters:'0.25',oilLifePercent:'0',cost:'0',note:''};
+ const s=addOilObservation(state(),input,'oil',day);s.service[0].attachments=[];
+ const next=addOilObservation(s,{...input,level:'normal',addedLiters:'0.5'},'unused',day,'oil');
+ assert.equal(next.service.length,1);assert.equal(next.service[0].id,'oil');assert.equal(next.service[0].oilObservation.addedMl,500);assert.equal(next.service[0].oilObservation.level,'normal');assert.deepEqual(next.service[0].attachments,[]);
+ assert.throws(()=>addOilObservation(s,{...input,vehicleId:'other'},'unused',day,'oil'));
+});
+test('completion carries an enabled date reminder to the new cycle with a fresh identifier',()=>{
+ const s=plan();s.reminders[0].notificationId='vsx-reminder-p';
+ const next=recordMaintenance(s,'p',{date:day,mileage:'15000',cost:'0',note:''},'service','next',day);
+ assert.equal(next.reminders.find(r=>r.id==='next').notificationId,'vsx-reminder-next');
+});
+test('reports preserve oil observations and interval sources with escaped text',async()=>{
+ const {serviceCsv,healthReportHtml}=await import('../src/reports.ts');
+ let s=saveMaintenancePlan(state(),input({source:'Instrukcja <script>bad</script>'}),'p',day);
+ s=addOilObservation(s,{vehicleId:'v',date:day,mileage:'15000',level:'low',addedLiters:'0.25',oilLifePercent:'0',cost:'0',note:''},'oil',day);
+ const html=healthReportHtml(s,'v',day),csv=serviceCsv(s,'v');
+ assert.match(html,/0.250 l/);assert.match(html,/Trwałość.*0%/);assert.match(html,/Instrukcja &lt;script&gt;bad&lt;\/script&gt;/);assert.doesNotMatch(html,/<script>bad/);assert.match(csv,/0.250/);assert.match(csv,/Poniżej minimum/);
+});
+test('an oil observation does not replace the service reference for before/after diagnostics',async()=>{
+ const {findServiceFollowUp}=await import('../src/vehicle-evidence.ts');
+ const {addService}=await import('../src/domain.ts');
+ let s=addService(state(),{vehicleId:'v',date:'2026-11-20',mileage:'14000',title:'Naprawa',cost:'0',note:''},'repair',day);
+ s=addOilObservation(s,{vehicleId:'v',date:day,mileage:'15000',level:'normal',addedLiters:'0',oilLifePercent:'',cost:'0',note:''},'oil',day);
+ assert.equal(findServiceFollowUp(s,'v',day).serviceId,'repair');
+});

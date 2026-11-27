@@ -31,3 +31,10 @@ test('monthly buckets cross year boundaries and invalid owner/date is rejected',
  assert.equal(a.months[0].purchasedMl,20000);assert.equal(a.months[1].purchasedMl,10000);
  assert.throws(()=>fuelAnalytics(state(),'unknown',today));assert.throws(()=>fuelAnalytics(state(),'v','2026-02-30'));
 });
+test('dashboard and reports use the same conservative fuel measurements as charts',async()=>{
+ const {vehicleSummary}=await import('../src/domain.ts');
+ const fuel=[fill('a','2026-09-01',1000,40),fill('b','2026-10-01',1000,10),fill('c','2026-11-01',1500,30)];
+ const s=state(fuel);assert.equal(vehicleSummary(s,'v','2026-11',today).consumption,null);
+ const normal=state([fill('a','2026-09-01',1000,40),fill('b','2026-10-01',1500,30),fill('future','2026-12-01',2000,100)]);
+ assert.equal(vehicleSummary(normal,'v','2026-11',today).consumption,6);
+});

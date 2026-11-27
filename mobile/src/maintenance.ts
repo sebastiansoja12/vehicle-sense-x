@@ -39,7 +39,9 @@ export function recordMaintenance(state: AppData, reminderId: string, input: { d
   const next = addService(state, { ...input, vehicleId: reminder.vehicleId, title: `${reminder.schedule.action === 'replace' ? 'Wymiana' : 'Kontrola'}: ${reminder.title}`.slice(0, 100) }, serviceId, today);
   next.service[next.service.length - 1] = { ...next.service.at(-1)!, maintenanceComponent: reminder.schedule.component };
   next.reminders = next.reminders.map(r => r.id === reminderId ? { ...r, completed: true } : r);
-  return saveMaintenancePlan(next, { vehicleId: reminder.vehicleId, title: reminder.title, component: reminder.schedule.component, action: reminder.schedule.action, lastDate: input.date, lastMileage: input.mileage, intervalMonths: reminder.schedule.intervalMonths === null ? '' : String(reminder.schedule.intervalMonths), intervalKm: reminder.schedule.intervalKm === null ? '' : String(reminder.schedule.intervalKm), source: reminder.schedule.source }, nextId, today);
+  const renewed = saveMaintenancePlan(next, { vehicleId: reminder.vehicleId, title: reminder.title, component: reminder.schedule.component, action: reminder.schedule.action, lastDate: input.date, lastMileage: input.mileage, intervalMonths: reminder.schedule.intervalMonths === null ? '' : String(reminder.schedule.intervalMonths), intervalKm: reminder.schedule.intervalKm === null ? '' : String(reminder.schedule.intervalKm), source: reminder.schedule.source }, nextId, today);
+  if (reminder.notificationId !== null) renewed.reminders = renewed.reminders.map(r => r.id === nextId ? { ...r, notificationId: 'vsx-reminder-' + nextId } : r);
+  return renewed;
 }
 export function addOilObservation(state: AppData, input: { vehicleId: string; date: string; mileage: string; level: OilObservation['level']; addedLiters: string; oilLifePercent: string; cost: string; note: string }, id: string, today: string, replaceId?: string): AppData {
   const previous = replaceId ? state.service.find(r => r.id === replaceId && r.vehicleId === input.vehicleId && r.oilObservation) : undefined;
