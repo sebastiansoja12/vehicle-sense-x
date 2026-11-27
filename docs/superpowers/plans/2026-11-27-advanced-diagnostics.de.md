@@ -17,7 +17,7 @@ Eine optionale Erweiterung der Version 1 erhält alte Berichte und Garagenschema
 ## Aufgaben
 
 - [x] Decoder-, Bereitschaftsbit- und Service-02-Tests schreiben; Fehler beobachten, Parser und Erweiterungsvalidierung implementieren.
-- [ ] PID-Seiten, erweiterten Scan, gewählte Live Data, Rahmen 0 und Löschschutz testen und implementieren.
+- [x] PID-Seiten, erweiterten Scan, gewählte Live Data, Rahmen 0 und Löschschutz testen und implementieren.
 - [ ] Berichte, CSV, Verlauf von 300 Zyklen und ECU-Vergleich testen; Bildschirme und Exporte anschließen.
 - [ ] Alle Tests, Typprüfung, Lint, Dokumentation und Exporte ausführen; Prüfung anfordern, Befunde beheben, Commits erstellen und hochladen.
 

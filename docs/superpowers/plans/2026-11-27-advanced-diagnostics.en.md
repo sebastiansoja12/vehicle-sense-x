@@ -17,7 +17,7 @@ An optional version 1 extension preserves old reports and garage schema 3. All n
 ## Tasks
 
 - [x] Write decoder, readiness-bit and service 02 tests; observe failure, implement parsers and extension validation.
-- [ ] Test and implement PID paging, extended scans, selected Live Data, frame 0 and clear guards.
+- [x] Test and implement PID paging, extended scans, selected Live Data, frame 0 and clear guards.
 - [ ] Test reports, CSV, a 300-cycle history and scope-aware comparison; connect screens and exports.
 - [ ] Run full tests, types, lint, documentation and exports; request review, address findings, commit and push.
 

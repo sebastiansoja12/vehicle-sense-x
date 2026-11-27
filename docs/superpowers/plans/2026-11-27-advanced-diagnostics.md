@@ -17,7 +17,7 @@ Opcjonalny obiekt rozszerzenia wersji 1 zachowuje stare raporty i schemat garaż
 ## Zadania
 
 - [x] Napisać testy dekoderów, bitów gotowości i ramek 02; obejrzeć czerwony wynik, wdrożyć parsery i walidację rozszerzeń.
-- [ ] Przetestować i wdrożyć stronicowanie PID, rozszerzony skan, wybrane pomiary Live Data, ramkę 0 i ochronę kasowania.
+- [x] Przetestować i wdrożyć stronicowanie PID, rozszerzony skan, wybrane pomiary Live Data, ramkę 0 i ochronę kasowania.
 - [ ] Przetestować raporty, CSV, historię 300 cykli i porównanie zakresów; podłączyć ekrany i eksporty.
 - [ ] Uruchomić pełne testy, typy, lint, dokumentację i eksporty; zlecić przegląd, poprawić uwagi, commitować i wypchnąć zmiany.
 
