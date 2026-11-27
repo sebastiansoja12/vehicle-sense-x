@@ -19,6 +19,6 @@ Eine optionale Erweiterung der Version 1 erhält alte Berichte und Garagenschema
 - [x] Decoder-, Bereitschaftsbit- und Service-02-Tests schreiben; Fehler beobachten, Parser und Erweiterungsvalidierung implementieren.
 - [x] PID-Seiten, erweiterten Scan, gewählte Live Data, Rahmen 0 und Löschschutz testen und implementieren.
 - [x] Berichte, CSV, Verlauf von 300 Zyklen und ECU-Vergleich testen; Bildschirme und Exporte anschließen.
-- [ ] Alle Tests, Typprüfung, Lint, Dokumentation und Exporte ausführen; Prüfung anfordern, Befunde beheben, Commits erstellen und hochladen.
+- [x] Alle Tests, Typprüfung, Lint, Dokumentation und Exporte ausführen; Prüfung anfordern, Befunde beheben, Commits erstellen und hochladen.
 
 `mobile/src/obd/parameters.ts` · `mobile/src/obd/readiness.ts` · `mobile/src/obd/types.ts` · `mobile/src/obd/driver.ts` · `mobile/src/obd/DiagnosticDetails.tsx` · `mobile/src/obd/live-history.ts` · `mobile/src/reports.ts` · `mobile/tests/obd-advanced.test.mjs`

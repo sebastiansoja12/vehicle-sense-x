@@ -61,3 +61,9 @@ When changing documentation, update all three versions and language links. Do no
 - [Offline vehicle catalog](superpowers/progress/2026-11-25-offline-catalog.en.md)
 - [Release preflight](superpowers/progress/2026-11-25-release-preflight.en.md)
 - [GPX trip export](superpowers/progress/2026-11-26-trip-gpx.en.md)
+
+## Advanced diagnostics
+
+- [Scope and verification](verification/2026-11-27-advanced-diagnostics.en.md)
+- [Plan](superpowers/plans/2026-11-27-advanced-diagnostics.en.md)
+- [Specification](superpowers/specs/2026-11-27-advanced-diagnostics.en.md)

@@ -61,3 +61,9 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 - [Offline-Fahrzeugkatalog](superpowers/progress/2026-11-25-offline-catalog.de.md)
 - [Release-Vorprüfung](superpowers/progress/2026-11-25-release-preflight.de.md)
 - [GPX-Fahrtenexport](superpowers/progress/2026-11-26-trip-gpx.de.md)
+
+## Erweiterte Diagnose
+
+- [Umfang und Prüfung](verification/2026-11-27-advanced-diagnostics.de.md)
+- [Plan](superpowers/plans/2026-11-27-advanced-diagnostics.de.md)
+- [Spezifikation](superpowers/specs/2026-11-27-advanced-diagnostics.de.md)

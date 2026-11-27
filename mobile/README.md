@@ -2,7 +2,7 @@
 
 # VehicleSenseX — aplikacja mobilna
 
-React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.4.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
+React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.5.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
 
 ## Uruchomienie
 
@@ -95,3 +95,17 @@ Wersja 0.2.1/build 2 zawiera GPX i uzupełnianie danych NHTSA w zweryfikowanym p
 - [Profile kompilacji Expo](https://docs.expo.dev/build/eas-json/), [BuildProperties](https://docs.expo.dev/versions/v58.0.0/sdk/build-properties/)
 
 Wersja 0.4.0 dodaje automatyczny skan ECU, osobne Live Data, obsługę utraty połączenia i próbę dźwięku radia przez systemowe Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.md)
+
+## 0.5.0
+
+Wersja 0.5.0/build 7 rozszerza diagnostykę o katalog 54 standardowych parametrów, gotowość emisji, freeze frame 0, wybór Live Data, wykres 300 cykli, porównanie odczytów i eksport JSON/CSV/PDF/HTML.
+
+Skan podstawowy odczytuje obroty, płyn chłodzący, obciążenie, napięcie adaptera i dostępne statusy kodów. Osobny skan rozszerzony odpytuje wspierane pozycje katalogu, monitory gotowości PID 01 i ramkę zamrożoną 0. Nie oznacza obsługi wszystkich sterowników ani diagnostyki producenta. Brak danych pozostaje nieznany.
+
+Live Data pozwala wybrać do 8 obsługiwanych PID. Przerwa 2/5/10 s rozpoczyna się po zakończeniu poprzedniego cyklu, więc rzeczywiste tempo zależy od adaptera. Wykres obejmuje ostatnie 300 cykli w pamięci sesji. Przerwy w odczycie i wznowienia tworzą osobne odcinki. Wyeksportuj CSV przed zamknięciem ekranu lub zmianą samochodu; sesja nie zapisuje się automatycznie w garażu.
+
+Pełny raport zachowuje swój czas i kody podczas Live Data. Możesz zapisać go w historii, pobrać JSON/CSV albo PDF w aplikacji natywnej i HTML w przeglądarce. Historia ma wyszukiwanie i strony po 20 odczytów. Porównanie wymaga zgodnego samochodu oraz jawnego adresu i protokołu CAN ECU; starsze raporty bez zakresu pozostają czytelne i eksportowalne. Porównywane są tylko wspólne statusy DTC. Niezgłoszony ponownie kod nie potwierdza naprawy.
+
+Do kasowania potrzebny jest dokładnie bieżący raport, jego zapisana kopia, potwierdzenie zachowania kopii i osobne potwierdzenie polecenia. PDF/CSV nie zastępuje pełnej kopii JSON lub historii. Po Live Data wykonaj nowy pełny odczyt. Przerwanie połączenia nie cofa wysłanego polecenia kasowania. Anulowany skan nie zastępuje poprzedniego ukończonego raportu.
+
+[Zakres i weryfikacja](../docs/verification/2026-11-27-advanced-diagnostics.md)

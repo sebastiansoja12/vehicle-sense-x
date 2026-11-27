@@ -2,7 +2,7 @@
 
 # VehicleSenseX — mobile App
 
-React Native 0.88.1, Expo SDK 58, React 19.3 und TypeScript 6. Quellversion 0.4.0. Die eigene Garage startet leer; die App hat keinen Demonstrationsmodus, kein Beispielfahrzeug und keinen Messwertgenerator. Im übergeordneten Verzeichnis ist ein separater früherer HTML-Prototyp erhalten.
+React Native 0.88.1, Expo SDK 58, React 19.3 und TypeScript 6. Quellversion 0.5.0. Die eigene Garage startet leer; die App hat keinen Demonstrationsmodus, kein Beispielfahrzeug und keinen Messwertgenerator. Im übergeordneten Verzeichnis ist ein separater früherer HTML-Prototyp erhalten.
 
 ## Starten
 
@@ -95,3 +95,17 @@ Version 0.2.1/Build 2 enthält GPX und NHTSA-Datenergänzung im geprüften signi
 - [Expo Build profiles](https://docs.expo.dev/build/eas-json/), [BuildProperties](https://docs.expo.dev/versions/v58.0.0/sdk/build-properties/)
 
 Version 0.4.0 ergänzt automatischen ECU-Scan, separate Live Data, Behandlung von Verbindungsverlust und einen Radio-Audiotest über System-Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.de.md)
+
+## 0.5.0
+
+Version 0.5.0/Build 7 erweitert die Diagnose um einen Katalog mit 54 Standardmesswerten, Emissionsbereitschaft, Freeze Frame 0, auswählbare Live Data, ein Diagramm mit 300 Zyklen, Scanvergleiche und JSON/CSV/PDF/HTML-Export.
+
+Der Basisscan liest Drehzahl, Kühlmittel, Last, Adapterspannung und verfügbare Fehlerstatus. Ein separater erweiterter Scan fragt unterstützte Katalogeinträge, Bereitschaftsmonitore mit PID 01 und Freeze Frame 0 ab. Dies bestätigt keinen Zugriff auf alle Steuergeräte oder Herstellerdiagnosen. Fehlende Daten bleiben unbekannt.
+
+Live Data unterstützt bis zu 8 gemeldete PIDs. Die Pause von 2/5/10 Sekunden beginnt nach Abschluss des vorherigen Zyklus; die tatsächliche Frequenz hängt vom Adapter ab. Das Diagramm hält die letzten 300 Zyklen im Sitzungsspeicher. Fehlende Messungen und Wiederaufnahmen erzeugen getrennte Abschnitte. CSV vor dem Verlassen des Bildschirms oder einem Fahrzeugwechsel exportieren; Sitzungen werden nicht automatisch in der Garage gespeichert.
+
+Der vollständige Bericht behält während Live Data seinen Zeitstempel und seine Codes. Er lässt sich im Verlauf speichern, als JSON/CSV herunterladen oder in der nativen App als PDF und im Browser als HTML exportieren. Der Verlauf bietet Suche und Seiten mit 20 Einträgen. Vergleiche erfordern dasselbe Fahrzeug sowie ausdrücklich übereinstimmende CAN-ECU-Adresse und Protokoll; ältere Berichte ohne Bereich bleiben lesbar und exportierbar. Nur gemeinsame DTC-Status werden verglichen. Ein nicht erneut gemeldeter Code bestätigt keine Reparatur.
+
+Zum Löschen werden der exakte aktuelle Bericht, eine gespeicherte Kopie, die Bestätigung ihrer Aufbewahrung und eine separate Befehlsbestätigung benötigt. PDF/CSV ersetzt keine vollständige JSON- oder Verlaufssicherung. Nach Live Data ist ein neuer vollständiger Scan erforderlich. Trennen kann einen bereits gesendeten Löschbefehl nicht zurücknehmen. Ein abgebrochener Scan ersetzt den vorherigen abgeschlossenen Bericht nicht.
+
+[Umfang und Prüfung](../docs/verification/2026-11-27-advanced-diagnostics.de.md)

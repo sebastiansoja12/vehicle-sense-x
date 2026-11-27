@@ -1,6 +1,10 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Wydanie VehicleSenseX 0.4.0
+# Wydanie VehicleSenseX 0.5.0
+
+Wersja 0.5.0/build 7 rozszerza diagnostykę o katalog 54 standardowych parametrów, gotowość emisji, freeze frame 0, wybór Live Data, wykres 300 cykli, porównanie odczytów i eksport JSON/CSV/PDF/HTML.
+
+Kompilacje 0.5.0/build 7 są weryfikowane osobno. Dotychczasowy APK/AAB 0.4.0/build 6 nie zawiera rozszerzeń 0.5.0. Brak aktywnego konta Apple Developer nadal wyklucza podpisane wydanie IPA do App Store. Nie wysłano aplikacji do sklepów. [Zakres i weryfikacja](../docs/verification/2026-11-27-advanced-diagnostics.md)
 
 Wersja 0.4.0 dodaje automatyczny skan ECU, osobne Live Data, obsługę utraty połączenia i próbę dźwięku radia przez systemowe Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.md)
 

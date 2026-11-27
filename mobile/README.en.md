@@ -2,7 +2,7 @@
 
 # VehicleSenseX — mobile app
 
-React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. Source version 0.4.0. The personal garage starts empty; the app has no demo mode, sample vehicle or measurement generator. A separate earlier HTML prototype is retained in the parent directory.
+React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. Source version 0.5.0. The personal garage starts empty; the app has no demo mode, sample vehicle or measurement generator. A separate earlier HTML prototype is retained in the parent directory.
 
 ## Running
 
@@ -95,3 +95,17 @@ Version 0.2.1/build 2 includes GPX and NHTSA data completion in the verified sig
 - [Expo Build profiles](https://docs.expo.dev/build/eas-json/), [BuildProperties](https://docs.expo.dev/versions/v58.0.0/sdk/build-properties/)
 
 Version 0.4.0 adds an automatic ECU scan, separate Live Data, connection-loss handling and a radio audio test through system Bluetooth. [0.4.0](../docs/verification/2026-11-26-obd-radio.en.md)
+
+## 0.5.0
+
+Version 0.5.0/build 7 expands diagnostics with a catalog of 54 standard measurements, emissions readiness, freeze frame 0, selectable Live Data, a 300-cycle chart, scan comparisons and JSON/CSV/PDF/HTML export.
+
+The basic scan reads RPM, coolant, load, adapter voltage and available fault statuses. A separate extended scan requests supported catalog entries, PID 01 readiness monitors and freeze frame 0. This does not establish access to all controllers or manufacturer diagnostics. Missing data stays unknown.
+
+Live Data supports up to 8 advertised PIDs. The 2/5/10-second pause starts after the previous cycle completes, so actual cadence depends on the adapter. The chart holds the latest 300 cycles in session memory. Missing readings and resumptions create separate segments. Export CSV before leaving the screen or changing vehicles; sessions are not automatically saved in the garage.
+
+The full report retains its timestamp and codes during Live Data. Save it in history, download JSON/CSV or export PDF in the native app and HTML in the browser. History offers search and pages of 20 records. Comparison requires the same vehicle and explicit matching CAN ECU address and protocol; older unscoped reports remain readable and exportable. Only common DTC statuses are compared. A code not reported again does not establish repair.
+
+Clearing requires the exact current report, a saved copy, acknowledgement that the copy was retained and a separate command confirmation. PDF/CSV does not replace a complete JSON or history backup. Run a new full scan after Live Data. Disconnecting cannot undo a clearing command already sent. A cancelled scan does not replace the previous completed report.
+
+[Scope and verification](../docs/verification/2026-11-27-advanced-diagnostics.en.md)

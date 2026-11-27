@@ -44,6 +44,5 @@ export function validateDiagnosticSnapshot(value: unknown): value is DiagnosticS
       if(p[key] !== (value.extended.measurements.find(m=>m.pid===pid)?.value??null))return false;
     }
   }
-  return measurement(p.rpm, 0, 16383.75) && measurement(p.coolantC, -40, 215) && measurement(p.loadPercent, 0, 100) && measurement(p.voltageV, 0, 100)
-    ;
+  return measurement(p.rpm, 0, 16383.75) && measurement(p.coolantC, -40, 215) && measurement(p.loadPercent, 0, 100) && measurement(p.voltageV, 0, 100);
 }

@@ -2,9 +2,11 @@
 
 # VehicleSenseX
 
-A mobile app for OBD2 diagnostics, vehicle records, trip recording and ownership costs. Current source version: 0.4.0. React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. The garage starts empty; measurements come from the device or owner entries.
+A mobile app for OBD2 diagnostics, vehicle records, trip recording and ownership costs. Current source version: 0.5.0. React Native 0.88.1, Expo SDK 58, React 19.3 and TypeScript 6. The garage starts empty; measurements come from the device or owner entries.
 
 [PL/EN/DE documentation](docs/README.en.md) · [Application guide](mobile/README.en.md) · [Builds and release](mobile/RELEASE.en.md)
+
+Version 0.5.0/build 7 expands diagnostics with a catalog of 54 standard measurements, emissions readiness, freeze frame 0, selectable Live Data, a 300-cycle chart, scan comparisons and JSON/CSV/PDF/HTML export. [Scope and verification](docs/verification/2026-11-27-advanced-diagnostics.en.md)
 
 ## Modules
 

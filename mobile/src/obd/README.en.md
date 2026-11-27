@@ -8,7 +8,7 @@ An explicit scan returns an asynchronous stop function; stop scanning before con
 
 The BLE profile identifies the actual device and adapter name. With empty UUID fields, native discovery selects exactly one custom serial service with one writable/notifying pair and excludes standard GATT services in 4-digit, 8-digit and canonical 128-bit UUID representations. Ambiguity fails explicitly. Advanced profiles accept the service UUID, writable characteristic UUID and notification characteristic UUID from the adapter vendor. No generic UUID or universal adapter compatibility is assumed. Discovered capabilities select acknowledged writes when available; otherwise explicit write-without-response support is required. Responses are ASCII in base64 notifications. Only an ELM327-compatible stream is supported.
 
-Call `new Elm327Driver(transport, adapterName)`, then `initialize()`, then `readSnapshot(vehicleId)`. The driver configures headers off, spaces on and automatic CAN formatting, queries PID support pages 00/20 and reads advertised RPM/coolant/load plus adapter supply voltage. The bitmap is the advertised set within pages 00/20; the driver does not follow later pages because it reads no higher PID. Unsupported parameters are null. Voltage is adapter input voltage, not an independently measured battery health assessment.
+Call `new Elm327Driver(transport, adapterName)`, then `initialize()`, then `readSnapshot(vehicleId)`. The driver follows advertised PID pages 00–E0 and reads basic RPM, coolant, load and ATRV. It does not request pages the ECU has not advertised. ATRV is adapter input voltage, distinct from PID 42 and battery health assessment.
 
 The headers-off parser remains strict for legacy protocols. For ISO 15765-4 CAN (6/7/8/9), the first 0100 opens the protocol before ATDPN is read. The driver enables ATH1, ATD0 and ATCFC1, discovers actual 7E8–7EF or 18DAF1xx response IDs from a second functional request, then physically addresses one controller with ATSH and filters it with ATCRA. Multiple IDs require user selection; a single actual ID can be selected automatically. Every payload is checked against that selected ID in software. Other addressing, CAN FD, extended-address ISO-TP and negative response-pending sequences remain unsupported. Non-CAN multi-controller replies still fail explicitly.
 
@@ -54,3 +54,22 @@ Starting a session through `startDiagnostics()` includes initialization and a fu
 The `readLiveParameters()` method refreshes supported measurements and voltage only. It uses the last full scan PID list, scoped to the vehicle and selected ECU. It does not poll fault codes again or change the report. A live measurement, ECU change, reinitialization and clear attempt invalidate permission to clear based on the earlier report.
 
 Transports expose `onDisconnected()` between commands as well. Before the first command, BLE tolerates startup ASCII data up to 8192 characters; excess or invalid bytes close the connection. After the first command, strict request/response ownership still applies.
+
+
+## Advanced OBD diagnostics
+
+The `readSnapshot(vehicleId, {extended: true})` option adds a validated version 1 extension without changing garage schema 3. The catalog contains 54 scalar PIDs; other advertised PIDs remain visible ECU capabilities without an invented decoder. Mode 02 has independent support maps and frame number 0. The triggering code is checked again after collection; a change aborts the scan. The ECU can overwrite a frame with the same code, so collection is not guaranteed atomic. Retrieval time is not fault occurrence time.
+
+PID 4F/50 configuration changes MAP, MAF and commanded lambda scaling. It is fetched during an extended scan or the first Live Data measurement requiring it and cached within ECU scope. Basic scans do not need it. No reply for advertised configuration leaves dependent values unknown. The optional second fuel-trim byte is accepted; only the named primary bank is displayed. O2 sensors have neutral ordinal labels because bank layout cannot be assumed without location interpretation.
+
+Import checks physical bounds, unique supported PIDs, readiness advertised by PID 01, frame 0 and agreement with duplicated basic fields. JSON exported before clearing is matched by its entire payload rather than report ID. CSV preserves negative numeric values and neutralizes formulas in text. HTML escapes textual data and excludes VIN, plates and routes. Automatic AI context retains the existing four fields.
+
+The basic scan reads RPM, coolant, load, adapter voltage and available fault statuses. A separate extended scan requests supported catalog entries, PID 01 readiness monitors and freeze frame 0. This does not establish access to all controllers or manufacturer diagnostics. Missing data stays unknown.
+
+Live Data supports up to 8 advertised PIDs. The 2/5/10-second pause starts after the previous cycle completes, so actual cadence depends on the adapter. The chart holds the latest 300 cycles in session memory. Missing readings and resumptions create separate segments. Export CSV before leaving the screen or changing vehicles; sessions are not automatically saved in the garage.
+
+The full report retains its timestamp and codes during Live Data. Save it in history, download JSON/CSV or export PDF in the native app and HTML in the browser. History offers search and pages of 20 records. Comparison requires the same vehicle and explicit matching CAN ECU address and protocol; older unscoped reports remain readable and exportable. Only common DTC statuses are compared. A code not reported again does not establish repair.
+
+Clearing requires the exact current report, a saved copy, acknowledgement that the copy was retained and a separate command confirmation. PDF/CSV does not replace a complete JSON or history backup. Run a new full scan after Live Data. Disconnecting cannot undo a clearing command already sent. A cancelled scan does not replace the previous completed report.
+
+[Scope and verification](../../../docs/verification/2026-11-27-advanced-diagnostics.en.md)

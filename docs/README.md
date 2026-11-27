@@ -61,3 +61,9 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 - [Katalog pojazdów offline](superpowers/progress/2026-11-25-offline-catalog.md)
 - [Przygotowanie wydania](superpowers/progress/2026-11-25-release-preflight.md)
 - [Eksport tras GPX](superpowers/progress/2026-11-26-trip-gpx.md)
+
+## Rozszerzona diagnostyka
+
+- [Zakres i weryfikacja](verification/2026-11-27-advanced-diagnostics.md)
+- [Plan](superpowers/plans/2026-11-27-advanced-diagnostics.md)
+- [Specyfikacja](superpowers/specs/2026-11-27-advanced-diagnostics.md)
