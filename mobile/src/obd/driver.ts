@@ -10,11 +10,13 @@ import type { ObdMeasurement, ParameterScaling } from './parameters.ts';
 import { parseReadiness } from './readiness.ts';
 import { parseFreezeDtc } from './details.ts';
 import type { DiagnosticDetails, FreezeFrame } from './details.ts';
+import {parseIdentificationSupported,parseIdentificationNegative,parseCalibrationIds,parseCalibrationVerificationNumbers,parseEcuName} from './identification.ts';
+import type {EcuIdentification,IdentityReading} from './identification.ts';
 
 export type ClearFaultOptions = { confirmed: boolean; backedUpSnapshot: DiagnosticSnapshot; vehicleId: string; tripRecording?: boolean };
 export type ClearFaultResult = { acknowledged: true; rawResponse: string; timestamp: number; backupSnapshotId: string };
-export type DiagnosticProgress = { stage: 'capabilities' | 'parameters' | 'faults' | 'readiness' | 'freeze-frame'; completed: number; total: number };
-export type ScanOptions = { extended?: boolean; onProgress?: (progress: DiagnosticProgress) => void };
+export type DiagnosticProgress = { stage: 'capabilities' | 'parameters' | 'faults' | 'readiness' | 'freeze-frame' | 'identification'; completed: number; total: number };
+export type ScanOptions = { extended?: boolean; identification?:boolean; onProgress?: (progress: DiagnosticProgress) => void };
 let sequence = 0;
 export class Elm327Driver {
   private transport: CommandTransport;
@@ -158,6 +160,35 @@ export class Elm327Driver {
     }
     return { status: 'available', frame: 0, readAt, code, supportedPids, measurements };
   }
+  private async identificationReply<T>(infoType:number,decode:(raw:string)=>T):Promise<Exclude<IdentityReading<T>,{status:'unsupported'}>> {
+    const command='09'+pidHex(infoType);
+    let raw:string;
+    try{raw=this.payload(await this.transport.send(command),command);}
+    catch(error){if(!(error instanceof ObdError)||error.kind!=='no-data')throw error;return {status:'no-data',readAt:Date.now()};}
+    let nrc:string|null;
+    try{nrc=parseIdentificationNegative(raw,infoType);}
+    catch(error){
+      if(error instanceof ObdError&&error.kind==='unsupported'){this.initialized=false;this.liveContext=null;this.lastSnapshot=null;}
+      throw error;
+    }
+    if(nrc!==null)return {status:'negative-response',nrc,readAt:Date.now()};
+    return {status:'available',value:decode(raw),readAt:Date.now()};
+  }
+  private async readIdentification(progress:(completed:number,total:number)=>void):Promise<EcuIdentification> {
+    const support=await this.identificationReply(0,parseIdentificationSupported);
+    if(support.status!=='available'){progress(1,1);return {version:1,...support};}
+    const supportedInfoTypes=support.value;
+    let completed=1;const total=1+[4,6,10].filter(pid=>supportedInfoTypes.includes(pid)).length;
+    progress(completed,total);
+    const read=async<T>(pid:number,decode:(raw:string)=>T):Promise<IdentityReading<T>>=>{
+      if(!supportedInfoTypes.includes(pid))return {status:'unsupported',readAt:support.readAt};
+      const value=await this.identificationReply(pid,decode);progress(++completed,total);return value;
+    };
+    const calibrationIds=await read(4,parseCalibrationIds);
+    const cvns=await read(6,parseCalibrationVerificationNumbers);
+    const ecuName=await read(10,parseEcuName);
+    return {version:1,status:'available',readAt:support.readAt,supportedInfoTypes,calibrationIds,cvns,ecuName};
+  }
   async readLiveParameters(vehicleId: string, selectedPids?: readonly number[]): Promise<LiveParameters> {
     return this.exclusive(async () => {
       if (!this.initialized || !this.liveContext || this.liveContext.vehicleId !== vehicleId) throw new ObdError('Najpierw wykonaj pełny odczyt dla wybranego samochodu.');
@@ -176,6 +207,7 @@ export class Elm327Driver {
     return this.exclusive(async () => {
       if (!this.initialized) throw new ObdError('Initialize adapter before reading');
       if (!vehicleId.trim() || vehicleId.length > 200) throw new ObdError('A vehicle is required');
+      if(options.identification&&(!options.extended||!this.canProtocol||!this.selectedEcu))throw new ObdError('Identyfikacja wymaga rozszerzonego skanu i wcześniej wybranego sterownika CAN.','unsupported');
       this.lastSnapshot = null;
       this.liveContext = null;
       this.scaling = {};
@@ -206,6 +238,10 @@ export class Elm327Driver {
         notify('readiness', supportedPids.includes(1) ? 1 : 0, supportedPids.includes(1) ? 1 : 0);
         notify('freeze-frame');
         extended = { version: 1, measurements, scaling: this.scalingCopy(), readiness, freezeFrame: await this.readFreezeFrame((completed, total) => notify('freeze-frame', completed, total)) };
+        if(options.identification){
+          notify('identification');
+          extended.identification=await this.readIdentification((completed,total)=>notify('identification',completed,total));
+        }
       }
       const timestamp = Date.now();
       const snapshot: DiagnosticSnapshot = { id: `obd-${timestamp}-${++sequence}-${Math.random().toString(36).slice(2, 9)}`, vehicleId, timestamp, source: 'obd', adapterName: this.adapterName, codes, readStatuses, parameters, supportedPids };

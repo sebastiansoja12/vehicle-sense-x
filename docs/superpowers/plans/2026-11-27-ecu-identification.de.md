@@ -18,7 +18,7 @@ Erwartet: neue Tests schlagen zuerst fehl und bestehen anschließend; kein Messw
 
 ## Task 2: Optionaler CAN-Scan und Antwortzustände
 
-- [ ] Tests an der CAN-Transportgrenze schreiben: nur gemeldete Typen, separate Aktivierung, kein VIN, Mehrrahmenantworten, andere ECU und NRC 78. Scanoption, Fortschritt und Identifikation im exakten Bericht ergänzen.
+- [x] Tests an der CAN-Transportgrenze schreiben: nur gemeldete Typen, separate Aktivierung, kein VIN, Mehrrahmenantworten, andere ECU und NRC 78. Scanoption, Fortschritt und Identifikation im exakten Bericht ergänzen.
 
 ```sh
 node --test mobile/tests/obd-identification-driver.test.mjs

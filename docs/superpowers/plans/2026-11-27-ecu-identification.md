@@ -18,7 +18,7 @@ Oczekiwane: nowe testy najpierw nie przechodzą, potem wszystkie przechodzą; ni
 
 ## Task 2: Opcjonalny skan CAN i statusy odpowiedzi
 
-- [ ] Napisz testy granicy transportu CAN: zapytania tylko zadeklarowanych typów, osobny opt-in, brak VIN, wieloramkowe odpowiedzi, inny ECU i NRC 78. Dodaj opcję skanu, postęp i zapis identyfikacji w dokładnym raporcie.
+- [x] Napisz testy granicy transportu CAN: zapytania tylko zadeklarowanych typów, osobny opt-in, brak VIN, wieloramkowe odpowiedzi, inny ECU i NRC 78. Dodaj opcję skanu, postęp i zapis identyfikacji w dokładnym raporcie.
 
 ```sh
 node --test mobile/tests/obd-identification-driver.test.mjs

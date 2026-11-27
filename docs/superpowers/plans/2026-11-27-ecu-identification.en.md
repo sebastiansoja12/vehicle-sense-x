@@ -18,7 +18,7 @@ Expected: new tests fail first and then pass; there is no measurement generator 
 
 ## Task 2: Optional CAN scan and response states
 
-- [ ] Write CAN transport-boundary tests: only advertised types, separate opt-in, no VIN, multiframe replies, wrong ECU and NRC 78. Add scan option, progress and identification in the exact report.
+- [x] Write CAN transport-boundary tests: only advertised types, separate opt-in, no VIN, multiframe replies, wrong ECU and NRC 78. Add scan option, progress and identification in the exact report.
 
 ```sh
 node --test mobile/tests/obd-identification-driver.test.mjs
