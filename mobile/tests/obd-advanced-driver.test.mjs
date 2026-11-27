@@ -90,3 +90,11 @@ test('scan progress counts requested parameters and fault modes without treating
  assert.ok(events.some(e=>e.stage==='freeze-frame'&&e.completed===3&&e.total===3));
  assert.ok(events.every(e=>e.completed>=0&&e.completed<=e.total));
 });
+test('basic scans skip scaling configuration and selected live data lazily fetches only the required configuration',async()=>{
+ const {driver,sent}=fixture({overrides:{'0140':'41 40 00 03 00 00>','014F':'41 4F 00 00 00 4D>','0150':'malformed>'}});
+ await driver.initialize();const report=await driver.readSnapshot('car');assert.equal(report.parameters.rpm,1726);
+ assert.equal(sent.includes('014F'),false);assert.equal(sent.includes('0150'),false);
+ sent.length=0;const live=await driver.readLiveParameters('car',[11]);assert.ok(live.measurements[0].value>300);
+ assert.deepEqual(sent,['014F','010B','ATRV']);
+ sent.length=0;await driver.readLiveParameters('car',[11]);assert.deepEqual(sent,['010B','ATRV']);
+});

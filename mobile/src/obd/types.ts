@@ -38,6 +38,12 @@ export function validateDiagnosticSnapshot(value: unknown): value is DiagnosticS
   if (!value.codes.every(c => record(c) && typeof c.code === 'string' && /^[PCBU][0-3][0-9A-F]{3}$/.test(c.code) && statuses.includes(c.status))) return false;
   if (!value.supportedPids.every(p => Number.isInteger(p) && p > 0 && p <= 255) || new Set(value.supportedPids).size !== value.supportedPids.length) return false;
   const p = value.parameters;
+  if(value.extended!==undefined){
+    if(!validDiagnosticDetails(value.extended,value.supportedPids))return false;
+    for(const [key,pid] of [['rpm',12],['coolantC',5],['loadPercent',4]] as const){
+      if(p[key] !== (value.extended.measurements.find(m=>m.pid===pid)?.value??null))return false;
+    }
+  }
   return measurement(p.rpm, 0, 16383.75) && measurement(p.coolantC, -40, 215) && measurement(p.loadPercent, 0, 100) && measurement(p.voltageV, 0, 100)
-    && (value.extended === undefined || validDiagnosticDetails(value.extended, value.supportedPids));
+    ;
 }

@@ -4,7 +4,7 @@ import { parameterByPid } from './parameters.ts';
 
 export function compareDiagnostics(before: DiagnosticSnapshot, after: DiagnosticSnapshot) {
   if (!validateDiagnosticSnapshot(before) || !validateDiagnosticSnapshot(after) || before.vehicleId !== after.vehicleId || before.timestamp > after.timestamp) throw new Error('Wybierz wcześniejszy odczyt tego samego samochodu.');
-  if (before.ecu?.protocol !== after.ecu?.protocol || before.ecu?.responseId !== after.ecu?.responseId) throw new Error('Raporty dotyczą różnych lub nieporównywalnych zakresów ECU.');
+  if (!before.ecu || !after.ecu || before.ecu.protocol !== after.ecu.protocol || before.ecu.responseId !== after.ecu.responseId) throw new Error('Porównanie wymaga potwierdzonego, zgodnego zakresu ECU w obu raportach.');
   const statuses: Dtc['status'][] = ['stored', 'pending', 'permanent'];
   const commonStatuses = statuses.filter(status => before.readStatuses.includes(status) && after.readStatuses.includes(status));
   const eligible = (scan: DiagnosticSnapshot) => new Map(scan.codes.filter(code => commonStatuses.includes(code.status)).map(code => [`${code.code}:${code.status}`, code]));

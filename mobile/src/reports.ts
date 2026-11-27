@@ -4,7 +4,8 @@ import {dueReminders,marketEstimate} from './features.ts';
 import {analyzeTrip} from './trips.ts';
 import {expenseCategoryLabels} from './expenses.ts';
 import {validateDiagnosticSnapshot} from './obd/types.ts';
-import type {DiagnosticSnapshot,LiveParameters} from './obd/types.ts';
+import type {DiagnosticSnapshot} from './obd/types.ts';
+import type {LiveHistorySample} from './obd/live-history.ts';
 import {parameterByPid,pidHex} from './obd/parameters.ts';
 import type {ObdMeasurement} from './obd/parameters.ts';
 import {monitorLabels} from './obd/readiness.ts';
@@ -53,9 +54,9 @@ export function diagnosticCsv(scan:DiagnosticSnapshot):string{
  }else measurements('current',([{pid:12,value:scan.parameters.rpm},{pid:5,value:scan.parameters.coolantC},{pid:4,value:scan.parameters.loadPercent}]).map(m=>({...m,readAt:scan.timestamp})));
  return csv(rows);
 }
-export function liveDataCsv(history:readonly LiveParameters[]):string{
- const rows:unknown[][]=[['Czas pobrania ISO','PID','Nazwa','Wartość','Jednostka','ECU','Adapter']];
- for(const sample of history){for(const m of sample.measurements??[]){const p=parameterByPid(m.pid)!;rows.push([new Date(m.readAt).toISOString(),pidHex(m.pid),p.label,m.value,p.unit,sample.ecu?.responseId??'',sample.adapterName]);}rows.push([new Date(sample.timestamp).toISOString(),'ATRV','Napięcie adaptera',sample.parameters.voltageV,'V',sample.ecu?.responseId??'',sample.adapterName]);}
+export function liveDataCsv(history:readonly LiveHistorySample[]):string{
+ const rows:unknown[][]=[['Czas pobrania ISO','PID','Nazwa','Wartość','Jednostka','ECU','Adapter','Początek nowego odcinka']];
+ for(const sample of history){for(const m of sample.measurements??[]){const p=parameterByPid(m.pid)!;rows.push([new Date(m.readAt).toISOString(),pidHex(m.pid),p.label,m.value,p.unit,sample.ecu?.responseId??'',sample.adapterName,!!sample.breakBefore]);}rows.push([new Date(sample.timestamp).toISOString(),'ATRV','Napięcie adaptera',sample.parameters.voltageV,'V',sample.ecu?.responseId??'',sample.adapterName,!!sample.breakBefore]);}
  return csv(rows);
 }
 export function healthReportHtml(state:AppData,vehicleId:string,today:string){

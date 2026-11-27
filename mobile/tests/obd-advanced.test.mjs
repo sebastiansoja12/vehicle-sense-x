@@ -75,8 +75,8 @@ test('frame-zero trigger decoding keeps a positive no-frame reply distinct from 
  assert.equal(parseFreezeDtc('42 02 00 00 00>'),null);
  for(const raw of ['NO DATA>','42 02 01 01 33>','42 02 00 01>','42 02 00 01 33 00>'])assert.throws(()=>parseFreezeDtc(raw));
 });
-const snapshot={id:'scan',vehicleId:'car',timestamp:100,source:'obd',adapterName:'ELM',parameters:{rpm:1000,coolantC:80,loadPercent:50,voltageV:14},codes:[],readStatuses:['stored'],supportedPids:[5,12,13]};
-const details={version:1,measurements:[{pid:12,value:1000,readAt:90}],readiness:null,freezeFrame:{status:'available',frame:0,readAt:90,code:'P0133',supportedPids:[5],measurements:[{pid:5,value:30,readAt:90}]}};
+const snapshot={id:'scan',vehicleId:'car',timestamp:100,source:'obd',adapterName:'ELM',parameters:{rpm:1000,coolantC:80,loadPercent:50,voltageV:14},codes:[],readStatuses:['stored'],supportedPids:[4,5,12,13]};
+const details={version:1,measurements:[{pid:4,value:50,readAt:90},{pid:5,value:80,readAt:90},{pid:12,value:1000,readAt:90}],readiness:null,freezeFrame:{status:'available',frame:0,readAt:90,code:'P0133',supportedPids:[5],measurements:[{pid:5,value:30,readAt:90}]}};
 test('extended snapshots validate physical bounds, supported PIDs and independent frame capabilities while legacy reports remain valid',()=>{
  assert.equal(validateDiagnosticSnapshot(snapshot),true);assert.equal(validateDiagnosticSnapshot({...snapshot,extended:details}),true);
  for(const patch of [
@@ -87,5 +87,10 @@ test('extended snapshots validate physical bounds, supported PIDs and independen
   {freezeFrame:{...details.freezeFrame,supportedPids:null}},{freezeFrame:{...details.freezeFrame,measurements:[{pid:13,value:40,readAt:90}]}},
   {readiness:{milOn:'false',storedDtcCount:0,ignition:'spark',monitors:[]}},
  ])assert.equal(validateDiagnosticSnapshot({...snapshot,extended:{...details,...patch}}),false,JSON.stringify(patch));
- assert.equal(validateDiagnosticSnapshot({...snapshot,extended:{...details,measurements:[{pid:12,value:null,readAt:90}],freezeFrame:{status:'no-data',frame:0,readAt:90}}}),true);
+ assert.equal(validateDiagnosticSnapshot({...snapshot,parameters:{rpm:null,coolantC:null,loadPercent:null,voltageV:14},extended:{...details,measurements:[{pid:12,value:null,readAt:90}],freezeFrame:{status:'no-data',frame:0,readAt:90}}}),true);
+});
+test('extended imports cannot contradict duplicate basic values or claim unsupported readiness',async()=>{
+ const {parseReadiness}=await import('../src/obd/readiness.ts');
+ assert.equal(validateDiagnosticSnapshot({...snapshot,extended:{...details,measurements:[{pid:12,value:4500,readAt:90}]}}),false);
+ assert.equal(validateDiagnosticSnapshot({...snapshot,extended:{...details,readiness:parseReadiness('41 01 00 00 00 00>')}}),false);
 });

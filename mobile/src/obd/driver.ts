@@ -110,10 +110,9 @@ export class Elm327Driver {
     }
     return pids;
   }
-  private async readScaling(supportedPids: number[]): Promise<void> {
-    this.scaling = {};
+  private async readScaling(supportedPids: number[], requested: readonly number[] = [0x4F,0x50]): Promise<void> {
     for (const [pid, key] of [[0x4F, 'pid4f'], [0x50, 'pid50']] as const) {
-      if (!supportedPids.includes(pid)) continue;
+      if (!supportedPids.includes(pid) || !requested.includes(pid) || Object.hasOwn(this.scaling,key)) continue;
       const command = `01${pidHex(pid)}`;
       try { this.scaling[key] = parseScalingConfiguration(this.payload(await this.transport.send(command), command), pid); }
       catch (error) { if (!(error instanceof ObdError) || error.kind !== 'no-data') throw error; this.scaling[key] = null; }
@@ -164,6 +163,11 @@ export class Elm327Driver {
       if (!this.initialized || !this.liveContext || this.liveContext.vehicleId !== vehicleId) throw new ObdError('Najpierw wykonaj pełny odczyt dla wybranego samochodu.');
       if (selectedPids !== undefined && (!Array.isArray(selectedPids) || selectedPids.length > 8 || new Set(selectedPids).size !== selectedPids.length || selectedPids.some(pid => !parameterByPid(pid) || !this.liveContext!.supportedPids.includes(pid)))) throw new ObdError('Wybierz maksymalnie 8 wspieranych parametrów.', 'unsupported');
       this.lastSnapshot = null;
+      const requested=selectedPids??[12,5,4];
+      await this.readScaling(this.liveContext.supportedPids,[
+        ...(requested.some(pid=>pid===11||pid===68)?[0x4F]:[]),
+        ...(requested.includes(16)?[0x50]:[]),
+      ]);
       const { parameters, measurements } = await this.readParameters(this.liveContext.supportedPids, selectedPids);
       return { vehicleId, timestamp: Date.now(), adapterName: this.adapterName, parameters, measurements, scaling: this.scalingCopy(), ...(this.selectedEcu ? { ecu: { ...this.selectedEcu } } : {}) };
     });
@@ -174,10 +178,11 @@ export class Elm327Driver {
       if (!vehicleId.trim() || vehicleId.length > 200) throw new ObdError('A vehicle is required');
       this.lastSnapshot = null;
       this.liveContext = null;
+      this.scaling = {};
       const notify = (stage: DiagnosticProgress['stage'], completed = 0, total = 0) => options.onProgress?.({ stage, completed, total });
       notify('capabilities');
       const supportedPids = await this.supportedPids(1, await this.pidStart());
-      await this.readScaling(supportedPids);
+      if(options.extended)await this.readScaling(supportedPids);
       notify('capabilities', 1, 1);
       const { parameters, measurements } = await this.readParameters(supportedPids, options.extended ? parameterDefinitions.map(p => p.pid) : undefined, (completed, total) => notify('parameters', completed, total));
       const codes: Dtc[] = [];

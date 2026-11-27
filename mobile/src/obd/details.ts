@@ -17,7 +17,7 @@ export function parseFreezeDtc(raw: string): string | null {
 function record(value: unknown): value is Record<string, unknown> { return !!value && typeof value === 'object' && !Array.isArray(value); }
 function pids(value: unknown): value is number[] { return Array.isArray(value) && value.length <= 255 && new Set(value).size === value.length && value.every(p => Number.isInteger(p) && p > 0 && p <= 255); }
 export function validDiagnosticDetails(value: unknown, supportedPids: number[]): value is DiagnosticDetails {
-  if (!record(value) || value.version !== 1 || !Array.isArray(supportedPids) || !validScaling(value.scaling, supportedPids) || !validMeasurements(value.measurements, supportedPids, value.scaling) || (value.readiness !== null && !validReadiness(value.readiness))) return false;
+  if (!record(value) || value.version !== 1 || !Array.isArray(supportedPids) || !validScaling(value.scaling, supportedPids) || !validMeasurements(value.measurements, supportedPids, value.scaling) || (value.readiness !== null && (!supportedPids.includes(1) || !validReadiness(value.readiness)))) return false;
   const frame = value.freezeFrame;
   if (!record(frame) || frame.frame !== 0 || typeof frame.readAt !== 'number' || !Number.isSafeInteger(frame.readAt) || frame.readAt < 0 || frame.readAt > 253402300799999) return false;
   if (frame.status === 'no-frame' || frame.status === 'no-data') return frame.code === undefined && frame.supportedPids === undefined && frame.measurements === undefined;

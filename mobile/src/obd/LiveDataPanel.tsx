@@ -1,7 +1,7 @@
 import {useState} from 'react';
 import {View,Text,TextInput,Switch} from 'react-native';
 import Svg,{Path,Line,Circle} from 'react-native-svg';
-import type {LiveParameters} from './types';
+import type {LiveHistorySample} from './live-history';
 import {parameterDefinitions,parameterByPid,pidHex} from './parameters';
 import {liveSeries,LIVE_HISTORY_LIMIT} from './live-history';
 import {Button,Note,Stat,number} from '../ui';
@@ -10,7 +10,7 @@ import {styles as s,colors} from '../theme';
 type Props={
  supportedPids:number[];selectedPids:number[];onSelection:(pids:number[])=>void;
  interval:number;onInterval:(seconds:number)=>void;live:boolean;onLive:(enabled:boolean)=>void;
- disabled:boolean;connected:boolean;history:LiveParameters[];
+ disabled:boolean;connected:boolean;history:LiveHistorySample[];
  onExport:()=>void;onReset:()=>void;
 };
 export function LiveDataPanel(p:Props) {

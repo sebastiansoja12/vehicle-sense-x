@@ -29,5 +29,18 @@ test('diagnostic comparisons limit code changes to common statuses and distingui
 test('diagnostic comparisons refuse cross-vehicle and cross-controller reports and disclose unknown legacy scope',async()=>{
  const {compareDiagnostics}=await import('../src/obd/comparison.ts');const before=report('before',1000);
  for(const after of [report('other',2000,{vehicleId:'other'}),report('other',2000,{ecu:{protocol:6,responseId:'7E9'}}),report('other',2000,{ecu:undefined}),report('other',500)])assert.throws(()=>compareDiagnostics(before,after));
- assert.equal(compareDiagnostics({...before,ecu:undefined},report('after',2000,{ecu:undefined})).scopeVerified,false);
+ assert.throws(()=>compareDiagnostics({...before,ecu:undefined},report('after',2000,{ecu:undefined})),/ECU|zakres/i);
+});
+test('resuming a live session begins a new chart segment without inventing missing readings',async()=>{
+ const {appendLiveSample,liveSeries}=await import('../src/obd/live-history.ts');
+ const history=appendLiveSample([sample(1000,1000),sample(2000,1100)],{...sample(60000,1200),breakBefore:true});
+ const series=liveSeries(history,12);assert.equal(series.segments.length,2);assert.equal(series.segments[0].length,2);assert.equal(series.segments[1].length,1);assert.equal(series.count,3);
+});
+test('backup eligibility requires the exact exported or saved payload, including when report IDs collide',async()=>{
+ const {hasDiagnosticBackup}=await import('../src/obd/backup.ts');
+ const current=report('same-id',2000),older=report('same-id',1000);
+ assert.equal(hasDiagnosticBackup(current,[older],JSON.stringify(older)),false);
+ assert.equal(hasDiagnosticBackup(current,[],JSON.stringify(current)),true);
+ assert.equal(hasDiagnosticBackup(current,[structuredClone(current)],null),true);
+ assert.equal(hasDiagnosticBackup(null,[current],JSON.stringify(current)),false);
 });
