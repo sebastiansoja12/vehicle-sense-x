@@ -18,7 +18,7 @@ Opcjonalny obiekt rozszerzenia wersji 1 zachowuje stare raporty i schemat garaż
 
 - [x] Napisać testy dekoderów, bitów gotowości i ramek 02; obejrzeć czerwony wynik, wdrożyć parsery i walidację rozszerzeń.
 - [x] Przetestować i wdrożyć stronicowanie PID, rozszerzony skan, wybrane pomiary Live Data, ramkę 0 i ochronę kasowania.
-- [ ] Przetestować raporty, CSV, historię 300 cykli i porównanie zakresów; podłączyć ekrany i eksporty.
+- [x] Przetestować raporty, CSV, historię 300 cykli i porównanie zakresów; podłączyć ekrany i eksporty.
 - [ ] Uruchomić pełne testy, typy, lint, dokumentację i eksporty; zlecić przegląd, poprawić uwagi, commitować i wypchnąć zmiany.
 
 `mobile/src/obd/parameters.ts` · `mobile/src/obd/readiness.ts` · `mobile/src/obd/types.ts` · `mobile/src/obd/driver.ts` · `mobile/src/obd/DiagnosticDetails.tsx` · `mobile/src/obd/live-history.ts` · `mobile/src/reports.ts` · `mobile/tests/obd-advanced.test.mjs`
