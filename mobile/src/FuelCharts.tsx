@@ -11,7 +11,7 @@ function Chart({ points, unit, bars = false, selected, select }: { points: Point
   const max = Math.max(1, ...points.map(p => p.value)) * 1.1, x = (i: number) => 44 + (points.length === 1 ? 139 : i / (points.length - 1) * 278), y = (v: number) => 164 - v / max * 140;
   const selectedPoint = points[selected], barWidth = Math.min(24, 220 / points.length);
   return <View style={{ marginTop: 18 }}>
-    <Svg width="100%" height={210} viewBox="0 0 350 210" accessible accessibilityLabel={`Wykres ${unit}. Wartości i wybór punktów poniżej.`}>
+    <Svg width="100%" height={210} viewBox="0 0 350 210" accessibilityLabel={`Wykres ${unit}. Wartości i wybór punktów poniżej.`}>
       {[0, .5, 1].map(t => <Line key={t} x1={40} x2={332} y1={y(max * t)} y2={y(max * t)} stroke={colors.line} />)}
       {[0, .5, 1].map(t => <SvgText key={t} x={35} y={y(max * t) + 4} textAnchor="end" fontSize={10} fill={colors.muted}>{number(max * t, max < 20 ? 1 : 0)}</SvgText>)}
       {bars ? points.map((p, i) => <Rect key={p.id} x={x(i) - barWidth / 2} y={y(p.value)} width={barWidth} height={164 - y(p.value)} fill={i === selected ? colors.red : colors.ink} />)

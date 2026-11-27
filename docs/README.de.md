@@ -73,3 +73,5 @@ Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren.
 [Markt und Machbarkeit für VehicleSenseX](research/2026-11-27-market-and-feasibility.de.md)
 
 [Datenprüfung und OBD-Bereitschaft](../mobile/VEHICLE-EVIDENCE.de.md)
+
+[Verbrauchsdiagramme, Bauteilpläne und Öl](../mobile/CONSUMPTION-MAINTENANCE.de.md)

@@ -121,3 +121,5 @@ CarPlay/Android Auto mogą działać z kompatybilnym radiem bez adaptera OBD2 �
 [Audyt danych i gotowość emisji OBD](VEHICLE-EVIDENCE.md)
 
 [Kokpit, własne zdjęcie auta i ograniczenia CarPlay/Android Auto](COCKPIT.md)
+
+[Wykresy spalania, harmonogram części i olej](CONSUMPTION-MAINTENANCE.md)

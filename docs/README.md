@@ -73,3 +73,5 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 [Rynek aplikacji samochodowych i możliwości VehicleSenseX](research/2026-11-27-market-and-feasibility.md)
 
 [Audyt danych i gotowość emisji OBD](../mobile/VEHICLE-EVIDENCE.md)
+
+[Wykresy spalania, harmonogram części i olej](../mobile/CONSUMPTION-MAINTENANCE.md)

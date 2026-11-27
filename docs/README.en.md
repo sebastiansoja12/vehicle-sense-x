@@ -73,3 +73,5 @@ When changing documentation, update all three versions and language links. Do no
 [Vehicle app market and VehicleSenseX feasibility](research/2026-11-27-market-and-feasibility.en.md)
 
 [Vehicle evidence audit and OBD readiness](../mobile/VEHICLE-EVIDENCE.en.md)
+
+[Consumption charts, component schedules and oil](../mobile/CONSUMPTION-MAINTENANCE.en.md)
