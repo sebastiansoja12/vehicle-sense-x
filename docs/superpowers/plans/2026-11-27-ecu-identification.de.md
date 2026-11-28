@@ -38,7 +38,7 @@ Erwartet: neue Tests schlagen zuerst fehl und bestehen anschließend; kein Messw
 
 ## Task 4: Vollständige Prüfung, Review, Dokumentation und gepushte Commits
 
-- [ ] Alle Tests, Typen, Lint, PL/EN/DE-Prüfung und Web-/Hermes-Exporte ausführen. Frisches Review anfordern, bestätigte Befunde mit Tests beheben und Commits ohne Co-authored pushen.
+- [x] Alle Tests, Typen, Lint, PL/EN/DE-Prüfung und Web-/Hermes-Exporte ausführen. Frisches Review anfordern, bestätigte Befunde mit Tests beheben und Commits ohne Co-authored pushen.
 
 ```sh
 node --test tests.mjs tests/*.test.mjs mobile/tests/*.test.mjs server/*.test.mjs

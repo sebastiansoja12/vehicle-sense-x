@@ -38,7 +38,7 @@ Oczekiwane: nowe testy najpierw nie przechodzą, potem wszystkie przechodzą; ni
 
 ## Task 4: Pełna weryfikacja, przegląd, dokumentacja i publikacja commitów
 
-- [ ] Uruchom pełne testy, typy, lint, walidację PL/EN/DE i eksporty web/Hermes. Zleć świeży przegląd, popraw potwierdzone błędy z testami i wypchnij commity bez Co-authored.
+- [x] Uruchom pełne testy, typy, lint, walidację PL/EN/DE i eksporty web/Hermes. Zleć świeży przegląd, popraw potwierdzone błędy z testami i wypchnij commity bez Co-authored.
 
 ```sh
 node --test tests.mjs tests/*.test.mjs mobile/tests/*.test.mjs server/*.test.mjs

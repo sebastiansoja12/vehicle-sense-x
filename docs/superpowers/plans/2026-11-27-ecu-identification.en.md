@@ -38,7 +38,7 @@ Expected: new tests fail first and then pass; there is no measurement generator 
 
 ## Task 4: Full verification, review, documentation and pushed commits
 
-- [ ] Run full tests, types, lint, PL/EN/DE validation and web/Hermes exports. Request a fresh review, fix confirmed findings with tests and push commits without Co-authored.
+- [x] Run full tests, types, lint, PL/EN/DE validation and web/Hermes exports. Request a fresh review, fix confirmed findings with tests and push commits without Co-authored.
 
 ```sh
 node --test tests.mjs tests/*.test.mjs mobile/tests/*.test.mjs server/*.test.mjs
