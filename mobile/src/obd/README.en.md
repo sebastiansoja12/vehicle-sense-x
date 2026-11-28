@@ -73,3 +73,6 @@ The full report retains its timestamp and codes during Live Data. Save it in his
 Clearing requires the exact current report, a saved copy, acknowledgement that the copy was retained and a separate command confirmation. PDF/CSV does not replace a complete JSON or history backup. Run a new full scan after Live Data. Disconnecting cannot undo a clearing command already sent. A cancelled scan does not replace the previous completed report.
 
 [Scope and verification](../../../docs/verification/2026-11-27-advanced-diagnostics.en.md)
+
+
+[Session report guide](../../LIVE-DATA-REPORTS.en.md)

@@ -10,32 +10,32 @@ Spec: [spec](../specs/2026-11-28-live-session-reports.md)
 
 ## Ograniczenia
 
-main; schema 3; LIVE_HISTORY_LIMIT = 300; maximum 8 PIDs per cycle; no native dependency changes.
+main; schema 3; LIVE_HISTORY_LIMIT = 300; maksymalnie 8 PID w cyklu; brak zmian zależności natywnych.
 
 ## Punkty przeglądu
 
-- Mixed vehicle/adapter/ECU scopes and invalid timestamps fail before export.
-- Missing, not-recorded and zero observations stay distinct.
-- Changing selected PIDs preserves per-cycle gaps and unweighted statistics.
-- Unknown fields and malicious labels cannot expose data or execute HTML.
-- Export freezes the selected buffer and cannot enable DTC clearing.
+- Mieszane zakresy pojazdu/adaptera/ECU i nieprawidłowe daty przerywają eksport.
+- Brakujące, niezapisane i zerowe pomiary pozostają rozróżnione.
+- Zmiana wyboru PID zachowuje luki w cyklach i nieważone statystyki.
+- Nieznane pola i złośliwe etykiety nie ujawniają danych ani nie wykonują HTML.
+- Eksport utrwala wybrany bufor i nie może odblokować kasowania DTC.
 
 ## Task 1: Model i formaty
 
-Files: mobile/src/obd/live-report.ts; mobile/tests/obd-live-report.test.mjs.
+Pliki: mobile/src/obd/live-report.ts; mobile/tests/obd-live-report.test.mjs.
 
-Interfaces: buildLiveSessionReport(history), liveSessionJson(history), liveSessionReportHtml(history).
+Interfejsy: buildLiveSessionReport(history), liveSessionJson(history), liveSessionReportHtml(history).
 
-- [x] RED: statistics, pauses, timestamps, voltage-only, scope/size/value validation, projection and escaping.
-- [x] GREEN: implement bounded projection and report builders; run node --test mobile/tests/obd-live-report.test.mjs.
-- [x] Commit verified report builders.
+- [x] RED: statystyki, przerwy, daty, samo napięcie, walidacja zakresu/rozmiaru/wartości, projekcja i escapowanie.
+- [x] GREEN: zaimplementować ograniczoną projekcję i generatory raportów; uruchomić node --test mobile/tests/obd-live-report.test.mjs.
+- [x] Zatwierdzić zweryfikowane generatory raportów.
 
 ## Task 2: Interfejs i weryfikacja
 
-Files: mobile/src/obd/LiveDataPanel.tsx; mobile/src/obd/DiagnosticsScreen.tsx; mobile/tests/obd-live-panel.test.mjs; mobile/src/obd/README.md.
+Pliki: mobile/src/obd/LiveDataPanel.tsx; mobile/src/obd/DiagnosticsScreen.tsx; mobile/src/reports.ts; mobile/tests/obd-live-panel.test.mjs; mobile/src/obd/README.md.
 
-Interfaces: onExport(format: LiveSessionExport), formats csv/json/report through existing shareTextFile/shareReport.
+Interfejsy: onExport(format: LiveSessionExport), formaty csv/json/report przez istniejące shareTextFile/shareReport.
 
-- [ ] RED: render export controls, format routing, disabled state; wire real builders and pause before export.
-- [ ] GREEN: full tests, typecheck, lint, PL/EN/DE docs and web/iOS/Android Hermes exports.
-- [ ] Review, commit and push only main; existing native artifacts remain tied to dd64fcd.
+- [x] RED: renderowanie eksportu, wybór formatu, blokada podczas pracy; podłączyć generatory i wstrzymanie przed eksportem.
+- [x] GREEN: pełne testy, typecheck, lint, dokumentacja PL/EN/DE i eksporty Hermes web/iOS/Android.
+- [x] Przegląd, commit i push wyłącznie main; istniejące pakiety natywne pozostają związane z dd64fcd.

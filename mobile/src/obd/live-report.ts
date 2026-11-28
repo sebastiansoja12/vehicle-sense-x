@@ -27,7 +27,7 @@ export function buildLiveSessionReport(history:readonly LiveHistorySample[]) {
   if(!validScaling(scaling,scalingPids))invalid();
   const observations=sample.measurements===undefined?[]:sample.measurements;
   if(!Array.isArray(observations)||observations.length>8||!validMeasurements(observations,observations.map(m=>m?.pid),scaling)
-   ||observations.some(m=>m.readAt>sample.timestamp))invalid();
+   ||observations.some((m,i)=>m.readAt>sample.timestamp||index>0&&m.readAt<history[index-1].timestamp||i>0&&m.readAt<observations[i-1].readAt))invalid();
   if(sample.measurements!==undefined){
    for(const [key,pid] of [['rpm',12],['coolantC',5],['loadPercent',4]] as const){
     if(p[key] !== (observations.find(m=>m.pid===pid)?.value??null))invalid();

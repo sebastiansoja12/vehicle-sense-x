@@ -72,3 +72,6 @@ Pełny raport zachowuje swój czas i kody podczas Live Data. Możesz zapisać go
 Do kasowania potrzebny jest dokładnie bieżący raport, jego zapisana kopia, potwierdzenie zachowania kopii i osobne potwierdzenie polecenia. PDF/CSV nie zastępuje pełnej kopii JSON lub historii. Po Live Data wykonaj nowy pełny odczyt. Przerwanie połączenia nie cofa wysłanego polecenia kasowania. Anulowany skan nie zastępuje poprzedniego ukończonego raportu.
 
 [Zakres i weryfikacja](../../../docs/verification/2026-11-27-advanced-diagnostics.md)
+
+
+[Instrukcja raportów sesji](../../LIVE-DATA-REPORTS.md)

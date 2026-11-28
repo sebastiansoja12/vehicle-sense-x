@@ -1,3 +1,4 @@
+import {buildLiveSessionReport} from './obd/live-report.ts';
 import {parameterByPid,pidHex} from './obd/parameters.ts';
 import {validateDiagnosticSnapshot} from './obd/types.ts';
 import type {ObdMeasurement} from './obd/parameters.ts';
@@ -95,8 +96,9 @@ export function diagnosticCsv(scan:DiagnosticSnapshot):string{
  return csv(rows);
 }
 export function liveDataCsv(history:readonly LiveHistorySample[]):string{
+ const session=buildLiveSessionReport(history);
  const rows:unknown[][]=[['Czas pobrania ISO','PID','Nazwa','Wartość','Jednostka','ECU','Adapter','Początek nowego odcinka']];
- for(const sample of history){for(const m of sample.measurements??[]){const p=parameterByPid(m.pid)!;rows.push([new Date(m.readAt).toISOString(),pidHex(m.pid),p.label,m.value,p.unit,sample.ecu?.responseId??'',sample.adapterName,!!sample.breakBefore]);}rows.push([new Date(sample.timestamp).toISOString(),'ATRV','Napięcie adaptera',sample.parameters.voltageV,'V',sample.ecu?.responseId??'',sample.adapterName,!!sample.breakBefore]);}
+ for(const sample of session.samples){for(const m of sample.measurements){const p=parameterByPid(m.pid)!;rows.push([new Date(m.readAt).toISOString(),pidHex(m.pid),p.label,m.value,p.unit,session.ecu?.responseId??'',session.adapterName,sample.breakBefore]);}rows.push([new Date(sample.timestamp).toISOString(),'ATRV','Napięcie adaptera',sample.parameters.voltageV,'V',session.ecu?.responseId??'',session.adapterName,sample.breakBefore]);}
  return csv(rows);
 }
 export function healthReportHtml(state:AppData,vehicleId:string,today:string){

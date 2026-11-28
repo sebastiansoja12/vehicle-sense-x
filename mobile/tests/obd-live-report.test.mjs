@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as reports from '../src/obd/live-report.ts';
+import {liveDataCsv} from '../src/reports.ts';
+import {hasDiagnosticBackup} from '../src/obd/backup.ts';
 const ecu={protocol:6,responseId:'7E8'};
 const sample=(timestamp,measurements,extra={})=>({vehicleId:'car',adapterName:'ELM',timestamp,ecu,parameters:{rpm:measurements.find(m=>m.pid===12)?.value??null,coolantC:measurements.find(m=>m.pid===5)?.value??null,loadPercent:measurements.find(m=>m.pid===4)?.value??null,voltageV:14},measurements,...extra});
 const history=[
@@ -49,4 +51,20 @@ test('HTML summary escapes labels, preserves unknown values and discloses scope 
  assert.ok(html.includes('&lt;b&gt;Car&lt;/b&gt;'));assert.ok(html.includes('&lt;script&gt;bad()&lt;/script&gt;'));assert.equal(html.includes('<script>'),false);
  for(const text of ['7E8','ATRV','300','arytmetyczna','kasowaniem','JSON/CSV','odpowiedzi','zapisanej','1970-01-01T00:00:00.900Z'])assert.ok(html.includes(text),text);
  assert.ok(reports.liveSessionReportHtml([sample(1000,[],{ecu:undefined})]).includes('niepotwierdzony'));
+});
+
+test('CSV rejects mixed scopes and invalid times through the shared export boundary',()=>{
+ for(const h of [[{...history[0],timestamp:-1}],[history[0],{...history[1],adapterName:'Other'}],[history[0],{...history[1],vehicleId:'Other'}]])assert.throws(()=>liveDataCsv(h),/sesj/i);
+});
+test('observations cannot predate a previous completed cycle, but equal times remain valid',()=>{
+ const h=[sample(10000,[{pid:12,value:100,readAt:9990}]),sample(11000,[{pid:12,value:200,readAt:0}])];
+ assert.throws(()=>reports.buildLiveSessionReport(h),/sesj/i);
+ assert.equal(reports.buildLiveSessionReport([sample(1000,[{pid:12,value:100,readAt:1000}]),sample(1000,[{pid:12,value:100,readAt:1000}])]).summary.durationMs,0);
+});
+test('sequential observations cannot move backward within one cycle',()=>{
+ assert.throws(()=>reports.buildLiveSessionReport([sample(1000,[{pid:12,value:100,readAt:950},{pid:5,value:80,readAt:900}])]),/sesj/i);
+});
+test('a Live Data JSON export cannot authorize clearing codes from a full diagnostic report',()=>{
+ const scan={id:'scan',vehicleId:'car',timestamp:1000,source:'obd',adapterName:'ELM',parameters:history[0].parameters,codes:[],readStatuses:['stored'],supportedPids:[12,6],ecu};
+ assert.equal(hasDiagnosticBackup(scan,[],reports.liveSessionJson(history)),false);
 });

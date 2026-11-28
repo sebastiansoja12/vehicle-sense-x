@@ -73,3 +73,6 @@ Der vollständige Bericht behält während Live Data seinen Zeitstempel und sein
 Zum Löschen werden der exakte aktuelle Bericht, eine gespeicherte Kopie, die Bestätigung ihrer Aufbewahrung und eine separate Befehlsbestätigung benötigt. PDF/CSV ersetzt keine vollständige JSON- oder Verlaufssicherung. Nach Live Data ist ein neuer vollständiger Scan erforderlich. Trennen kann einen bereits gesendeten Löschbefehl nicht zurücknehmen. Ein abgebrochener Scan ersetzt den vorherigen abgeschlossenen Bericht nicht.
 
 [Umfang und Prüfung](../../../docs/verification/2026-11-27-advanced-diagnostics.de.md)
+
+
+[Anleitung für Sitzungsberichte](../../LIVE-DATA-REPORTS.de.md)

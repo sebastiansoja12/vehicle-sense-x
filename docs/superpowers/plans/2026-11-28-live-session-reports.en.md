@@ -32,10 +32,10 @@ Interfaces: buildLiveSessionReport(history), liveSessionJson(history), liveSessi
 
 ## Task 2: Interface and verification
 
-Files: mobile/src/obd/LiveDataPanel.tsx; mobile/src/obd/DiagnosticsScreen.tsx; mobile/tests/obd-live-panel.test.mjs; mobile/src/obd/README.en.md.
+Files: mobile/src/obd/LiveDataPanel.tsx; mobile/src/obd/DiagnosticsScreen.tsx; mobile/src/reports.ts; mobile/tests/obd-live-panel.test.mjs; mobile/src/obd/README.en.md.
 
 Interfaces: onExport(format: LiveSessionExport), formats csv/json/report through existing shareTextFile/shareReport.
 
-- [ ] RED: render export controls, format routing, disabled state; wire real builders and pause before export.
-- [ ] GREEN: full tests, typecheck, lint, PL/EN/DE docs and web/iOS/Android Hermes exports.
-- [ ] Review, commit and push only main; existing native artifacts remain tied to dd64fcd.
+- [x] RED: render export controls, format routing, disabled state; wire real builders and pause before export.
+- [x] GREEN: full tests, typecheck, lint, PL/EN/DE docs and web/iOS/Android Hermes exports.
+- [x] Review, commit and push only main; existing native artifacts remain tied to dd64fcd.

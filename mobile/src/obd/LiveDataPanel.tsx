@@ -2,6 +2,7 @@ import {useState} from 'react';
 import {View,Text,TextInput,Switch} from 'react-native';
 import Svg,{Path,Line,Circle} from 'react-native-svg';
 import type {LiveHistorySample} from './live-history';
+import type {LiveSessionExport} from './live-report';
 import {parameterDefinitions,parameterByPid,pidHex} from './parameters';
 import {liveSeries,LIVE_HISTORY_LIMIT} from './live-history';
 import {Button,Note,Stat,number} from '../ui';
@@ -11,7 +12,7 @@ type Props={
  supportedPids:number[];selectedPids:number[];onSelection:(pids:number[])=>void;
  interval:number;onInterval:(seconds:number)=>void;live:boolean;onLive:(enabled:boolean)=>void;
  disabled:boolean;connected:boolean;history:LiveHistorySample[];
- onExport:()=>void;onReset:()=>void;
+ onExport:(format:LiveSessionExport)=>void;onReset:()=>void;
 };
 export function LiveDataPanel(p:Props) {
  const[picker,setPicker]=useState(false),[query,setQuery]=useState(''),[chartPid,setChartPid]=useState<number|null>(null);
@@ -42,7 +43,10 @@ export function LiveDataPanel(p:Props) {
     <Text style={s.fine}>Min. {format(series.min)} · maks. {format(series.max)} · średnia {format(series.mean)} · ostatni {format(series.current)} {definition.unit}</Text>
    </>}
    <Text style={s.fine}>Przerwy oznaczają brak odczytu. — oznacza wartość nieznaną. Bufor sesji obejmuje ostatnie {LIVE_HISTORY_LIMIT} cykli i nie zapisuje się automatycznie w garażu.</Text>
-   <Button label="Eksportuj sesję Live Data CSV" secondary disabled={p.disabled} onPress={p.onExport}/>
+   <Button label="Eksportuj sesję Live Data CSV" secondary disabled={p.disabled} onPress={()=>p.onExport('csv')}/>
+   <Button label="Eksportuj sesję Live Data JSON" secondary disabled={p.disabled} onPress={()=>p.onExport('json')}/>
+   <Button label="Eksportuj sesję Live Data PDF / HTML" secondary disabled={p.disabled} onPress={()=>p.onExport('report')}/>
+   <Text style={s.fine}>JSON zachowuje pomiary i przerwy. PDF / HTML podsumowuje sesję. Eksport sesji nie zastępuje kopii pełnego skanu przed kasowaniem kodów.</Text>
    <Button label="Wyczyść wykres sesji" secondary disabled={p.disabled||p.live} onPress={p.onReset}/>
   </>}
  </View>;

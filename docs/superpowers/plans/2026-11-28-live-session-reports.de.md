@@ -10,32 +10,32 @@ Spec: [spec](../specs/2026-11-28-live-session-reports.de.md)
 
 ## Grenzen
 
-main; schema 3; LIVE_HISTORY_LIMIT = 300; maximum 8 PIDs per cycle; no native dependency changes.
+main; schema 3; LIVE_HISTORY_LIMIT = 300; höchstens 8 PIDs pro Zyklus; keine Änderungen nativer Abhängigkeiten.
 
 ## Prüfschwerpunkte
 
-- Mixed vehicle/adapter/ECU scopes and invalid timestamps fail before export.
-- Missing, not-recorded and zero observations stay distinct.
-- Changing selected PIDs preserves per-cycle gaps and unweighted statistics.
-- Unknown fields and malicious labels cannot expose data or execute HTML.
-- Export freezes the selected buffer and cannot enable DTC clearing.
+- Gemischte Fahrzeug-/Adapter-/ECU-Bereiche und ungültige Zeitstempel verhindern den Export.
+- Fehlende, nicht gespeicherte und Nullmesswerte bleiben unterscheidbar.
+- Geänderte PID-Auswahl erhält Lücken je Zyklus und ungewichtete Statistik.
+- Unbekannte Felder und bösartige Bezeichnungen dürfen keine Daten offenlegen oder HTML ausführen.
+- Der Export hält den gewählten Puffer fest und kann DTC-Löschen nicht freigeben.
 
 ## Task 1: Modell und Formate
 
-Files: mobile/src/obd/live-report.ts; mobile/tests/obd-live-report.test.mjs.
+Dateien: mobile/src/obd/live-report.ts; mobile/tests/obd-live-report.test.mjs.
 
-Interfaces: buildLiveSessionReport(history), liveSessionJson(history), liveSessionReportHtml(history).
+Schnittstellen: buildLiveSessionReport(history), liveSessionJson(history), liveSessionReportHtml(history).
 
-- [x] RED: statistics, pauses, timestamps, voltage-only, scope/size/value validation, projection and escaping.
-- [x] GREEN: implement bounded projection and report builders; run node --test mobile/tests/obd-live-report.test.mjs.
-- [x] Commit verified report builders.
+- [x] RED: Statistik, Pausen, Zeitstempel, nur Spannung, Bereichs-/Größen-/Wertprüfung, Projektion und Escaping.
+- [x] GREEN: begrenzte Projektion und Berichtsgeneratoren implementieren; ausführen node --test mobile/tests/obd-live-report.test.mjs.
+- [x] Geprüfte Berichtsgeneratoren committen.
 
 ## Task 2: Oberfläche und Prüfung
 
-Files: mobile/src/obd/LiveDataPanel.tsx; mobile/src/obd/DiagnosticsScreen.tsx; mobile/tests/obd-live-panel.test.mjs; mobile/src/obd/README.de.md.
+Dateien: mobile/src/obd/LiveDataPanel.tsx; mobile/src/obd/DiagnosticsScreen.tsx; mobile/src/reports.ts; mobile/tests/obd-live-panel.test.mjs; mobile/src/obd/README.de.md.
 
-Interfaces: onExport(format: LiveSessionExport), formats csv/json/report through existing shareTextFile/shareReport.
+Schnittstellen: onExport(format: LiveSessionExport), Formate csv/json/report über bestehende shareTextFile/shareReport.
 
-- [ ] RED: render export controls, format routing, disabled state; wire real builders and pause before export.
-- [ ] GREEN: full tests, typecheck, lint, PL/EN/DE docs and web/iOS/Android Hermes exports.
-- [ ] Review, commit and push only main; existing native artifacts remain tied to dd64fcd.
+- [x] RED: Exportsteuerung, Formatwahl und Sperrstatus rendern; echte Generatoren und Pause vor Export verbinden.
+- [x] GREEN: vollständige Tests, typecheck, lint, PL/EN/DE-Dokumentation und Hermes-Exporte für web/iOS/Android.
+- [x] Prüfen, committen und ausschließlich main pushen; bestehende native Artefakte bleiben an dd64fcd gebunden.
