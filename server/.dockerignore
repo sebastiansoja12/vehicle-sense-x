@@ -2,3 +2,4 @@
 !Dockerfile
 !.dockerignore
 !index.mjs
+!automotive.mjs

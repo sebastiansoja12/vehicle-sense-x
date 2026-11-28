@@ -67,3 +67,17 @@ When changing documentation, update all three versions and language links. Do no
 - [Scope and verification](verification/2026-11-27-advanced-diagnostics.en.md)
 - [Plan](superpowers/plans/2026-11-27-advanced-diagnostics.en.md)
 - [Specification](superpowers/specs/2026-11-27-advanced-diagnostics.en.md)
+
+[VehicleSenseX Services](../mobile/SERVICES.en.md)
+
+[VehicleSenseX Services — verification](verification/2026-11-26-automotive-services.en.md)
+
+[Diagnostic comparison and workshop report](../mobile/DIAGNOSTIC-COMPARISON.en.md)
+
+[Diagnostic comparison — verification](verification/2026-11-27-diagnostic-comparison.en.md)
+
+[Vehicle app market and VehicleSenseX feasibility](research/2026-11-27-market-and-feasibility.en.md)
+
+[Vehicle evidence audit and OBD readiness](../mobile/VEHICLE-EVIDENCE.en.md)
+
+[Consumption charts, component schedules and oil](../mobile/CONSUMPTION-MAINTENANCE.en.md)

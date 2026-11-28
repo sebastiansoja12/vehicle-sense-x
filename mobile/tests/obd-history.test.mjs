@@ -19,7 +19,7 @@ test('live graphs show real gaps and current unknown data instead of connecting 
 });
 const report=(id,time,patch={})=>({id,vehicleId:'car',timestamp:time,source:'obd',adapterName:'ELM',parameters:{rpm:1000,coolantC:80,loadPercent:50,voltageV:14},codes:[],readStatuses:['stored'],supportedPids:[4,5,12],ecu:{protocol:6,responseId:'7E8'},...patch});
 test('diagnostic comparisons limit code changes to common statuses and distinguish not-reported from repaired',async()=>{
- const {compareDiagnostics}=await import('../src/obd/comparison.ts');
+ const {compareAdvancedDiagnostics:compareDiagnostics}=await import('../src/obd/comparison.ts');
  const before=report('before',1000,{readStatuses:['stored','pending'],codes:[{code:'P0133',status:'stored'},{code:'P0300',status:'pending'}]});
  const after=report('after',2000,{readStatuses:['stored','permanent'],codes:[{code:'P0171',status:'stored'},{code:'P0300',status:'permanent'}],parameters:{rpm:1500,coolantC:80,loadPercent:50,voltageV:14}});
  const change=compareDiagnostics(before,after);assert.deepEqual(change.added,[{code:'P0171',status:'stored'}]);assert.deepEqual(change.notReported,[{code:'P0133',status:'stored'}]);
@@ -27,7 +27,7 @@ test('diagnostic comparisons limit code changes to common statuses and distingui
  assert.deepEqual(change.parameters,[{pid:12,before:1000,after:1500,unit:'rpm'}]);
 });
 test('diagnostic comparisons refuse cross-vehicle and cross-controller reports and disclose unknown legacy scope',async()=>{
- const {compareDiagnostics}=await import('../src/obd/comparison.ts');const before=report('before',1000);
+ const {compareAdvancedDiagnostics:compareDiagnostics}=await import('../src/obd/comparison.ts');const before=report('before',1000);
  for(const after of [report('other',2000,{vehicleId:'other'}),report('other',2000,{ecu:{protocol:6,responseId:'7E9'}}),report('other',2000,{ecu:undefined}),report('other',500)])assert.throws(()=>compareDiagnostics(before,after));
  assert.throws(()=>compareDiagnostics({...before,ecu:undefined},report('after',2000,{ecu:undefined})),/ECU|zakres/i);
 });

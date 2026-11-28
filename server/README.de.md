@@ -20,7 +20,7 @@ Die Standard-Bind-Adresse ist `127.0.0.1:8787`. Für lokale Arbeit beibehalten. 
 
 ## Private Container-Bereitstellung
 
-Das Image verwendet das offizielle `node:24.18.0-bookworm-slim`, startet Node direkt als Benutzer `node` ohne Root-Rechte und kopiert nur `index.mjs`. Es werden keine Pakete installiert. `.dockerignore` erlaubt nur Builddateien und Laufzeitcode; `.env`-Dateien, Geheimnisse, Tests und Dokumentation gelangen nicht in den Buildkontext. Private Konfiguration erst zur Laufzeit injizieren, niemals durch `ARG`, `COPY` oder öffentliche Umgebungsvariablen der mobilen App.
+Das Image verwendet das offizielle `node:24.18.0-bookworm-slim`, startet Node direkt als Benutzer `node` ohne Root-Rechte und kopiert nur `index.mjs` und `automotive.mjs`. Es werden keine Pakete installiert. `.dockerignore` erlaubt nur Builddateien und Laufzeitcode; `.env`-Dateien, Geheimnisse, Tests und Dokumentation gelangen nicht in den Buildkontext. Private Konfiguration erst zur Laufzeit injizieren, niemals durch `ARG`, `COPY` oder öffentliche Umgebungsvariablen der mobilen App.
 
 Nach Vorbereitung der lokalen `.env` wie oben beschrieben, im Verzeichnis `server`:
 
@@ -93,3 +93,5 @@ Für diese Implementierung geprüfte offizielle API-Referenzen:
 - [Datenkontrollen und Aufbewahrung beim Anbieter](https://developers.openai.com/api/docs/guides/your-data)
 
 Optionale diagnostische `ecu`-Metadaten enthalten nur eine validierte Standard-CAN-Protokollnummer (6/7/8/9) und Antwortadresse. Sie werden unabhängig auf Client und Server in die Whitelist aufgenommen. Das Modell wird darauf hingewiesen, dass dies das ausgewählte Steuergerät betrifft, nicht jedes Steuergerät. VIN, VIN-Quellenbelege und unbekannte ECU-Metadaten gehören nicht zum akzeptierten KI-Kontext.
+
+Werkstätten aus OpenStreetMap und Teileangebote von eBay erscheinen direkt in der App. Privaten Server konfigurieren; Preise benötigen zusätzlich eBay-Browse-API-Zugang. [VehicleSenseX Services](../mobile/SERVICES.de.md)

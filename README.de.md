@@ -20,6 +20,7 @@ Version 0.5.0/Build 7 erweitert die Diagnose um einen Katalog mit 54 Standardmes
 | AI Car Assistant | Lokale Zusammenfassung und echte Anfragen an einen konfigurierten Server nach Zustimmung; der Anbieterschlüssel bleibt auf dem Server |
 | Trips | Manuelle Einträge, Vordergrund-GPS, Entwurfswiederherstellung, Spur ohne Kartenkacheln und GPX-/JSON-/CSV-Export |
 | Vehicle Health & Value | Belege und fehlende Daten, Angebotsvergleiche des Besitzers und PDF-/HTML-Verkaufsbericht |
+| Empfohlenes Zubehör | Alle 563 Marken und manuelle Einträge, vier Kategorien, fahrzeugbezogene Angebotssuche, Hinweise zur Passform und zusätzliche Kataloge für 19 Hersteller |
 
 Fünf Hauptregister: Start, Diagnose, Fahrten, Kosten und Garage. Wartung, Zustand, Fahranalyse und Assistent sind über die Garage erreichbar. Die helle Oberfläche verwendet Graphit und einen roten Akzent sowie ausdrückliche Einheiten, Quellen und Daten.
 
@@ -60,3 +61,5 @@ Die Dokumentationsprüfung benötigt Python 3.9+ und Git. Quell- und Formularerg
 Die Oberflächenentwurfsdateien bleiben im Hauptverzeichnis als historisches Material erhalten. Start mit `npm run prototype` unter http://127.0.0.1:5173. Die aktuelle App befindet sich in `mobile/`.
 
 Version 0.4.0 ergänzt automatischen ECU-Scan, separate Live Data, Behandlung von Verbindungsverlust und einen Radio-Audiotest über System-Bluetooth. [0.4.0](docs/verification/2026-11-26-obd-radio.de.md)
+
+Werkstätten aus OpenStreetMap und Teileangebote von eBay erscheinen direkt in der App. Privaten Server konfigurieren; Preise benötigen zusätzlich eBay-Browse-API-Zugang. [VehicleSenseX Services](mobile/SERVICES.de.md)

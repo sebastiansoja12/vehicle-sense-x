@@ -1,6 +1,7 @@
 import { createServer } from 'node:http';
 import { createHash, timingSafeEqual } from 'node:crypto';
 import { pathToFileURL } from 'node:url';
+import { createAutomotiveService, ServiceError } from './automotive.mjs';
 
 const BODY_BYTES = 16_384;
 const INSTRUCTIONS = `Jesteś asystentem samochodowym VehicleSenseX. Odpowiadaj zwięźle po polsku.
@@ -108,6 +109,8 @@ export function createAssistantServer({ env = process.env, fetchImpl = globalThi
   const timeoutMs = env.ASSISTANT_TIMEOUT_MS === undefined ? 25_000 : Number(env.ASSISTANT_TIMEOUT_MS);
   if (!Number.isInteger(timeoutMs) || timeoutMs < 100 || timeoutMs > 30_000) throw new Error('Invalid ASSISTANT_TIMEOUT_MS');
   const expectedToken = hash(token);
+  const automotive = createAutomotiveService({ env, fetchImpl });
+  const tokenConfigured = /^[A-Za-z0-9._~-]{32,512}$/.test(token);
   let windowStart = Date.now(), requests = 0, active = 0;
   const server = createServer({ maxHeaderSize: 8192, requestTimeout: 10_000, headersTimeout: 5000 }, async (req, res) => {
     res.setHeader('cache-control', 'no-store');
@@ -127,7 +130,8 @@ export function createAssistantServer({ env = process.env, fetchImpl = globalThi
         res.setHeader('vary', 'Origin');
       }
       if (req.url === '/health' && req.method === 'GET') return send(200, { configured });
-      if (req.url !== '/assistant') throw new HttpError(404, 'Nie znaleziono zasobu.');
+      const serviceMethod = ({ '/automotive/places': 'places', '/automotive/workshops': 'workshops', '/automotive/parts': 'parts' })[req.url];
+      if (req.url !== '/assistant' && !serviceMethod) throw new HttpError(404, 'Nie znaleziono zasobu.');
       if (req.method === 'OPTIONS') {
         if (!origin || req.headers['access-control-request-method'] !== 'POST') throw new HttpError(403, 'Niedozwolone źródło żądania.');
         res.setHeader('access-control-allow-methods', 'POST');
@@ -135,10 +139,10 @@ export function createAssistantServer({ env = process.env, fetchImpl = globalThi
         return send(204);
       }
       if (req.method !== 'POST') { res.setHeader('allow', 'POST, OPTIONS'); throw new HttpError(405, 'Niedozwolona metoda.'); }
-      if (!configured) throw new HttpError(503, 'Asystent AI nie jest skonfigurowany.');
+      if (serviceMethod ? !tokenConfigured : !configured) throw new HttpError(503, serviceMethod ? 'Usługi samochodowe nie są skonfigurowane.' : 'Asystent AI nie jest skonfigurowany.');
       const authorization = req.headers.authorization || '';
       const supplied = authorization.startsWith('Bearer ') ? authorization.slice(7) : '';
-      if (!timingSafeEqual(hash(supplied), expectedToken)) throw new HttpError(401, 'Nieprawidłowy token asystenta.');
+      if (!timingSafeEqual(hash(supplied), expectedToken)) throw new HttpError(401, 'Nieprawidłowy token aplikacji.');
       if (Date.now() - windowStart >= 60_000) { windowStart = Date.now(); requests = 0; }
       if (++requests > 20 || active >= 2) {
         res.setHeader('retry-after', String(Math.max(1, Math.ceil((60_000 - Date.now() + windowStart) / 1000))));
@@ -150,6 +154,14 @@ export function createAssistantServer({ env = process.env, fetchImpl = globalThi
       try {
         const body = await readBody(req);
         if (!object(body)) badInput();
+        if (serviceMethod) {
+          const controller = new AbortController();
+          const timer = setTimeout(() => controller.abort(), 25_000);
+          const disconnect = () => controller.abort();
+          res.once('close', disconnect);
+          try { return send(200, await automotive[serviceMethod](body, controller.signal)); }
+          finally { clearTimeout(timer); res.off('close', disconnect); }
+        }
         const question = text(body.question, 2000);
         const context = sanitizeContext(body.context);
         const controller = new AbortController();
@@ -173,7 +185,8 @@ export function createAssistantServer({ env = process.env, fetchImpl = globalThi
         } finally { clearTimeout(timer); res.off('close', disconnect); }
       } finally { active--; }
     } catch (error) {
-      send(error instanceof HttpError ? error.status : 500, { error: error instanceof HttpError ? error.message : 'Wewnętrzny błąd asystenta.' });
+      const known = error instanceof HttpError || error instanceof ServiceError;
+      send(known ? error.status : 500, { error: known ? error.message : 'Wewnętrzny błąd serwera.' });
       req.resume();
     }
   });

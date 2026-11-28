@@ -1,3 +1,5 @@
+import {ReadinessDetails} from './ReadinessDetails';
+import {OilTemperatureDetails} from './OilTemperatureDetails';
 import {useState} from 'react';
 import {View,Text} from 'react-native';
 import type {DiagnosticSnapshot} from './types';
@@ -24,7 +26,7 @@ export function Snapshot({value,expanded=false}:{value:DiagnosticSnapshot;expand
   <Button label={open?'Zwiń raport diagnostyczny':'Pokaż raport diagnostyczny'} secondary onPress={()=>setOpen(v=>!v)}/>
   {open&&<>
    {value.readStatuses.length<3&&<Note>Odczyt częściowy. Pozostałe statusy kodów są nieznane.</Note>}
-   <ParameterGrid parameters={value.parameters}/>
+   <ParameterGrid parameters={value.parameters}/>{!value.extended&&<><OilTemperatureDetails value={value}/><ReadinessDetails value={value}/></>}
    {value.codes.length?value.codes.map((code,i)=><View key={`${code.code}-${code.status}-${i}`} style={s.between}><Text style={[s.body,{fontWeight:'700'}]}>{code.code}</Text><Text style={s.muted}>{labels[code.status]}</Text></View>):<Text style={s.body}>Brak kodów w odczytanych statusach. Nie potwierdza to sprawności samochodu.</Text>}
    <Text style={s.fine}>— oznacza brak obsługi lub odczytu parametru. Wspierane PID: {value.supportedPids.map(v=>v.toString(16).toUpperCase().padStart(2,'0')).join(', ')||'brak'}.</Text>
    {value.extended?<DetailsToggle key={value.id} value={value.extended} initiallyOpen={expanded}/>:<Text style={s.fine}>Raport podstawowy. Gotowość emisji i freeze frame nie zostały odczytane.</Text>}

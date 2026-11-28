@@ -20,7 +20,7 @@ Domyślny adres nasłuchiwania to `127.0.0.1:8787`. Zachowaj go do pracy lokalne
 
 ## Prywatne wdrożenie w kontenerze
 
-Obraz korzysta z oficjalnego `node:24.18.0-bookworm-slim`, uruchamia Node bezpośrednio jako użytkownik `node` (bez roota) i kopiuje wyłącznie `index.mjs`. Nie instaluje pakietów. `.dockerignore` dopuszcza tylko pliki budowania i kod uruchomieniowy; pliki `.env`, sekrety, testy i dokumentacja nie trafiają do kontekstu budowania. Wstrzykuj prywatną konfigurację dopiero przy uruchomieniu, nigdy przez `ARG`, `COPY` ani publiczne zmienne aplikacji mobilnej.
+Obraz korzysta z oficjalnego `node:24.18.0-bookworm-slim`, uruchamia Node bezpośrednio jako użytkownik `node` (bez roota) i kopiuje wyłącznie `index.mjs` i `automotive.mjs`. Nie instaluje pakietów. `.dockerignore` dopuszcza tylko pliki budowania i kod uruchomieniowy; pliki `.env`, sekrety, testy i dokumentacja nie trafiają do kontekstu budowania. Wstrzykuj prywatną konfigurację dopiero przy uruchomieniu, nigdy przez `ARG`, `COPY` ani publiczne zmienne aplikacji mobilnej.
 
 Po przygotowaniu lokalnego `.env` zgodnie z instrukcją powyżej, z katalogu `server`:
 
@@ -93,3 +93,5 @@ Oficjalne materiały API sprawdzone podczas tej implementacji:
 - [Kontrola danych i retencja u dostawcy](https://developers.openai.com/api/docs/guides/your-data)
 
 Opcjonalne metadane diagnostyczne `ecu` zawierają wyłącznie zwalidowany numer standardowego protokołu CAN (6/7/8/9) i adres odpowiedzi. Są niezależnie dopuszczane przez białą listę klienta i serwera. Model otrzymuje informację, że dane dotyczą wybranego sterownika, a nie wszystkich sterowników. VIN, dowody źródła VIN i nieznane metadane ECU nie należą do akceptowanego kontekstu AI.
+
+Dodano moduły warsztatów z OpenStreetMap i ofert części z eBay, wyświetlane w aplikacji. Wymagają konfiguracji prywatnego serwera; ceny także dostępu eBay Browse API. [VehicleSenseX Services](../mobile/SERVICES.md)

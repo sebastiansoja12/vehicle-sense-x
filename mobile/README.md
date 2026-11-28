@@ -109,3 +109,31 @@ Pełny raport zachowuje swój czas i kody podczas Live Data. Możesz zapisać go
 Do kasowania potrzebny jest dokładnie bieżący raport, jego zapisana kopia, potwierdzenie zachowania kopii i osobne potwierdzenie polecenia. PDF/CSV nie zastępuje pełnej kopii JSON lub historii. Po Live Data wykonaj nowy pełny odczyt. Przerwanie połączenia nie cofa wysłanego polecenia kasowania. Anulowany skan nie zastępuje poprzedniego ukończonego raportu.
 
 [Zakres i weryfikacja](../docs/verification/2026-11-27-advanced-diagnostics.md)
+
+## Polecane akcesoria
+
+Ze Startu lub Garażu otwórz „Polecane akcesoria”. Moduł korzysta z marki aktywnego samochodu. Zawiera kategorie Ochrona, Transport, Komfort i Pielęgnacja oraz wyszukiwanie bez rozróżniania wielkości liter i polskich znaków. Rozpoznaje także VW i Škodę. Zmiana auta zmienia propozycje i resetuje filtry.
+
+Moduł obejmuje wszystkie 563 marki z katalogu garażu oraz dowolne marki wpisane ręcznie. Każda ma propozycje we wszystkich czterech kategoriach i przyciski wyszukiwania ofert na Allegro według marki, modelu, rocznika oraz rodzaju akcesorium. Zweryfikowane katalogi producentów są dodatkowo dostępne dla 19 marek, w tym Mercedes-Benz, Hondy, Volvo, Nissana, Lexusa, SEAT-a, Tesli, Peugeota i Opla. Nie są wymagane do korzystania z modułu dla pozostałych marek. Lista działa offline; katalogi i wyszukiwanie ofert otwierają się po kliknięciu i wymagają internetu. Źródła sprawdzono 26–27 listopada 2026. Każda propozycja opisuje zastosowanie i warunki do sprawdzenia przed zakupem; BMW Travel & Comfort i Dacia YouClip są przypisane wyłącznie do odpowiednich marek.
+
+To rekomendacje rodzajów akcesoriów, bez potwierdzenia zgodności konkretnej części z generacją, nadwoziem czy rocznikiem. Ceny i dostępność sprawdź u sprzedawcy. Po naciśnięciu „Szukaj ofert” Allegro otrzymuje wyłącznie markę, model, rocznik i rodzaj akcesorium. VIN, tablice, historia i notatki nie są dołączane. Katalogi producentów nie otrzymują danych auta z aplikacji. Oferty nie są pobierane w tle; wyszukiwanie nie gwarantuje wyników ani zgodności części, zwłaszcza dla marek historycznych i niszowych.
+
+Dodano moduły warsztatów z OpenStreetMap i ofert części z eBay, wyświetlane w aplikacji. Wymagają konfiguracji prywatnego serwera; ceny także dostępu eBay Browse API. [VehicleSenseX Services](SERVICES.md)
+
+[Porównanie diagnostyki i raport dla warsztatu](DIAGNOSTIC-COMPARISON.md)
+
+## Radio bez adaptera, CarPlay i Android Auto
+
+Ekran Połączenia obsługuje radio audio niezależnie od adaptera OBD2: ustawienia Bluetooth, próbę dźwięku, ręcznie uruchamiane czytanie lokalnego podsumowania auta oraz wyjścia audio telefonu. Podsumowanie obejmuje markę/model, zapisany przebieg, spalanie obliczone z tankowań i liczbę osiągniętych terminów. Pomija VIN, tablice, tytuły przypomnień i notatki. Tekst przetwarza systemowy silnik mowy; dostępność głosu offline zależy od konfiguracji telefonu. Czytanie zatrzymuje się po opuszczeniu ekranu lub przejściu aplikacji w tło.
+
+Lokalny moduł Expo odczytuje bieżącą trasę sesji audio iOS oraz dostępne wyjścia audio Androida. Lista Androida nie potwierdza aktywnego wyjścia; również Car Audio na iOS nie potwierdza projekcji aplikacji. Nazwy urządzeń nie są zapisywane ani wysyłane do serwera. Stan jest odświeżany ręcznie i po powrocie do aplikacji. Starsza kompilacja lub Expo Go pokazuje informację o potrzebie przebudowania modułu; podstawowe parowanie i mowa nadal działają.
+
+CarPlay/Android Auto mogą działać z kompatybilnym radiem bez adaptera OBD2 — przez USB z transmisją danych lub obsługiwany tryb bezprzewodowy z Wi-Fi. Zwykłe radio Bluetooth nie zyskuje tych systemów po aktualizacji aplikacji. Animowany kokpit pozostaje ekranem aplikacji; opcjonalny kod listy CarPlay jest domyślnie wyłączony i wymaga zgody Apple. CarPlay wymaga entitlement Apple, profilu i natywnych szablonów, a Android Auto obsługiwanej kategorii oraz osobnego interfejsu. Dostęp do wybranych danych przez Android Car Hardware API zależy od hosta i uprawnień; pełne odczyty/kasowanie DTC w tej aplikacji nadal korzystają z OBD2.
+
+[Konfiguracja CarPlay](https://support.apple.com/guide/iphone/connect-to-carplay-iph6860e6b53/ios) · [Konfiguracja Android Auto](https://support.google.com/androidauto/answer/6348019) · [Wymagania Apple](https://developer.apple.com/documentation/carplay/preparing-your-ios-app-for-carplay-development) · [Android Car Hardware API](https://developer.android.com/training/cars/apps/library/car-hardware-api)
+
+[Audyt danych i gotowość emisji OBD](VEHICLE-EVIDENCE.md)
+
+[Kokpit, własne zdjęcie auta i ograniczenia CarPlay/Android Auto](COCKPIT.md)
+
+[Wykresy spalania, harmonogram części i olej](CONSUMPTION-MAINTENANCE.md)

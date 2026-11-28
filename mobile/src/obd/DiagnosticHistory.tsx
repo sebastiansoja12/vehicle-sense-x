@@ -1,7 +1,7 @@
 import {useMemo,useState} from 'react';
 import {View,Text,TextInput} from 'react-native';
 import type {DiagnosticSnapshot} from './types';
-import {compareDiagnostics} from './comparison';
+import {compareAdvancedDiagnostics as compareDiagnostics} from './comparison';
 import {parameterByPid,pidHex} from './parameters';
 import {Snapshot} from './SnapshotView';
 import {Button,Note,number} from '../ui';

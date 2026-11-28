@@ -1,4 +1,7 @@
-import {ValidationError} from './validation.ts';
+import {validOilObservation,maintenanceComponents} from './maintenance-model.ts';
+import type {OilObservation,MaintenanceComponent} from './maintenance-model.ts';
+import {ValidationError,validDate} from './validation.ts';
+import {fuelMeasurements} from './fuel-analytics.ts';
 import {parseVehicleSpec,validVehicleSpec,validAssets} from './media.ts';
 import type {VehicleSpec,Asset} from './media.ts';
 import {emptyExtensions,validateExtensions,expenseCategories} from './records.ts';
@@ -7,10 +10,10 @@ import {validVinSource} from './vin.ts';
 import type {VinSource} from './vin.ts';
 import {validDecodedSource,retainDecodedSource} from './vin-decoder.ts';
 import type {DecodedVehicleSource} from './vin-decoder.ts';
-export {ValidationError} from './validation.ts';
+export {ValidationError,validDate} from './validation.ts';
 export type Vehicle = { id: string; make: string; model: string; year: number; engine: string; mileage: number; plate: string; vin: string; spec?:VehicleSpec;photos?:Asset[];vinSource?:VinSource;decodedSource?:DecodedVehicleSource };
 export type FuelEntry = { id: string; vehicleId: string; date: string; mileage: number; volumeMl: number; priceCents: number; costCents: number; full: boolean };
-export type ServiceEntry = { id: string; vehicleId: string; date: string; mileage: number; title: string; costCents: number; note: string;attachments?:Asset[] };
+export type ServiceEntry = { id: string; vehicleId: string; date: string; mileage: number; title: string; costCents: number; note: string;attachments?:Asset[];oilObservation?:OilObservation;maintenanceComponent?:MaintenanceComponent };
 export type AppData = Extensions & { version: 3; activeVehicleId: string | null; vehicles: Vehicle[]; fuel: FuelEntry[]; service: ServiceEntry[] };
 export type VehicleInput = { make: string; model: string; year: string; engine: string; mileage: string; plate: string; vin: string } & Partial<Record<keyof VehicleSpec,string>>;
 export type FuelInput = { vehicleId: string; date: string; mileage: string; liters: string; price: string; full: boolean };
@@ -22,11 +25,7 @@ export const emptyData = (): AppData => ({ version: 3, activeVehicleId: null, ve
 export function localDay(now = new Date()): string { return `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`; }
 const integer = (value: unknown, min: number, max: number): value is number => typeof value === 'number' && Number.isSafeInteger(value) && value >= min && value <= max;
 const text = (value: unknown, max = 100): value is string => typeof value === 'string' && value.trim().length > 0 && value.length <= max;
-export function validDate(value: string): boolean {
- if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
- const parsed = new Date(`${value}T12:00:00Z`);
- return Number.isFinite(parsed.getTime()) && parsed.toISOString().slice(0,10) === value;
-}
+
 function dateInput(value: string, today: string) {
  if (!validDate(value) || value > today || value < '1900-01-01') throw new ValidationError('Wpisz prawidłową datę, nie późniejszą niż dzisiaj (RRRR-MM-DD).');
  return value;
@@ -81,21 +80,14 @@ export function addExpense(state:AppData,input:ExpenseInput,id:string,today:stri
  const entry:ExpenseEntry={id,vehicleId:input.vehicleId,date,category:input.category,title:required(input.title,'Nazwa wydatku',100),costCents:decimal(input.cost,'Kwota',2,1,100000000),note:input.note.trim()};
  return {...state,expenses:[...state.expenses,entry]};
 }
-export function vehicleSummary(state: AppData, vehicleId: string, month: string) {
- const fuel=state.fuel.filter(r=>r.vehicleId===vehicleId);
+export function vehicleSummary(state: AppData, vehicleId: string, month: string, today = localDay()) {
+ const fuel=state.fuel.filter(r=>r.vehicleId===vehicleId&&r.date<=today);
  const service=state.service.filter(r=>r.vehicleId===vehicleId);
- let anchor: number|null=null, accumulatedMl=0, measuredMl=0, measuredDistance=0;
- for (const entry of [...fuel].sort((a,b)=>a.mileage-b.mileage||a.date.localeCompare(b.date))) {
-  if (anchor!==null) accumulatedMl+=entry.volumeMl;
-  if (entry.full) {
-   if (anchor!==null && entry.mileage>anchor) { measuredMl+=accumulatedMl; measuredDistance+=entry.mileage-anchor; }
-   anchor=entry.mileage; accumulatedMl=0;
-  }
- }
+ const {consumption,measuredDistanceKm:measuredDistance}=fuelMeasurements(fuel);
  const fuelCents=fuel.filter(r=>r.date.startsWith(month+'-')).reduce((sum,r)=>sum+r.costCents,0);
  const serviceCents=service.filter(r=>r.date.startsWith(month+'-')).reduce((sum,r)=>sum+r.costCents,0);
  const otherCents=state.expenses.filter(r=>r.vehicleId===vehicleId&&r.date.startsWith(month+'-')).reduce((sum,r)=>sum+r.costCents,0);
- return {fuelCents,serviceCents,otherCents,totalCents:fuelCents+serviceCents+otherCents,consumption:measuredDistance?measuredMl/1000/measuredDistance*100:null,measuredDistance,fuelCount:fuel.length,serviceCount:service.length};
+ return {fuelCents,serviceCents,otherCents,totalCents:fuelCents+serviceCents+otherCents,consumption,measuredDistance,fuelCount:fuel.length,serviceCount:service.length};
 }
 
 export function parseStoredData(raw: string|null): AppData {
@@ -124,6 +116,7 @@ export function parseStoredData(raw: string|null): AppData {
    for(let i=1;i<history.length;i++)if(history[i].mileage<history[i-1].mileage)throw new StorageFormatError();
   }
   for(const s of data.service) if (!text(s.title,100)||typeof s.note!=='string'||s.note.length>1000) throw new StorageFormatError();
+  for(const v of data.service)if(v.oilObservation!==undefined&&!validOilObservation(v.oilObservation)||v.maintenanceComponent!==undefined&&!Object.hasOwn(maintenanceComponents,v.maintenanceComponent))throw new StorageFormatError();
   for(const v of data.vehicles)if(v.spec!==undefined&&!validVehicleSpec(v.spec)||v.photos!==undefined&&!validAssets(v.photos,true))throw new StorageFormatError();
   for(const v of data.service)if(v.attachments!==undefined&&!validAssets(v.attachments))throw new StorageFormatError();
   return data;

@@ -1,3 +1,5 @@
+import {parseReadiness,parseReadinessStatus,parseClearCounter} from './readiness.ts';
+import type {ReadinessData} from './readiness.ts';
 import { ObdError, parseClearResponse, parseDtc, parseSupportedPids, parseVoltage, responseLines } from './protocol.ts';
 import { validateDiagnosticSnapshot } from './types.ts';
 import type { CommandTransport, DiagnosticSnapshot, Dtc, LiveParameters } from './types.ts';
@@ -7,7 +9,6 @@ import {parseObdVin} from '../vin.ts';
 import type {VinObservation} from '../vin.ts';
 import { decodeMeasurement, parameterByPid, parameterDefinitions, parseScalingConfiguration, pidHex } from './parameters.ts';
 import type { ObdMeasurement, ParameterScaling } from './parameters.ts';
-import { parseReadiness } from './readiness.ts';
 import { parseFreezeDtc } from './details.ts';
 import type { DiagnosticDetails, FreezeFrame } from './details.ts';
 import {parseIdentificationSupported,parseIdentificationNegative,parseCalibrationIds,parseCalibrationVerificationNumbers,parseEcuName} from './identification.ts';
@@ -217,6 +218,24 @@ export class Elm327Driver {
       if(options.extended)await this.readScaling(supportedPids);
       notify('capabilities', 1, 1);
       const { parameters, measurements } = await this.readParameters(supportedPids, options.extended ? parameterDefinitions.map(p => p.pid) : undefined, (completed, total) => notify('parameters', completed, total));
+      let oilTemperatureC:number|null|undefined;
+      if(supportedPids.includes(0x5C)){
+        if(options.extended)oilTemperatureC=measurements.find(m=>m.pid===0x5C)?.value??null;
+        else{try{oilTemperatureC=decodeMeasurement(this.payload(await this.transport.send('015C'),'015C'),0x5C);}catch(error){if(!(error instanceof ObdError)||error.kind!=='no-data')throw error;oilTemperatureC=null;}}
+      }
+      let readinessEvidence:ReadinessData|null|undefined;
+      notify('readiness');
+      if(supportedPids.includes(1)){
+        readinessEvidence=null;
+        try{readinessEvidence={statusBytes:parseReadinessStatus(this.payload(await this.transport.send('0101'),'0101')),warmupsSinceClear:null,distanceSinceClearKm:null};}
+        catch(error){if(!(error instanceof ObdError)||error.kind!=='no-data')throw error;}
+        if(readinessEvidence)for(const [pid,command,key] of [[0x30,'0130','warmupsSinceClear'],[0x31,'0131','distanceSinceClearKm']] as const){
+          if(!supportedPids.includes(pid))continue;
+          if(options.extended)readinessEvidence[key]=measurements.find(m=>m.pid===pid)?.value??null;
+          else{try{readinessEvidence[key]=parseClearCounter(this.payload(await this.transport.send(command),command),command);}catch(error){if(!(error instanceof ObdError)||error.kind!=='no-data')throw error;}}
+        }
+      }
+      notify('readiness',supportedPids.includes(1)?1:0,supportedPids.includes(1)?1:0);
       const codes: Dtc[] = [];
       const readStatuses: Dtc['status'][] = [];
       let faultProgress = 0;
@@ -229,13 +248,7 @@ export class Elm327Driver {
       if (!readStatuses.length) throw new ObdError('No diagnostic fault mode returned data', 'no-data');
       let extended: DiagnosticDetails | undefined;
       if (options.extended) {
-        let readiness = null;
-        notify('readiness');
-        if (supportedPids.includes(1)) {
-          try { readiness = parseReadiness(this.payload(await this.transport.send('0101'), '0101')); }
-          catch (error) { if (!(error instanceof ObdError) || error.kind !== 'no-data') throw error; }
-        }
-        notify('readiness', supportedPids.includes(1) ? 1 : 0, supportedPids.includes(1) ? 1 : 0);
+        const readiness=readinessEvidence?parseReadiness([0x41,1,...readinessEvidence.statusBytes].map(b=>pidHex(b)).join(' ')+'>'):null;
         notify('freeze-frame');
         extended = { version: 1, measurements, scaling: this.scalingCopy(), readiness, freezeFrame: await this.readFreezeFrame((completed, total) => notify('freeze-frame', completed, total)) };
         if(options.identification){
@@ -247,6 +260,8 @@ export class Elm327Driver {
       const snapshot: DiagnosticSnapshot = { id: `obd-${timestamp}-${++sequence}-${Math.random().toString(36).slice(2, 9)}`, vehicleId, timestamp, source: 'obd', adapterName: this.adapterName, codes, readStatuses, parameters, supportedPids };
       if(this.selectedEcu)snapshot.ecu={...this.selectedEcu};
       if(extended)snapshot.extended=extended;
+      if(readinessEvidence!==undefined)snapshot.readiness=readinessEvidence;
+      if(oilTemperatureC!==undefined)snapshot.oilTemperatureC=oilTemperatureC;
       if (!validateDiagnosticSnapshot(snapshot)) throw new ObdError('Invalid diagnostic snapshot');
       this.lastSnapshot = JSON.stringify(snapshot);
       this.liveContext = { vehicleId, supportedPids: [...supportedPids] };

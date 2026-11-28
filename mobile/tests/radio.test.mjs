@@ -29,3 +29,11 @@ test('a speech engine that never completes times out and is stopped',async()=>{
  const {createRadioAudioTest}=await import('../src/radio-audio.ts');const speech=engine();const player=createRadioAudioTest(speech,5);
  await assert.rejects(player.play(),/czas/);assert.equal(speech.stops,1);
 });
+test('radio player reads only an explicitly supplied nonempty bounded summary and still cancels it',async()=>{
+ const {createRadioAudioTest}=await import('../src/radio-audio.ts');const speech=engine();const player=createRadioAudioTest(speech);
+ const playing=player.play('Toyota Corolla. Zapisany przebieg: 50000 kilometrów.');
+ await Promise.resolve();assert.equal(speech.spoken[0],'Toyota Corolla. Zapisany przebieg: 50000 kilometrów.');
+ const rejected=assert.rejects(playing,/przerwana/);await player.stop();await rejected;
+ await assert.rejects(player.play(''),/komunikat/);await assert.rejects(player.play('x'.repeat(2001)),/komunikat/);
+ assert.equal(speech.spoken.length,1);
+});

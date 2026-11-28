@@ -4,7 +4,7 @@ import {registerHooks} from 'node:module';
 import {Platform,state} from './fixtures/radio.mjs';
 const fixture=new URL('./fixtures/radio.mjs',import.meta.url).href;
 registerHooks({resolve(specifier,context,next){
- if(context.parentURL?.endsWith('/radio.native.ts')&&['react-native','expo-speech'].includes(specifier))return {url:fixture,shortCircuit:true};
+ if(context.parentURL?.endsWith('/radio.native.ts')&&['react-native','expo-speech','expo'].includes(specifier))return {url:fixture,shortCircuit:true};
  return next(specifier,context);
 }});
 const radio=await import('../src/radio.native.ts');
@@ -21,5 +21,12 @@ test('native audio test delegates a fixed phrase to the OS speech engine and pro
  utterance.options.onError(new Error('No TTS voice'));await rejected;
 });
 test('web radio boundary refuses hardware actions instead of reporting a connected radio',async()=>{
- const web=await import('../src/radio.ts');await assert.rejects(web.openBluetoothSettings());await assert.rejects(web.createRadioTest().play());
+ const web=await import('../src/radio.ts');await assert.rejects(web.openBluetoothSettings());await assert.rejects(web.createRadioTest().play());await assert.rejects(web.getAudioOutputs());
+});
+test('native output inspection preserves available-vs-current scope and refuses missing or malformed native data',async()=>{
+ state.nativeModule={async getOutputs(){return {scope:'available',outputs:[{name:'Radio',type:'bluetooth'}]};}};
+ assert.deepEqual(await radio.getAudioOutputs(),{scope:'available',outputs:[{name:'Radio',type:'bluetooth'}]});
+ state.nativeModule={async getOutputs(){return {scope:'connected',outputs:[]};}};
+ await assert.rejects(radio.getAudioOutputs(),/audio/);
+ state.nativeModule=null;await assert.rejects(radio.getAudioOutputs(),/kompilacji/);
 });

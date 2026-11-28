@@ -35,12 +35,12 @@ export function parseSupportedPids(raw: string, page = 0, mode: 1 | 2 | 9 = 1): 
   for (let i = 0; i < 32 && page + i + 1 <= 255; i++) if (b[headerLength + Math.floor(i / 8)] & (0x80 >>> (i % 8))) supported.push(page + i + 1);
   return supported;
 }
-export function parsePid(raw: string, command: '010C' | '0105' | '0104'): number {
+export function parsePid(raw: string, command: '010C' | '0105' | '0104' | '015C'): number {
   const b = responseBytes(raw, command);
   const pid = parseInt(command.slice(2), 16);
   if (b[0] !== 0x41 || b[1] !== pid || b.length !== (pid === 12 ? 4 : 3)) throw new ObdError('Unexpected PID response');
   if (pid === 12) return (b[2] * 256 + b[3]) / 4;
-  if (pid === 5) return b[2] - 40;
+  if (pid === 5 || pid === 0x5C) return b[2] - 40;
   return b[2] * 100 / 255;
 }
 export function parseVoltage(raw: string): number {

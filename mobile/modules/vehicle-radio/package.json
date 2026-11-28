@@ -1,0 +1,6 @@
+{
+  "name": "vehicle-radio",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local read-only audio output inspection for VehicleSenseX"
+}

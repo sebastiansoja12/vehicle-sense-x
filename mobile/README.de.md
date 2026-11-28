@@ -109,3 +109,31 @@ Der vollständige Bericht behält während Live Data seinen Zeitstempel und sein
 Zum Löschen werden der exakte aktuelle Bericht, eine gespeicherte Kopie, die Bestätigung ihrer Aufbewahrung und eine separate Befehlsbestätigung benötigt. PDF/CSV ersetzt keine vollständige JSON- oder Verlaufssicherung. Nach Live Data ist ein neuer vollständiger Scan erforderlich. Trennen kann einen bereits gesendeten Löschbefehl nicht zurücknehmen. Ein abgebrochener Scan ersetzt den vorherigen abgeschlossenen Bericht nicht.
 
 [Umfang und Prüfung](../docs/verification/2026-11-27-advanced-diagnostics.de.md)
+
+## Empfohlenes Zubehör
+
+„Polecane akcesoria“ lässt sich über Start oder Garage öffnen. Das Modul verwendet die Marke des aktiven Fahrzeugs. Es bietet die Kategorien Schutz, Transport, Komfort und Pflege sowie eine Suche ohne Unterscheidung von Großschreibung und Akzenten. VW und Škoda werden ebenfalls erkannt. Ein Fahrzeugwechsel aktualisiert Vorschläge und setzt Filter zurück.
+
+Das Modul umfasst alle 563 Marken des Garagenkatalogs und beliebige manuell eingegebene Marken. Jede bietet Vorschläge in allen vier Kategorien und Schaltflächen zur Allegro-Angebotssuche nach Marke, Modell, Modelljahr und Zubehörart. Geprüfte Herstellerkataloge sind zusätzlich für 19 Marken verfügbar, darunter Mercedes-Benz, Honda, Volvo, Nissan, Lexus, SEAT, Tesla, Peugeot und Opel. Für andere Marken sind sie keine Voraussetzung zur Nutzung des Moduls. Die Liste funktioniert offline; Kataloge und Angebotssuchen öffnen sich nach einem Klick und benötigen Internetzugang. Die Quellen wurden am 26.–27. November 2026 geprüft. Jeder Vorschlag beschreibt Zweck und Prüfungen vor dem Kauf; BMW Travel & Comfort und Dacia YouClip erscheinen nur bei der jeweiligen Marke.
+
+Dies sind Empfehlungen für Zubehörarten ohne Bestätigung, dass ein bestimmtes Teil zur Generation, Karosserie oder zum Modelljahr passt. Preise und Verfügbarkeit beim Verkäufer prüfen. Nach dem Drücken von „Szukaj ofert“ erhält Allegro ausschließlich Marke, Modell, Modelljahr und Zubehörart. VIN, Kennzeichen, Historie und Notizen werden nicht übermittelt. Herstellerkataloge erhalten keine Fahrzeugdaten von der App. Angebote werden nicht im Hintergrund abgerufen; Suchanfragen garantieren weder Ergebnisse noch Teilekompatibilität, besonders bei historischen und seltenen Marken.
+
+Werkstätten aus OpenStreetMap und Teileangebote von eBay erscheinen direkt in der App. Privaten Server konfigurieren; Preise benötigen zusätzlich eBay-Browse-API-Zugang. [VehicleSenseX Services](SERVICES.de.md)
+
+[Diagnosevergleich und Werkstattbericht](DIAGNOSTIC-COMPARISON.de.md)
+
+## Radio ohne Adapter, CarPlay und Android Auto
+
+Verbindungen unterstützt Radio-Audio unabhängig von OBD2: Bluetooth-Einstellungen, Klangtest, manuelles Vorlesen der lokalen Fahrzeugübersicht und Audioausgänge des Telefons. Die Übersicht enthält Marke/Modell, gespeicherten Kilometerstand, Verbrauch aus Tankdaten und Anzahl erreichter Servicetermine. VIN, Kennzeichen, Termintitel und Notizen bleiben ausgenommen. Die Systemsprachausgabe verarbeitet den Text; Offline-Stimmen hängen von der Telefonkonfiguration ab. Vorlesen stoppt beim Verlassen der Ansicht oder im Hintergrund.
+
+Ein lokales Expo-Modul liest den aktuellen Audioweg der iOS-Sitzung und verfügbare Android-Audioausgänge. Die Android-Liste bestätigt keinen aktiven Ausgang; auch Car Audio unter iOS bestätigt keine App-Projektion. Gerätenamen werden weder gespeichert noch an Server gesendet. Aktualisierung erfolgt manuell und bei Rückkehr zur App. Ältere Builds oder Expo Go erklären, dass das Modul neu kompiliert werden muss; Pairing und Sprachausgabe bleiben verfügbar.
+
+CarPlay/Android Auto können mit kompatiblem Radio ohne OBD2-Adapter funktionieren — über USB mit Datenübertragung oder unterstützten drahtlosen Modus mit WLAN. Gewöhnliches Bluetooth-Radio erhält diese Systeme nicht durch ein App-Update. Das animierte Cockpit bleibt eine App-Ansicht; optionaler CarPlay-Listencode ist standardmäßig deaktiviert und erfordert Apple-Genehmigung. CarPlay benötigt Apple-Entitlement, Profil und native Vorlagen; Android Auto benötigt eine unterstützte Kategorie und gesonderte Oberfläche. Ausgewählte Android-Car-Hardware-API-Daten hängen von Host und Berechtigungen ab; vollständiges DTC-Lesen/-Löschen dieser App nutzt weiterhin OBD2.
+
+[CarPlay einrichten](https://support.apple.com/guide/iphone/connect-to-carplay-iph6860e6b53/ios) · [Android Auto einrichten](https://support.google.com/androidauto/answer/6348019) · [Apple-Anforderungen](https://developer.apple.com/documentation/carplay/preparing-your-ios-app-for-carplay-development) · [Android Car Hardware API](https://developer.android.com/training/cars/apps/library/car-hardware-api)
+
+[Datenprüfung und OBD-Bereitschaft](VEHICLE-EVIDENCE.de.md)
+
+[Cockpit, eigenes Fahrzeugfoto und CarPlay-/Android-Auto-Grenzen](COCKPIT.de.md)
+
+[Verbrauchsdiagramme, Bauteilpläne und Öl](CONSUMPTION-MAINTENANCE.de.md)

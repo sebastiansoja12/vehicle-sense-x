@@ -5,7 +5,7 @@ import {addVehicle,emptyData} from '../src/domain.ts';
 import {addDiagnostic} from '../src/features.ts';
 import {buildAssistantContext} from '../src/assistant-context.ts';
 import {askAssistant} from '../src/assistant-client.ts';
-import {compareDiagnostics} from '../src/obd/comparison.ts';
+import {compareAdvancedDiagnostics as compareDiagnostics} from '../src/obd/comparison.ts';
 const identity={version:1,status:'available',readAt:90,supportedInfoTypes:[4,6,10],calibrationIds:{status:'available',value:['<Calibration>','=SUM(1,2)'],readAt:91},cvns:{status:'available',value:['0010ABFF','00000000'],readAt:92},ecuName:{status:'available',value:{acronym:'ECM',name:'<Engine>'},readAt:93}};
 const scan={id:'scan',vehicleId:'car',timestamp:100,source:'obd',adapterName:'ELM',parameters:{rpm:1000,coolantC:null,loadPercent:null,voltageV:14},codes:[],readStatuses:['stored','pending','permanent'],supportedPids:[12],ecu:{protocol:6,responseId:'7E8'},extended:{version:1,measurements:[{pid:12,value:1000,readAt:90}],readiness:null,freezeFrame:{status:'no-data',frame:0,readAt:90},identification:identity}};
 function garage(value=scan){return addDiagnostic(addVehicle(emptyData(),{make:'Test',model:'Car',year:'2020',engine:'1.0',mileage:'1000',plate:'PRIVATE-PLATE',vin:''},'car','2030-01-01'),value);}

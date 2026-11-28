@@ -4,7 +4,7 @@
     "slug": "vehiclesensex",
     "scheme": "vehiclesensex",
     "version": "0.5.0",
-    "orientation": "portrait",
+    "orientation": "default",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": true,
@@ -51,7 +51,7 @@
       [
         "expo-location",
         {
-          "locationWhenInUsePermission": "VehicleSenseX używa lokalizacji do rejestrowania przejazdu po jego rozpoczęciu. Pomiar wstrzymuje się po przejściu aplikacji w tło.",
+          "locationWhenInUsePermission": "VehicleSenseX używa lokalizacji do rejestrowania rozpoczętego przejazdu lub jednorazowego wyszukania warsztatów w okolicy. Pomiar trasy wstrzymuje się w tle.",
           "isIosBackgroundLocationEnabled": false,
           "isAndroidBackgroundLocationEnabled": false,
           "isAndroidForegroundServiceEnabled": false,
@@ -94,7 +94,13 @@
         }
       ],
       "expo-font",
-      "./plugins/withClassicBuildConfig.cjs"
+      "./plugins/withClassicBuildConfig.cjs",
+      [
+        "./plugins/withCarPlay.cjs",
+        {
+          "enabled": false
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true

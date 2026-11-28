@@ -2,7 +2,7 @@ FROM node:24.18.0-bookworm-slim
 
 ENV NODE_ENV=production HOST=0.0.0.0 PORT=8787
 WORKDIR /app
-COPY --chown=node:node index.mjs ./
+COPY --chown=node:node index.mjs automotive.mjs ./
 USER node
 EXPOSE 8787
 STOPSIGNAL SIGTERM

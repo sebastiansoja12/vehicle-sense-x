@@ -1,0 +1,5 @@
+{
+  "platforms": ["apple", "android"],
+  "apple": {"modules": ["VehicleRadioModule"]},
+  "android": {"modules": ["expo.modules.vehicleradio.VehicleRadioModule"]}
+}

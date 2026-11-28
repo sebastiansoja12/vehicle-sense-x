@@ -67,3 +67,17 @@ Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki języko
 - [Zakres i weryfikacja](verification/2026-11-27-advanced-diagnostics.md)
 - [Plan](superpowers/plans/2026-11-27-advanced-diagnostics.md)
 - [Specyfikacja](superpowers/specs/2026-11-27-advanced-diagnostics.md)
+
+[VehicleSenseX Services](../mobile/SERVICES.md)
+
+[VehicleSenseX Services — verification](verification/2026-11-26-automotive-services.md)
+
+[Porównanie diagnostyki i raport dla warsztatu](../mobile/DIAGNOSTIC-COMPARISON.md)
+
+[Porównanie diagnostyki — weryfikacja](verification/2026-11-27-diagnostic-comparison.md)
+
+[Rynek aplikacji samochodowych i możliwości VehicleSenseX](research/2026-11-27-market-and-feasibility.md)
+
+[Audyt danych i gotowość emisji OBD](../mobile/VEHICLE-EVIDENCE.md)
+
+[Wykresy spalania, harmonogram części i olej](../mobile/CONSUMPTION-MAINTENANCE.md)

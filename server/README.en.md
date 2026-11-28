@@ -20,7 +20,7 @@ The default bind address is `127.0.0.1:8787`. Keep it for local work. For a phys
 
 ## Private container deployment
 
-The image uses official `node:24.18.0-bookworm-slim`, runs Node directly as the nonroot `node` user, and copies only `index.mjs`. No packages are installed. `.dockerignore` allows only build files and runtime code; `.env` files, secrets, tests and documentation are excluded from the build context. Inject private configuration at runtime, never through `ARG`, `COPY` or public mobile environment variables.
+The image uses official `node:24.18.0-bookworm-slim`, runs Node directly as the nonroot `node` user, and copies only `index.mjs` and `automotive.mjs`. No packages are installed. `.dockerignore` allows only build files and runtime code; `.env` files, secrets, tests and documentation are excluded from the build context. Inject private configuration at runtime, never through `ARG`, `COPY` or public mobile environment variables.
 
 After preparing a local `.env` as described above, from the `server` directory:
 
@@ -93,3 +93,5 @@ Official API references checked for this implementation:
 - [Data controls and provider retention](https://developers.openai.com/api/docs/guides/your-data)
 
 Optional diagnostic `ecu` metadata contains only a validated standard CAN protocol number (6/7/8/9) and response address. It is whitelisted independently on client and server. The model is told this covers the selected controller, not every controller. VIN, VIN-source evidence and unknown ECU metadata are not part of the accepted AI context.
+
+Added in-app OpenStreetMap workshops and eBay part offers. A private server must be configured; prices also require eBay Browse API access. [VehicleSenseX Services](../mobile/SERVICES.en.md)
