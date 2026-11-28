@@ -7,11 +7,12 @@ import {Snapshot} from './SnapshotView';
 import {Button,Note,number} from '../ui';
 import {RecordActions} from '../RecordActions';
 import {styles as s} from '../theme';
+import {identificationFields} from './identification';
 
 export type DiagnosticExport='json'|'csv'|'report';
 export const dtcLabels={stored:'Zapisane',pending:'Oczekujące',permanent:'Trwałe'};
-export function DiagnosticExports({onExport,disabled}:{onExport:(format:DiagnosticExport)=>void;disabled:boolean}) {
- return <View style={{gap:8,marginTop:12}}><Button label="Zapisz kopię JSON" secondary disabled={disabled} onPress={()=>onExport('json')}/><Button label="Eksportuj pomiary i kody CSV" secondary disabled={disabled} onPress={()=>onExport('csv')}/><Button label="Eksportuj raport PDF / HTML" secondary disabled={disabled} onPress={()=>onExport('report')}/></View>;
+export function DiagnosticExports({onExport,disabled,hasIdentification=false}:{onExport:(format:DiagnosticExport)=>void;disabled:boolean;hasIdentification?:boolean}) {
+ return <View style={{gap:8,marginTop:12}}>{hasIdentification&&<Note>Eksport diagnostyczny obejmuje identyfikację ECU. Teksty producenta mogą identyfikować pojazd; sprawdź je przed udostępnieniem. Raport sprzedaży i automatyczny kontekst AI pomijają te dane.</Note>}<Button label="Zapisz kopię JSON" secondary disabled={disabled} onPress={()=>onExport('json')}/><Button label="Eksportuj pomiary i kody CSV" secondary disabled={disabled} onPress={()=>onExport('csv')}/><Button label="Eksportuj raport PDF / HTML" secondary disabled={disabled} onPress={()=>onExport('report')}/></View>;
 }
 export function DiagnosticHistory({records,target,disabled,onExport}:{records:DiagnosticSnapshot[];target:DiagnosticSnapshot|null;disabled:boolean;onExport:(scan:DiagnosticSnapshot,format:DiagnosticExport)=>void}) {
  const[query,setQuery]=useState(''),[page,setPage]=useState(0),[beforeId,setBeforeId]=useState<string|null>(null);
@@ -34,12 +35,17 @@ export function DiagnosticHistory({records,target,disabled,onExport}:{records:Di
    <Text style={s.fine}>Niezgłoszony ponownie kod nie potwierdza naprawy. Warunki i obciążenie silnika pomiędzy odczytami mogą być różne. Importy nie potwierdzają pochodzenia danych.</Text>
    {comparison.parameters.map(p=><Text key={p.pid} style={s.body}>{parameterByPid(p.pid)!.label} · PID {pidHex(p.pid)}: {number(p.before,2)} → {number(p.after,2)} {p.unit}</Text>)}
    {comparison.parameters.length===0&&<Text style={s.muted}>Brak zmienionych, porównywalnych pomiarów liczbowych.</Text>}
+   {(before.extended?.identification||target.extended?.identification)&&<>
+    <Text style={s.body}>Identyfikacja ECU · porównane pola: {comparison.identification.comparedFields.map(key=>identificationFields.find(f=>f.key===key)!.label).join(', ')||'brak wspólnych dostępnych danych'}</Text>
+    {comparison.identification.changes.map(change=><Text selectable key={change.field} style={s.body}>{identificationFields.find(f=>f.key===change.field)!.label}: {JSON.stringify(change.before)} → {JSON.stringify(change.after)}</Text>)}
+    <Text style={s.fine}>Pokazujemy zmiany zgłoszonych danych. Nie potwierdzają naprawy, oryginalności oprogramowania ani tuningu.</Text>
+   </>}
    <Button label="Zamknij porównanie" secondary onPress={()=>setBeforeId(null)}/>
   </View>}
   {records.length===0&&<Text style={s.muted}>Brak zapisanych odczytów. Odczytaj dane z adaptera lub zaimportuj raport VehicleSenseX.</Text>}
   {records.length>0&&filtered.length===0&&<Text style={s.muted}>Brak odczytów pasujących do wyszukiwania.</Text>}
   {filtered.slice(shownPage*20,(shownPage+1)*20).map(value=><View key={value.id} style={s.listRow}>
-   <Snapshot value={value}/><DiagnosticExports disabled={disabled} onExport={format=>onExport(value,format)}/>
+   <Snapshot value={value}/><DiagnosticExports hasIdentification={!!value.extended?.identification} disabled={disabled} onExport={format=>onExport(value,format)}/>
    {target&&target.id!==value.id&&value.timestamp<=target.timestamp&&<Button label="Porównaj z najnowszym pełnym odczytem" secondary disabled={disabled} onPress={()=>setBeforeId(value.id)}/>}
    <RecordActions kind="diagnostic" id={value.id}/>
   </View>)}

@@ -28,7 +28,7 @@ Expected: new tests fail first and then pass; there is no measurement generator 
 
 ## Task 3: Interface, comparisons and safe exports
 
-- [ ] Test exports, backups, exclusion from sale reports/AI and comparisons. Add the full CAN scan button, details, export disclosure and data comparisons.
+- [x] Test exports, backups, exclusion from sale reports/AI and comparisons. Add the full CAN scan button, details, export disclosure and data comparisons.
 
 ```sh
 node --test mobile/tests/obd-identification-reports.test.mjs mobile/tests/obd-screen.test.mjs

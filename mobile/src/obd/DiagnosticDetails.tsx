@@ -6,6 +6,7 @@ import {parameterByPid,pidHex} from './parameters';
 import {monitorLabels} from './readiness';
 import {Button,Note,number} from '../ui';
 import {styles as s,colors} from '../theme';
+import {IdentificationView} from './IdentificationView';
 
 export function Measurements({values}:{values:ObdMeasurement[]}) {
  return <View>{values.map(m=>{const p=parameterByPid(m.pid)!;return <View key={m.pid} style={s.listRow}>
@@ -19,6 +20,7 @@ export function DiagnosticDetails({value}:{value:Details}) {
  const values=value.measurements.filter(m=>{const p=parameterByPid(m.pid)!;return (p.label+' '+pidHex(m.pid)).toLocaleLowerCase('pl').includes(q);});
  const ready=value.readiness,frame=value.freezeFrame;
  return <View style={{gap:14}}>
+  {value.identification&&<IdentificationView value={value.identification}/>}
   <Text accessibilityRole="header" style={s.sectionTitle}>Parametry rozszerzone · {value.measurements.length}</Text>
   <TextInput accessibilityLabel="Szukaj parametru po nazwie lub PID" placeholder="Nazwa parametru lub PID" value={query} onChangeText={setQuery} maxLength={80} style={s.input}/>
   {Object.values(value.scaling??{}).some(v=>v===null)&&<Note>ECU nie podał konfiguracji skalowania. Zależne od niej pomiary pozostają nieznane.</Note>}

@@ -11,12 +11,12 @@ const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{reso
 const flush=async()=>{for(let i=0;i<8;i++)await new Promise(resolve=>setImmediate(resolve));};
 const report={id:'previous',vehicleId:'car',timestamp:1000,source:'obd',adapterName:'ELM',parameters:{rpm:1000,coolantC:80,loadPercent:50,voltageV:14},codes:[],readStatuses:['stored'],supportedPids:[4,5,12],ecu:{protocol:6,responseId:'7E8'}};
 function harness({scanStop=async()=>{},createLink,selectEcu=async()=>{},records=[]}={}) {
- const slots=[];let cursor=0,layouts=[],tree,factoryCalls=0;
+ const slots=[];let cursor=0,layouts=[],tree,factoryCalls=0;const scanOptions=[];
  const state=initial=>{const index=cursor++;if(!(index in slots))slots[index]=typeof initial==='function'?initial():initial;return [slots[index],value=>{slots[index]=typeof value==='function'?value(slots[index]):value;}];};
  const ref=initial=>{const index=cursor++;return slots[index]??(slots[index]={current:initial});};
  const jsx=(type,props)=>({type,props:props??{}});
  const link={adapterName:'ELM',disconnect:async()=>{},onDisconnected:()=>()=>{}};
- const driver={selectEcu,readSnapshot:async()=>({...report,id:'new',ecu:{protocol:6,responseId:'7E9'}})};
+ const driver={selectEcu,readSnapshot:async(_vehicle,options)=>{scanOptions.push(options);return {...report,id:'new',ecu:{protocol:6,responseId:'7E9'}};}};
  const modules={
   react:{useState:state,useRef:ref,useMemo:fn=>fn(),useCallback:fn=>fn,useEffect:()=>{},useLayoutEffect:fn=>layouts.push(fn)},
   'react/jsx-runtime':{jsx,jsxs:jsx,Fragment:'Fragment'},
@@ -39,6 +39,7 @@ function harness({scanStop=async()=>{},createLink,selectEcu=async()=>{},records=
  const all=()=>{const nodes=[];const visit=node=>{if(Array.isArray(node))node.forEach(visit);else if(node&&typeof node==='object'){nodes.push(node);visit(node.props?.children);}};visit(render());return nodes;};
  return {
   get factoryCalls(){return factoryCalls;},
+  get scanOptions(){return scanOptions;},
   async click(label){const button=all().find(node=>node.type==='Button'&&node.props.label===label);assert.ok(button,`button ${label}; visible: ${all().filter(n=>n.type==='Text'||n.type==='Button').map(n=>n.props.label??n.props.children).join(' | ')}`);assert.equal(!!button.props.disabled,false,label);button.props.onPress();await flush();},
   get report(){return all().find(node=>node.type==='Snapshot')?.props.value;},
   get backupDisabled(){return all().find(node=>node.type==='Switch'&&node.props.accessibilityLabel==='Potwierdzam zapis kopii odczytu OBD')?.props.disabled;},
@@ -67,4 +68,9 @@ test('exporting a different historical report with a colliding ID cannot enable 
  await ui.click('Połącz i odczytaj samochód');assert.equal(ui.backupDisabled,true);
  await ui.exportHistory(older);assert.equal(ui.backupDisabled,true);
  await ui.exportHistory(report);assert.equal(ui.backupDisabled,false);
+});
+
+test('the full CAN identification scan requires an explicit button action and passes both scan options',async()=>{
+ const ui=harness();await ui.click('Połącz i odczytaj samochód');assert.equal(ui.scanOptions.length,0);
+ await ui.click('Pełny skan z identyfikacją ECU');assert.equal(ui.scanOptions.length,1);assert.equal(ui.scanOptions[0].extended,true);assert.equal(ui.scanOptions[0].identification,true);
 });

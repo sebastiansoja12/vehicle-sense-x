@@ -28,7 +28,7 @@ Erwartet: neue Tests schlagen zuerst fehl und bestehen anschließend; kein Messw
 
 ## Task 3: Oberfläche, Vergleiche und sichere Exporte
 
-- [ ] Exporte, Sicherungen, Ausschluss aus Verkaufsbericht/KI und Vergleiche testen. Vollständigen CAN-Scan, Details, Exporthinweis und Datenvergleiche ergänzen.
+- [x] Exporte, Sicherungen, Ausschluss aus Verkaufsbericht/KI und Vergleiche testen. Vollständigen CAN-Scan, Details, Exporthinweis und Datenvergleiche ergänzen.
 
 ```sh
 node --test mobile/tests/obd-identification-reports.test.mjs mobile/tests/obd-screen.test.mjs

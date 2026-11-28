@@ -9,6 +9,21 @@ export type EcuIdentification={version:1}&(NoData|NegativeResponse|{
  status:'available';readAt:number;supportedInfoTypes:number[];
  calibrationIds:IdentityReading<string[]>;cvns:IdentityReading<string[]>;ecuName:IdentityReading<EcuName>;
 });
+export const identificationFields=[
+ {key:'calibrationIds',infoType:4,label:'Identyfikatory kalibracji · CALID'},
+ {key:'cvns',infoType:6,label:'Numery weryfikacji kalibracji · CVN'},
+ {key:'ecuName',infoType:10,label:'Nazwa ECU · skrót i opis'},
+] as const;
+export type IdentificationKey=typeof identificationFields[number]['key'];
+export function identificationValues(reading:IdentityReading<string[]|EcuName>):string[]|null {
+ return reading.status!=='available'?null:Array.isArray(reading.value)?[...reading.value]:[reading.value.acronym,reading.value.name];
+}
+export function identificationStatus(value:IdentityReading<unknown>|EcuIdentification):string {
+ if(value.status==='available')return 'Zgłoszone przez ECU';
+ if(value.status==='unsupported')return 'Nieobsługiwane według mapy 09 00';
+ if(value.status==='negative-response')return 'Negatywna odpowiedź ECU · NRC '+value.nrc;
+ return 'Brak odpowiedzi · nieznane';
+}
 export function parseIdentificationSupported(raw:string):number[]{return parseSupportedPids(raw,0,9);}
 export function parseIdentificationNegative(raw:string,infoType:number):string|null {
  const b=responseBytes(raw,'09'+infoType.toString(16).padStart(2,'0'));

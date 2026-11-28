@@ -28,7 +28,7 @@ Oczekiwane: nowe testy najpierw nie przechodzą, potem wszystkie przechodzą; ni
 
 ## Task 3: Interfejs, porównania i bezpieczne eksporty
 
-- [ ] Przetestuj eksporty, kopie, pominięcie identyfikacji w raporcie sprzedaży/AI i porównania. Dodaj przycisk pełnego skanu CAN, szczegóły, ostrzeżenie eksportowe i porównania danych.
+- [x] Przetestuj eksporty, kopie, pominięcie identyfikacji w raporcie sprzedaży/AI i porównania. Dodaj przycisk pełnego skanu CAN, szczegóły, ostrzeżenie eksportowe i porównania danych.
 
 ```sh
 node --test mobile/tests/obd-identification-reports.test.mjs mobile/tests/obd-screen.test.mjs
