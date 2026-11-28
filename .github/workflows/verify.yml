@@ -25,6 +25,10 @@ jobs:
           node-version-file: mobile/.nvmrc
           cache: npm
           cache-dependency-path: mobile/package-lock.json
+      - name: Install XML validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends libxml2-utils
       - name: Install locked mobile dependencies
         run: npm ci --prefix mobile
       - name: Test application, transports, backend and documentation validator
