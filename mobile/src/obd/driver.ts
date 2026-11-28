@@ -165,16 +165,14 @@ export class Elm327Driver {
     const command='09'+pidHex(infoType);
     let raw:string;
     try{raw=this.payload(await this.transport.send(command),command);}
-    catch(error){if(!(error instanceof ObdError)||error.kind!=='no-data')throw error;return {status:'no-data',readAt:Date.now()};}
-    let nrc:string|null;
-    try{nrc=parseIdentificationNegative(raw,infoType);}
-    catch(error){
-      if(error instanceof ObdError&&error.kind==='unsupported'){this.initialized=false;this.liveContext=null;this.lastSnapshot=null;}
-      throw error;
-    }
-    if(nrc!==null)return {status:'negative-response',nrc,readAt:Date.now()};
-    return {status:'available',value:decode(raw),readAt:Date.now()};
+    catch(error){if(error instanceof ObdError&&error.kind==='no-data')return {status:'no-data',readAt:Date.now()};this.initialized=false;this.liveContext=null;this.lastSnapshot=null;throw error;}
+    try{
+      const nrc=parseIdentificationNegative(raw,infoType);
+      if(nrc!==null)return {status:'negative-response',nrc,readAt:Date.now()};
+      return {status:'available',value:decode(raw),readAt:Date.now()};
+    }catch(error){this.initialized=false;this.liveContext=null;this.lastSnapshot=null;throw error;}
   }
+
   private async readIdentification(progress:(completed:number,total:number)=>void):Promise<EcuIdentification> {
     const support=await this.identificationReply(0,parseIdentificationSupported);
     if(support.status!=='available'){progress(1,1);return {version:1,...support};}

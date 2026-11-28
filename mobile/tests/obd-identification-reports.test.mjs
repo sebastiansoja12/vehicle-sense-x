@@ -42,3 +42,11 @@ test('identity comparisons use only common available fields, preserve record ord
  after.extended.identification.cvns={status:'no-data',readAt:95};const partial=compareDiagnostics(scan,after).identification;assert.deepEqual(partial.comparedFields,['calibrationIds','ecuName']);assert.deepEqual(partial.changes,[]);
  const legacy={...after,extended:{...after.extended}};delete legacy.extended.identification;assert.deepEqual(compareDiagnostics(scan,legacy).identification,{comparedFields:[],changes:[]});
 });
+test('basic diagnostic HTML and CSV retain captured readiness counters and oil readings without claiming PID 01 was unread',()=>{
+ const basic={...scan,extended:undefined,supportedPids:[1,12,48,49,92],readiness:{statusBytes:[128,7,0,0],warmupsSinceClear:3,distanceSinceClearKm:123},oilTemperatureC:85};
+ const html=diagnosticReportHtml(basic),csv=diagnosticCsv(basic);
+ for(const text of ['MIL:','Rozgrzania','123 km','85 °C'])assert.ok(html.includes(text),text);
+ assert.equal(html.includes('Nie odczytano rozszerzonych parametrów, PID 01'),false);
+ for(const text of ['"015C"','"85"','"0130"','"3"','"0131"','"123"','"readiness"'])assert.ok(csv.includes(text),text);
+ const missing=diagnosticReportHtml({...scan,extended:undefined});assert.ok(missing.includes('brak danych'));
+});

@@ -49,7 +49,7 @@ function diagnosticDetailsHtml(scan:DiagnosticSnapshot,includeIdentification=fal
  const d=scan.extended;
  const rows=(measurements:ObdMeasurement[])=>measurements.map(m=>{const p=parameterByPid(m.pid)!;return `<tr><td>${pidHex(m.pid)} · ${esc(p.label)}</td><td>${m.value===null?'Brak odczytu':esc(m.value)} ${esc(p.unit)}</td><td>${esc(new Date(m.readAt).toISOString())}</td></tr>`;}).join('');
  const table=(measurements:ObdMeasurement[])=>`<table><thead><tr><th>Parametr</th><th>Wartość</th><th>Czas pobrania</th></tr></thead><tbody>${rows(measurements)}</tbody></table>`;
- if(!d)return table([{pid:12,value:scan.parameters.rpm,readAt:scan.timestamp},{pid:5,value:scan.parameters.coolantC,readAt:scan.timestamp},{pid:4,value:scan.parameters.loadPercent,readAt:scan.timestamp}])+'<p>Raport podstawowy. Nie odczytano rozszerzonych parametrów, PID 01 ani ramki zamrożonej.</p>';
+ if(!d)return table([{pid:12,value:scan.parameters.rpm,readAt:scan.timestamp},{pid:5,value:scan.parameters.coolantC,readAt:scan.timestamp},{pid:4,value:scan.parameters.loadPercent,readAt:scan.timestamp}])+oilTemperatureHtml(scan)+readinessHtml(scan)+'<p>Raport podstawowy. Nie zebrano pełnego katalogu parametrów ani ramki zamrożonej.</p>';
  const r=d.readiness;
  const readiness=r?`<p>MIL: ${r.milOn?'aktywna':'nieaktywna'} · liczba DTC zgłoszona przez PID 01: ${r.storedDtcCount} · zapłon: ${r.ignition==='spark'?'iskrowy':'samoczynny'}</p><table>${r.monitors.map(m=>`<tr><td>${esc(monitorLabels[m.id])}</td><td>${!m.supported?'Nieobsługiwany':m.complete?'Zakończony':'Niezakończony'}</td></tr>`).join('')}</table>`:'<p>Brak odczytu PID 01. Gotowość monitorów pozostaje nieznana.</p>';
  const f=d.freezeFrame;
@@ -81,6 +81,17 @@ export function diagnosticCsv(scan:DiagnosticSnapshot):string{
    }
   }
  }else measurements('current',([{pid:12,value:scan.parameters.rpm},{pid:5,value:scan.parameters.coolantC},{pid:4,value:scan.parameters.loadPercent}]).map(m=>({...m,readAt:scan.timestamp})));
+ if(!scan.extended){
+  const at=new Date(scan.timestamp).toISOString(),ready=scan.readiness;
+  rows.push(['current',at,'015C','Temperatura oleju',scan.oilTemperatureC??'','°C',!scan.supportedPids.includes(0x5C)?'unsupported':scan.oilTemperatureC==null?'unknown':'reported',ecu]);
+  if(ready){
+   const decoded=decodeReadiness(ready);
+   rows.push(['readiness',at,'0101','MIL',decoded.mil,'','reported',ecu]);
+   rows.push(['readiness',at,'0101','Liczba DTC',decoded.dtcCount,'','reported',ecu]);
+   for(const [pid,label,value,unit] of [[0x30,'Rozgrzania od kasowania',ready.warmupsSinceClear,''],[0x31,'Dystans od kasowania',ready.distanceSinceClearKm,'km']] as const)rows.push(['readiness',at,'01'+pidHex(pid),label,value??'',unit,!scan.supportedPids.includes(pid)?'unsupported':value===null?'unknown':'reported',ecu]);
+   for(const monitor of decoded.monitors)rows.push(['readiness',at,'0101',monitorLabels[monitor.id],'','',!monitor.available?'unsupported':monitor.complete?'complete':'incomplete',ecu]);
+  }else rows.push(['readiness',at,'0101','Gotowość emisji','','','unknown',ecu]);
+ }
  return csv(rows);
 }
 export function liveDataCsv(history:readonly LiveHistorySample[]):string{

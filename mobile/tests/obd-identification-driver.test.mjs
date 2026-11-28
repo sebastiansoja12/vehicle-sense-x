@@ -73,3 +73,10 @@ test('altering calibration evidence cannot authorize clearing a different full r
  const {driver,sent}=fixture();await driver.initialize();await driver.readSnapshot('car');const scan=await driver.readSnapshot('car',{extended:true,identification:true});
  scan.extended.identification.cvns.value[0]='00000000';await assert.rejects(driver.clearFaults({confirmed:true,backedUpSnapshot:scan,vehicleId:'car'}),e=>e.kind==='confirmation');assert.equal(sent.includes('04'),false);
 });
+test('mixed pending/no-data and repeated pending CAN replies invalidate identification before another command',async()=>{
+ for(const raw of ['7E8 03 7F 09 78\rNO DATA>','7E8 03 7F 09 78\r7E8 03 7F 09 78>']){
+  const {driver,sent}=fixture({overrides:{'0906':{raw}}});await driver.initialize();await driver.readSnapshot('car');
+  await assert.rejects(driver.readSnapshot('car',{extended:true,identification:true}));assert.equal(sent.includes('090A'),false);
+  const count=sent.length;await assert.rejects(driver.readSnapshot('car'),/Initialize/);assert.equal(sent.length,count);
+ }
+});

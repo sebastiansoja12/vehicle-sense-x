@@ -12,7 +12,10 @@ export function responseLines(raw: string, command: string): string[] {
   const response = raw.trim().toUpperCase();
   if (!response.endsWith('>') || response.indexOf('>') !== response.length - 1) throw new ObdError('Incomplete ELM327 response');
   const lines = response.slice(0, -1).replace(/SEARCHING\.{3}/g, '').split(/[\r\n]+/).map(l => l.trim()).filter(l => l && l.replace(/\s/g, '') !== command.toUpperCase().replace(/\s/g, ''));
-  if (lines.some(l => /NO\s*DATA/.test(l))) throw new ObdError('No response from vehicle', 'no-data');
+  if (lines.some(l => /NO\s*DATA/.test(l))) {
+    if(lines.length!==1||!/^NO\s*DATA$/.test(lines[0]))throw new ObdError('Mixed vehicle data and adapter no-data response');
+    throw new ObdError('No response from vehicle', 'no-data');
+  }
   if (lines.some(l => /ERROR|UNABLE|STOPPED|BUS BUSY|BUFFER FULL|LV RESET|\?/.test(l))) throw new ObdError('Adapter or vehicle rejected the request');
   if (!lines.length) throw new ObdError('Empty ELM327 response');
   return lines;
