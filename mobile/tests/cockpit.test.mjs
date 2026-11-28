@@ -45,3 +45,9 @@ test('car display accepts the longest valid make and model within native label l
  const data=emptyData();data.vehicles=[{id:'long',make:'A'.repeat(100),model:'B'.repeat(100),year:2020,engine:'2.0',mileage:0,plate:'',vin:''}];data.activeVehicleId='long';
  assert.ok(Array.from(buildCarDisplayPayload(data,now).vehicleLabel).length<=160);
 });
+
+test('expanded cockpit preserves the full report scope independently of live measurements',()=>{
+ const session=snapshot();const view=buildCockpit('a',{session,connected:true,streaming:true,live:{...session,timestamp:now,parameters:{...session.parameters,rpm:2400}}},now);
+ assert.equal(view.report.id,session.id);assert.equal(view.report.timestamp,now-1000);assert.equal(view.parameters.rpm,2400);
+ assert.equal(buildCockpit('b',{saved:[session]},now).report,null);
+});

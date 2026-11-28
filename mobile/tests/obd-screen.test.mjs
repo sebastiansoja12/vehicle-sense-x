@@ -4,26 +4,28 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 import ts from '../node_modules/typescript/lib/typescript.js';
 import {hasDiagnosticBackup} from '../src/obd/backup.ts';
+import {applyVinObservation} from '../src/vin.ts';
 
 // Exercise the real screen's async handlers with native I/O replaced at its boundary.
 const compiled=ts.transpileModule(readFileSync(new URL('../src/obd/DiagnosticsScreen.tsx',import.meta.url),'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX}}).outputText;
 const deferred=()=>{let resolve,reject;const promise=new Promise((yes,no)=>{resolve=yes;reject=no;});return {promise,resolve,reject};};
 const flush=async()=>{for(let i=0;i<8;i++)await new Promise(resolve=>setImmediate(resolve));};
 const report={id:'previous',vehicleId:'car',timestamp:1000,source:'obd',adapterName:'ELM',parameters:{rpm:1000,coolantC:80,loadPercent:50,voltageV:14},codes:[],readStatuses:['stored'],supportedPids:[4,5,12],ecu:{protocol:6,responseId:'7E8'}};
-function harness({scanStop=async()=>{},createLink,selectEcu=async()=>{},records=[]}={}) {
- const slots=[];let cursor=0,layouts=[],tree,factoryCalls=0;const scanOptions=[];
+function harness({scanStop=async()=>{},createLink,selectEcu=async()=>{},records=[],initialCockpit=false}={}) {
+ const slots=[];let cursor=0,layouts=[],tree,factoryCalls=0,commits=0;let data={activeVehicleId:'car',diagnostics:records,vehicles:[{id:'car',vin:''}]};const scanOptions=[];
  const state=initial=>{const index=cursor++;if(!(index in slots))slots[index]=typeof initial==='function'?initial():initial;return [slots[index],value=>{slots[index]=typeof value==='function'?value(slots[index]):value;}];};
  const ref=initial=>{const index=cursor++;return slots[index]??(slots[index]={current:initial});};
  const jsx=(type,props)=>({type,props:props??{}});
  const link={adapterName:'ELM',disconnect:async()=>{},onDisconnected:()=>()=>{}};
- const driver={selectEcu,readSnapshot:async(_vehicle,options)=>{scanOptions.push(options);return {...report,id:'new',ecu:{protocol:6,responseId:'7E9'}};}};
+ const driver={selectEcu,readVin:async()=>({vehicleId:'car',source:'obd',vin:'WVWZZZ1JZXW000001',timestamp:1000,adapterName:'ELM',ecu:{protocol:6,responseId:'7E8'}}),readSnapshot:async(_vehicle,options)=>{scanOptions.push(options);return {...report,id:'new',ecu:{protocol:6,responseId:'7E9'}};}};
  const modules={
   react:{useState:state,useRef:ref,useMemo:fn=>fn(),useCallback:fn=>fn,useEffect:()=>{},useLayoutEffect:fn=>layouts.push(fn)},
   'react/jsx-runtime':{jsx,jsxs:jsx,Fragment:'Fragment'},
   'react-native':{View:'View',Text:'Text',TextInput:'TextInput',Switch:'Switch',Platform:{OS:'android'},AppState:{}},
   'expo-constants':{default:{executionEnvironment:'bare'}},
   'expo-router':{router:{},useFocusEffect:()=>{},useIsFocused:()=>true},
-  '../AppProvider':{useApp:()=>({data:{activeVehicleId:'car',diagnostics:records,vehicles:[{id:'car',vin:''}]},recordingVehicleId:null,busy:false})},
+  '../AppProvider':{useApp:()=>({data,recordingVehicleId:null,busy:false,commit:async change=>{data=change(data);commits++;}})},
+  '../DiagnosticCockpit':{DiagnosticCockpit:'DiagnosticCockpit'},'../RecordActions':{Confirm:'Confirm'},'../vin':{applyVinObservation},
   '../ui':Object.fromEntries(['Page','Title','Section','Note','Button','Empty'].map(name=>[name,name])),
   './SnapshotView':{Snapshot:'Snapshot'},'./LiveDataPanel':{LiveDataPanel:'LiveDataPanel'},
   '../theme':{styles:{}},'./backup':{hasDiagnosticBackup},
@@ -35,9 +37,12 @@ function harness({scanStop=async()=>{},createLink,selectEcu=async()=>{},records=
   './session':{startDiagnostics:async()=>({driver,reading:report,ecus:[{protocol:6,responseId:'7E8'},{protocol:6,responseId:'7E9'}]})},
  };
  const module={exports:{}};vm.runInNewContext(compiled,{module,exports:module.exports,require:name=>modules[name]??{},setTimeout,clearTimeout,setInterval,clearInterval,console});
- const render=()=>{cursor=0;layouts=[];const root=module.exports.DiagnosticsScreen();tree=root.type(root.props);for(const fn of layouts)fn();return tree;};
+ const render=()=>{cursor=0;layouts=[];const root=module.exports.DiagnosticsScreen({initialCockpit});tree=root.type(root.props);for(const fn of layouts)fn();return tree;};
  const all=()=>{const nodes=[];const visit=node=>{if(Array.isArray(node))node.forEach(visit);else if(node&&typeof node==='object'){nodes.push(node);visit(node.props?.children);}};visit(render());return nodes;};
  return {
+  get cockpit(){return all().find(node=>node.type==='DiagnosticCockpit')?.props;},
+  get vinConfirmation(){return all().find(node=>node.type==='Confirm')?.props;},
+  get commits(){return commits;},
   get factoryCalls(){return factoryCalls;},
   get scanOptions(){return scanOptions;},
   async click(label){const button=all().find(node=>node.type==='Button'&&node.props.label===label);assert.ok(button,`button ${label}; visible: ${all().filter(n=>n.type==='Text'||n.type==='Button').map(n=>n.props.label??n.props.children).join(' | ')}`);assert.equal(!!button.props.disabled,false,label);button.props.onPress();await flush();},
@@ -73,4 +78,13 @@ test('exporting a different historical report with a colliding ID cannot enable 
 test('the full CAN identification scan requires an explicit button action and passes both scan options',async()=>{
  const ui=harness();await ui.click('Połącz i odczytaj samochód');assert.equal(ui.scanOptions.length,0);
  await ui.click('Pełny skan z identyfikacją ECU');assert.equal(ui.scanOptions.length,1);assert.equal(ui.scanOptions[0].extended,true);assert.equal(ui.scanOptions[0].identification,true);
+});
+
+
+test('direct cockpit uses the real connection flow and VIN still requires confirmation before saving',async()=>{
+ const ui=harness({initialCockpit:true});assert.ok(ui.cockpit);assert.equal(ui.cockpit.connected,false);
+ ui.cockpit.adapter.onConnect();await flush();assert.equal(ui.cockpit.connected,true);assert.equal(ui.cockpit.canReadVin,true);
+ ui.cockpit.onReadVin();await flush();assert.equal(ui.commits,0);assert.equal(ui.vinConfirmation.title,'Zapisać odczytany VIN w profilu?');
+ ui.vinConfirmation.onConfirm();await flush();assert.equal(ui.commits,1);assert.equal(ui.vinConfirmation,undefined);
+ ui.cockpit.onClose();await flush();assert.equal(ui.report.id,'previous');
 });

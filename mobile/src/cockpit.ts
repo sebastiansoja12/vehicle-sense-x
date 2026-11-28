@@ -24,6 +24,7 @@ export function buildCockpit(vehicleId:string,input:Inputs,now:number){
  const faultReport=scopedLive?session:full;
  return {source:source as 'none'|'live'|'session'|'saved'|'import',timestamp:sample?.timestamp??null,stale:!fresh,
   parameters:sample?{...sample.parameters}:emptyParameters(),
+  report:faultReport,
   scope:sample?.ecu?`CAN ${sample.ecu.responseId} · protokół ${sample.ecu.protocol}`:'Zakres sterownika niepodany',
   faults:faultReport?{count:faultReport.codes.length,codes:faultReport.codes.map(code=>({...code})),partial:faultReport.readStatuses.length<3,timestamp:faultReport.timestamp}:null};
 }
