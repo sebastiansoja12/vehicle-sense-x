@@ -1,0 +1,58 @@
+{
+  "id": "c6988a9c-625f-4c50-818e-aabbff8bed0d",
+  "status": "FINISHED",
+  "completedAt": "2026-11-28T05:42:13.617Z",
+  "gitCommitHash": "dd64fcd6c111062c9333c54a3dea254459f59c19",
+  "platform": "IOS",
+  "buildProfile": "native-check",
+  "appVersion": "0.6.0",
+  "appBuildVersion": "8",
+  "artifact": "VehicleSenseX-0.6.0-ios-simulator.tar.gz",
+  "bytes": 29034337,
+  "sha256": "faf8449a2c630255cd8f4a62a4c1279c4bf8f26cfe1709002139cfe1698b2dfc",
+  "runtimeTestedOnDevice": false,
+  "version": "0.6.0",
+  "buildNumber": "8",
+  "bundleIdentifier": "com.vehiclesensex.app",
+  "minimumOS": "16.4",
+  "sdk": "iphonesimulator27.1",
+  "usageDescriptionKeys": [
+    "NSBluetoothAlwaysUsageDescription",
+    "NSLocalNetworkUsageDescription",
+    "NSLocationWhenInUseUsageDescription",
+    "NSPhotoLibraryUsageDescription"
+  ],
+  "backgroundModes": [],
+  "signature": "ad-hoc simulator; no Apple team",
+  "storeIpa": false,
+  "architectures": [
+    "x86_64",
+    "arm64"
+  ],
+  "nativeClassesVerified": [
+    "BlePlx",
+    "TcpSockets",
+    "TcpSocketClient",
+    "ExpoSpeech",
+    "VehicleRadio",
+    "VehicleCarPlayStore"
+  ],
+  "javascript": {
+    "bytes": 4255335,
+    "hermes": true,
+    "diagnosticMarkers": [
+      "readFreezeFrame",
+      "readIdentification",
+      "parseCalibrationIds",
+      "VehicleRadio",
+      "Rozszerzony skan diagnostyczny"
+    ]
+  },
+  "privacyManifestCount": 15,
+  "trackingDomains": [],
+  "carPlay": {
+    "enabled": false,
+    "sceneRegistered": false,
+    "entitlementPresent": false
+  }
+}

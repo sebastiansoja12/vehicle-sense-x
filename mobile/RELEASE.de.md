@@ -4,6 +4,8 @@
 
 Quellstand 0.6.0/Build 8 ergänzt einen separaten vollständigen CAN-Scan mit CALID, CVN und Steuergerätename. Cockpit, Emissionsbereitschaft, Öltemperatur und Werkstattvergleiche aus main bleiben erhalten. [Anleitung und Umfang](ECU-IDENTIFICATION.de.md)
 
+Signierte Android-APK/AAB und iOS-Release-Simulatorpakete für 0.6.0/Build 8 aus Quelle `dd64fcd` mit ECU-Identifikation und nativem Radiomodul wurden geprüft. CarPlay ist deaktiviert. Ein fehlendes aktives Apple-Developer-Konto verhindert weiterhin eine App-Store-IPA; physische Adapter- und Telefontests stehen aus. [Ergebnisse 0.6.0](../docs/verification/2026-11-28-ecu-identification.de.md)
+
 Version 0.5.0/Build 7 erweitert die Diagnose um einen Katalog mit 54 Standardmesswerten, Emissionsbereitschaft, Freeze Frame 0, auswählbare Live Data, ein Diagramm mit 300 Zyklen, Scanvergleiche und JSON/CSV/PDF/HTML-Export.
 
 Signierte Android-APK/AAB und iOS-Release-Simulatorpakete für 0.5.0/Build 7 aus Quelle `35258e9` wurden geprüft. Frühere APK/AAB für 0.4.0/Build 6 enthalten die Erweiterungen von 0.5.0 nicht. Ein fehlendes aktives Apple-Developer-Konto verhindert weiterhin eine signierte App-Store-IPA. Es erfolgte keine Einreichung bei Stores. [Umfang und Prüfung](../docs/verification/2026-11-27-advanced-diagnostics.de.md)

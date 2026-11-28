@@ -1,0 +1,309 @@
+{
+  "id": "1870c254-e8fd-4b89-8929-626143ccc331",
+  "status": "FINISHED",
+  "completedAt": "2026-11-28T05:49:26.579Z",
+  "gitCommitHash": "dd64fcd6c111062c9333c54a3dea254459f59c19",
+  "platform": "ANDROID",
+  "buildProfile": "preview",
+  "appVersion": "0.6.0",
+  "appBuildVersion": "8",
+  "artifact": "VehicleSenseX-0.6.0-android-preview.apk",
+  "bytes": 110185904,
+  "sha256": "b03b5e0df89ec63228c9241d1f3f09e2c25174387fd6ab1cb955d93733f71aad",
+  "runtimeTestedOnDevice": false,
+  "package": "com.vehiclesensex.app",
+  "versionName": "0.6.0",
+  "versionCode": "8",
+  "minSdk": "24",
+  "targetSdk": "36",
+  "allowBackup": "false",
+  "debuggable": "false",
+  "permissions": [
+    "android.permission.ACCESS_COARSE_LOCATION",
+    "android.permission.ACCESS_FINE_LOCATION",
+    "android.permission.ACCESS_NETWORK_STATE",
+    "android.permission.BLUETOOTH",
+    "android.permission.BLUETOOTH_ADMIN",
+    "android.permission.BLUETOOTH_CONNECT",
+    "android.permission.BLUETOOTH_SCAN",
+    "android.permission.CHANGE_NETWORK_STATE",
+    "android.permission.INTERNET",
+    "android.permission.POST_NOTIFICATIONS",
+    "android.permission.READ_APP_BADGE",
+    "android.permission.RECEIVE_BOOT_COMPLETED",
+    "android.permission.VIBRATE",
+    "android.permission.WAKE_LOCK",
+    "com.anddoes.launcher.permission.UPDATE_COUNT",
+    "com.google.android.c2dm.permission.RECEIVE",
+    "com.google.android.finsky.permission.BIND_GET_INSTALL_REFERRER_SERVICE",
+    "com.htc.launcher.permission.READ_SETTINGS",
+    "com.htc.launcher.permission.UPDATE_SHORTCUT",
+    "com.huawei.android.launcher.permission.CHANGE_BADGE",
+    "com.huawei.android.launcher.permission.READ_SETTINGS",
+    "com.huawei.android.launcher.permission.WRITE_SETTINGS",
+    "com.majeur.launcher.permission.UPDATE_BADGE",
+    "com.oppo.launcher.permission.READ_SETTINGS",
+    "com.oppo.launcher.permission.WRITE_SETTINGS",
+    "com.sec.android.provider.badge.permission.READ",
+    "com.sec.android.provider.badge.permission.WRITE",
+    "com.sonyericsson.home.permission.BROADCAST_BADGE",
+    "com.sonymobile.home.permission.PROVIDER_INSERT_BADGE",
+    "com.vehiclesensex.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION",
+    "me.everything.badger.permission.BADGE_COUNT_READ",
+    "me.everything.badger.permission.BADGE_COUNT_WRITE"
+  ],
+  "permissionsMatch040": true,
+  "signing": {
+    "verified": true,
+    "v1": false,
+    "v2": true,
+    "v3": false,
+    "certificateSha256": "d07968eb9f05359209b5874ebf8137818e7db45b836a5564bf957320bba621a0",
+    "warningCount": 0
+  },
+  "native64BitLibraries": [
+    {
+      "path": "lib/arm64-v8a/libappmodules.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libc++_shared.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libdatastore_shared_counter.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libexpo-modules-core.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libexpo-modules-jsi.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libexpo-modules-v2.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libexpo-modules-worklets.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libexpo-sqlite.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libfbjni.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libgesturehandler.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libgifimage.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libhermestooling.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libhermesvm.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libimagepipeline.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libjsi.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libnative-filters.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libnative-imagetranscoder.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libreact_codegen_rngesturehandler_codegen.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libreact_codegen_rnscreens.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libreact_codegen_rnsvg.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libreact_codegen_safeareacontext.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libreactnative.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libreanimated.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/librnscreens.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libstatic-webp.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libworklets.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/arm64-v8a/libzstd-kmp.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libappmodules.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libc++_shared.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libdatastore_shared_counter.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libexpo-modules-core.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libexpo-modules-jsi.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libexpo-modules-v2.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libexpo-modules-worklets.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libexpo-sqlite.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libfbjni.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libgesturehandler.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libgifimage.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libhermestooling.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libhermesvm.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libimagepipeline.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libjsi.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libnative-filters.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libnative-imagetranscoder.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libreact_codegen_rngesturehandler_codegen.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libreact_codegen_rnscreens.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libreact_codegen_rnsvg.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libreact_codegen_safeareacontext.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libreactnative.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libreanimated.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/librnscreens.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libstatic-webp.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libworklets.so",
+      "minimumLoadAlignment": 16384
+    },
+    {
+      "path": "lib/x86_64/libzstd-kmp.so",
+      "minimumLoadAlignment": 16384
+    }
+  ],
+  "nativeModuleDescriptors": [
+    "Lkjd/reactnative/bluetooth/RNBluetoothClassicModule;",
+    "Lcom/asterinet/react/tcpsocket/TcpSocketModule;",
+    "Lcom/bleplx/BlePlxModule;"
+  ],
+  "javascript": {
+    "bytes": 3565188,
+    "hermes": true,
+    "diagnosticMarkers": [
+      "readFreezeFrame",
+      "readIdentification",
+      "parseCalibrationIds",
+      "VehicleRadio",
+      "Rozszerzony skan diagnostyczny"
+    ]
+  },
+  "nativeSpeechClassMapping": {
+    "sourceClass": "expo.modules.speech.SpeechModule",
+    "releaseClass": "be4",
+    "descriptorVerified": "Lbe4;"
+  },
+  "vehicleRadioNativeClass": {
+    "sourceClass": "expo.modules.vehicleradio.VehicleRadioModule",
+    "releaseClass": "yz4",
+    "descriptorVerified": "Lyz4;"
+  },
+  "submittedToGooglePlay": false
+}
