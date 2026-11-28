@@ -6,6 +6,8 @@ The complete Polish, English and German versions cover the same content and comm
 
 When changing documentation, update all three versions and language links. Do not translate commands, API identifiers, filenames, addresses or data syntax. `AGENTS.md` instructions, original licenses and JSON reports retain their source syntax; the result descriptions are available in all three languages.
 
+[ECU identification](../mobile/ECU-IDENTIFICATION.en.md)
+
 ## Setup and operation
 
 - [Project overview](../README.en.md)

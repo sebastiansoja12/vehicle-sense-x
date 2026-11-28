@@ -2,7 +2,9 @@
 
 # VehicleSenseX — aplikacja mobilna
 
-React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.5.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
+React Native 0.88.1, Expo SDK 58, React 19.3 i TypeScript 6. Wersja źródłowa 0.6.0. Własny garaż startuje pusty; aplikacja nie ma trybu demonstracyjnego, przykładowego samochodu ani generatora pomiarów. W katalogu nadrzędnym zachowano osobny, wcześniejszy prototyp HTML.
+
+Źródło 0.6.0/build 8 dodaje osobny pełny skan CAN z CALID, CVN i nazwą sterownika. Zachowano kokpit, gotowość emisji, temperaturę oleju i porównania warsztatowe z main. [Instrukcja i zakres](ECU-IDENTIFICATION.md)
 
 ## Uruchomienie
 

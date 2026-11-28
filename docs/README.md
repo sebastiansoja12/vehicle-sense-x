@@ -6,6 +6,8 @@ Pełne wersje polska, angielska i niemiecka mają ten sam zakres i polecenia. Pl
 
 Przy zmianie dokumentacji zaktualizuj wszystkie trzy wersje i odnośniki językowe. Nie tłumacz poleceń, identyfikatorów API, nazw plików, adresów ani składni danych. Instrukcje `AGENTS.md`, oryginalne licencje i raporty JSON zachowują składnię źródłową; opisy wyników są dostępne w trzech językach.
 
+[Identyfikacja ECU](../mobile/ECU-IDENTIFICATION.md)
+
 ## Uruchomienie i obsługa
 
 - [Opis projektu](../README.md)

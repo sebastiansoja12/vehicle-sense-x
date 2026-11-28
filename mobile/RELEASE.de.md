@@ -1,6 +1,8 @@
 [Polski](RELEASE.md) | [English](RELEASE.en.md) | [Deutsch](RELEASE.de.md)
 
-# Veröffentlichung von VehicleSenseX 0.5.0
+# Veröffentlichung von VehicleSenseX 0.6.0
+
+Quellstand 0.6.0/Build 8 ergänzt einen separaten vollständigen CAN-Scan mit CALID, CVN und Steuergerätename. Cockpit, Emissionsbereitschaft, Öltemperatur und Werkstattvergleiche aus main bleiben erhalten. [Anleitung und Umfang](ECU-IDENTIFICATION.de.md)
 
 Version 0.5.0/Build 7 erweitert die Diagnose um einen Katalog mit 54 Standardmesswerten, Emissionsbereitschaft, Freeze Frame 0, auswählbare Live Data, ein Diagramm mit 300 Zyklen, Scanvergleiche und JSON/CSV/PDF/HTML-Export.
 

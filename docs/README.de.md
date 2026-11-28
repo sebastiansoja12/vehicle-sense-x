@@ -6,6 +6,8 @@ Die vollständigen polnischen, englischen und deutschen Fassungen decken dieselb
 
 Bei Dokumentationsänderungen alle drei Fassungen und Sprachlinks aktualisieren. Befehle, API-Bezeichner, Dateinamen, Adressen und Datensyntax nicht übersetzen. Anweisungen in `AGENTS.md`, Originallizenzen und JSON-Berichte behalten ihre ursprüngliche Syntax; die Ergebnisbeschreibungen sind in allen drei Sprachen verfügbar.
 
+[ECU-Identifikation](../mobile/ECU-IDENTIFICATION.de.md)
+
 ## Einrichtung und Betrieb
 
 - [Projektübersicht](../README.de.md)
